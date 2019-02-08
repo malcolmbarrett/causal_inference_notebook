@@ -6,3 +6,4 @@ bookdown::gitbook:
         <li><a href="./">Causal Inference Notebook</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+    edit: https://github.com/malcolmbarrett/causal_inference_book/blob/master/%s
