@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>A Minimal Book Example</title>
-  <meta name="description" content="A Minimal Book Example">
+  <title>Coding Causal Inference in R</title>
+  <meta name="description" content="Coding Causal Inference in R">
   <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
-  <meta property="og:title" content="A Minimal Book Example" />
+  <meta property="og:title" content="Coding Causal Inference in R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,12 +17,11 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A Minimal Book Example" />
+  <meta name="twitter:title" content="Coding Causal Inference in R" />
   
   
   
 
-<meta name="author" content="Yihui Xie">
 
 
 <meta name="date" content="2019-02-07">
@@ -160,7 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Coding Causal Inference in R</a>
           </h1>
         </div>
 
@@ -610,7 +609,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 x 4
 ##   type      estimate conf.low conf.high
 ##   &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 bootstrap     3.44     2.47      4.37</code></pre>
+## 1 bootstrap     3.44     2.45      4.37</code></pre>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">bind_rows</span>(ols_cis, gee_model_cis, robust_lm_model_cis, bootstrap_cis) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">width =</span> conf.high <span class="op">-</span><span class="st"> </span>conf.low) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb32-3" data-line-number="3"><span class="st">  </span><span class="kw">arrange</span>(width) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -753,8 +752,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 2 x 5
 ##   statistic    bias std.error conf.low conf.high
 ##       &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1     2.00  -0.0243     0.309     1.40      2.61
-## 2     0.903  0.134      1.34     -1.27      3.93</code></pre>
+## 1     2.00  -0.0299     0.297     1.45      2.62
+## 2     0.903  0.197      1.36     -1.22      3.94</code></pre>
 </div>
 <div id="program-12.5" class="section level2">
 <h2><span class="header-section-number">3.5</span> Program 12.5</h2>
