@@ -1,0 +1,116 @@
+---
+title: 'Causal Inference: Chapter 11'
+output: html_document
+---
+
+# Chapter 11
+
+This is the code for Chapter 11
+
+## Program 11.1
+
+```{r, fig.cap="Figure 11.1"}
+library(tidyverse)
+library(broom)
+
+binary_a_df <- data.frame(a = c(rep(1, 8), rep(0, 8)),
+           y = c(200, 150, 220, 110, 50, 180, 90, 170, 
+                 170, 30, 70, 110, 80, 50, 10, 20))
+
+ggplot(binary_a_df, aes(a, y)) +
+  geom_point(size = 4, col = "white", fill = "#E69F00", shape = 21) +
+  scale_x_continuous(breaks = c(0, 1), expand = expand_scale(.5)) + 
+  theme_minimal(base_size = 20)
+```
+
+```{r skim_data}
+binary_a_df %>% 
+  group_by(a) %>% 
+  summarize(n = n(), mean = mean(y), sd = sd(y), 
+            minimum = min(y), maximum = max(y)) %>% 
+  kable(digits = 2)
+```
+
+
+```{r, fig.cap="Figure 11.2"}
+categorical_a_df <- data.frame(a = sort(rep(1:4, 4)),
+                               y = c(110, 80, 50, 40, 170, 30, 70, 50, 
+                                     110, 50, 180, 130, 200, 150, 220, 210))
+
+ggplot(categorical_a_df, aes(a, y)) +
+  geom_point(size = 4, col = "white", fill = "#E69F00",  shape = 21) +
+  scale_x_continuous(breaks = 1:4, expand = expand_scale(.25)) + 
+  theme_minimal(base_size = 20)
+```
+
+```{r}
+categorical_a_df %>% 
+  group_by(a) %>% 
+  summarize(n = n(), mean = mean(y), sd = sd(y), minimum = min(y), maximum = max(y)) %>% 
+  kable(digits = 2)
+```
+
+## Program 11.2
+
+```{r, fig.cap="Figure 11.3"}
+continuous_a_df <- data.frame(a = c(3,11,17,23,29,37,41,53,
+                                    67,79,83,97,60,71,15,45),
+                              y = c(21,54,33,101,85,65,157,120,
+                                    111,200,140,220,230,217,11,190))
+
+
+ggplot(continuous_a_df, aes(a, y)) +
+  geom_point(size = 4, col = "white", fill = "#E69F00",  shape = 21) +
+  theme_minimal(base_size = 20)
+```
+
+
+```{r, fig.cap="Figure 11.4"}
+ggplot(continuous_a_df, aes(a, y)) +
+  geom_point(size = 4, col = "white", fill = "grey85", shape = 21) +
+  geom_smooth(method = "lm", se = FALSE, col = "#E69F00", size = 1.2) + 
+  theme_minimal(base_size = 20) 
+```
+
+```{r}
+linear_regression <- lm(y ~ a, data = continuous_a_df)
+
+linear_regression %>% 
+  tidy(conf.int = TRUE) %>% 
+  select(-statistic, -p.value) %>% 
+  knitr::kable(digits = 2)
+
+linear_regression %>% 
+  predict(newdata = data.frame(a = 90))
+```
+
+```{r}
+lm(y ~ a, data = binary_a_df) %>% 
+  tidy(conf.int = TRUE) %>% 
+  select(-statistic, -p.value) %>% 
+  knitr::kable(digits = 2)
+```
+
+## Program 11.3
+```{r}
+smoothed_regression <- lm(y ~ a + I(a^2), data = continuous_a_df) 
+
+smoothed_regression %>% 
+  tidy(conf.int = TRUE) %>% 
+  select(-statistic, -p.value) %>% 
+  mutate(term = ifelse(term == "I(a^2)", "a^2", term)) %>% 
+  knitr::kable(digits = 2) 
+```
+
+```{r, fig.cap="Figure 11.5"}
+ggplot(continuous_a_df, aes(a, y)) +
+  geom_point(size = 4, col = "white", fill = "grey85", shape = 21) +
+  geom_smooth(method = "lm", se = FALSE, col = "#E69F00", formula = y ~ x + I(x^2), size = 1.2) + 
+  theme_minimal(base_size = 20) 
+```
+
+```{r}
+smoothed_regression %>% 
+  predict(newdata = data.frame(a = 90))
+```
+

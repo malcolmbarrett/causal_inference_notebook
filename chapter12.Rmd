@@ -1,0 +1,410 @@
+```{r setup3, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(knitr)
+```
+
+# Chapter 12
+
+This is the code for Chapter 12
+
+## Program 12.1
+
+```{r}
+library(tidyverse)
+library(haven)
+library(broom)
+library(tableone)
+```
+
+
+```{r}
+nhefs <- read_sas("data/nhefs.sas7bdat")
+
+nhefs
+```
+
+```{r}
+
+nhefs <- nhefs %>% 
+  # add id and censored indicator
+  # recode age > 50 and years of school to categories
+  mutate(
+    id = 1:n(),
+    censored = ifelse(is.na(wt82), 1, 0),
+    older = case_when(is.na(age) ~ NA_real_,
+                      age > 50 ~ 1,
+                      TRUE ~ 0),
+    education = case_when(school <  9 ~ 1,
+                       school <  12 ~ 2,
+                       school == 12 ~ 3,
+                       school < 16 ~ 4,
+                       TRUE ~ 5)
+  ) %>% 
+  # change categorical to factors
+  mutate_at(vars(sex, race, education, exercise, active), factor)
+
+
+# restrict to complete cases
+nhefs_complete <- nhefs %>% 
+  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
+         active, wt71, wt82, wt82_71, censored)
+
+
+nhefs_complete %>%
+  filter(censored == 0) %>% 
+  group_by(qsmk) %>% 
+  summarize(mean_weight_change = mean(wt82_71), sd = sd(wt82_71)) %>% 
+  knitr::kable(digits = 2)
+
+
+# clean up the data for the table
+fct_yesno <- function(x) {
+  factor(x, labels = c("No", "Yes"))
+}
+
+tbl1_data <- nhefs_complete %>% 
+    filter(censored == 0) %>%
+    mutate(university = fct_yesno(ifelse(education == 5, 1, 0)),
+           no_exercise = fct_yesno(ifelse(exercise == 2, 1, 0)),
+           inactive = fct_yesno(ifelse(active == 2, 1, 0)),
+           qsmk = factor(qsmk, levels = 1:0, c("Ceased Smoking", "Continued Smoking")),
+           sex = factor(sex, levels = 1:0, labels = c("Female", "Male")),
+           race = factor(race, levels = 1:0, labels = c("Other", "White"))) %>% 
+    select(qsmk, age, sex, race, university, wt71, smokeintensity, smokeyrs, no_exercise, 
+           inactive) %>% 
+  rename("Smoking Cessation" = "qsmk",
+         "Age" = "age",
+         "Sex" = "sex",
+         "Race" = "race",
+         "University education" = "university",
+         "Weight, kg" = "wt71", 
+         "Cigarettes/day" = "smokeintensity",
+         "Years smoking" = "smokeyrs",
+         "Little or no exercise" = "no_exercise",
+         "Inactive daily life" = "inactive")
+
+kableone <- function(x, ...) {
+  capture.output(x <- print(x))
+  knitr::kable(x, ...)
+}
+
+tbl1_data %>% 
+  CreateTableOne(vars = select(tbl1_data, -`Smoking Cessation`) %>% names, 
+                 strata = "Smoking Cessation", data = ., test = FALSE) %>% 
+  kableone()
+
+```
+
+## Program 12.2
+
+```{r}
+# Estimation of IP weights via a logistic model
+
+propensity <- glm(qsmk ~ sex + race + age + I(age^2) + education + 
+                  smokeintensity + I(smokeintensity^2) + 
+                  smokeyrs + I(smokeyrs^2) + exercise + active + 
+                  wt71 + I(wt71^2), 
+                  family = binomial(), data = nhefs_complete)
+
+propensity %>% 
+  tidy(conf.int = TRUE, exponentiate = TRUE) %>% 
+  select(-statistic, -p.value) %>% 
+  knitr::kable(digits = 2)
+
+nhefs_complete <- propensity %>% 
+  augment(type.predict = "response", data = nhefs_complete) %>% 
+  mutate(wts = 1 / ifelse(qsmk == 0, 1 - .fitted, .fitted))
+    
+nhefs_complete %>% 
+  summarize(mean_wt = mean(wts), sd_wts = sd(wts))
+
+ggplot(nhefs_complete, aes(wts)) +
+  geom_density(col = "#E69F00", fill = "#E69F0095") + 
+  scale_x_log10() + 
+  theme_minimal(base_size = 14) + 
+  xlab("log10(Weights)")
+
+tidy_est_cis <- function(.df, .type) {
+  .df %>% 
+    mutate(type = .type) %>% 
+    filter(term == "qsmk") %>% 
+    select(type, estimate, conf.low, conf.high)
+}
+
+#  standard error a little too small
+ols_cis <- lm(wt82_71 ~ qsmk, data = nhefs_complete, weights = wts) %>% 
+  tidy(conf.int = TRUE) %>% 
+  tidy_est_cis("ols")
+
+ols_cis
+
+library(geepack)
+gee_model <- geeglm(
+  wt82_71 ~ qsmk, 
+  data = nhefs_complete, 
+  std.err = "san.se", # default robust SE 
+  weights = wts, # inverse probability weights
+  id = id, 
+  corstr = "independence" # independent correlation structure
+) 
+
+gee_model_cis <- tidy(gee_model, conf.int = TRUE) %>% 
+  tidy_est_cis("gee")
+
+gee_model_cis
+
+#  easy robust SEs
+library(estimatr)
+robust_lm_model_cis <- lm_robust(
+  wt82_71 ~ qsmk, data = nhefs_complete, 
+  weights = wts
+) %>% 
+  tidy() %>% 
+  tidy_est_cis("robust ols")
+
+robust_lm_model_cis
+
+model_nhefs <- function(data, indices) {
+  #  need to bootstrap the entire fitting process, including IPWs
+  df <- data[indices, ]
+  propensity <- glm(qsmk ~ sex + race + age + I(age^2) + education + 
+                  smokeintensity + I(smokeintensity^2) + 
+                  smokeyrs + I(smokeyrs^2) + exercise + active + 
+                  wt71 + I(wt71^2), 
+                  family = binomial(), data = df)
+
+df <- propensity %>% 
+  augment(type.predict = "response", data = df) %>% 
+  mutate(wts = 1 / ifelse(qsmk == 0, 1 - .fitted, .fitted))
+
+  lm(wt82_71 ~ qsmk, data = df, weights = wts) %>% 
+    tidy() %>% 
+    filter(term == "qsmk") %>% 
+    pull(estimate)
+}
+
+library(boot)
+bootstrap_estimates <- nhefs_complete %>% 
+  select(-.fitted:-wts) %>% 
+  boot(model_nhefs, R = 2000)
+bootstrap_cis <- bootstrap_estimates %>% 
+  tidy(conf.int = TRUE, conf.method = "bca") %>% 
+  mutate(type = "bootstrap") %>% 
+  select(type, estimate = statistic, conf.low, conf.high)
+
+bootstrap_cis
+
+bind_rows(ols_cis, gee_model_cis, robust_lm_model_cis, bootstrap_cis) %>% 
+  mutate(width = conf.high - conf.low) %>% 
+  arrange(width) %>% 
+  mutate(type = fct_inorder(type)) %>% 
+  ggplot(aes(x = type, y = estimate, ymin = conf.low, ymax = conf.high)) + 
+    geom_pointrange(color = "#0172B1", size = 1, fatten = 3) +
+    coord_flip() +
+    theme_minimal(base_size = 14)
+```
+
+## Program 12.3
+
+```{r}
+numerator <- glm(qsmk ~ 1, data = nhefs_complete, family = binomial())
+
+nhefs_complete <- numerator %>% 
+  augment(type.predict = "response", data = nhefs_complete) %>% 
+  mutate(numerator = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+  select(id, numerator) %>% 
+  left_join(nhefs_complete, by = "id") %>% 
+  mutate(swts = numerator / ifelse(qsmk == 0, 1 - .fitted, .fitted))
+
+nhefs_complete %>% 
+  summarize(mean_wt = mean(swts), sd_wts = sd(swts))
+
+ggplot(nhefs_complete, aes(swts)) +
+  geom_density(col = "#E69F00", fill = "#E69F0095") + 
+  scale_x_log10() + 
+  theme_minimal(base_size = 14) + 
+  xlab("log10(Stabilized Weights)")
+
+lm_robust(wt82_71 ~ qsmk, data = nhefs_complete, weights = swts) %>% 
+  tidy()
+```
+
+## Program 12.4
+
+```{r}
+nhefs_light_smokers <- nhefs %>% 
+  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
+         active, wt71, wt82, wt82_71, censored) %>% 
+  filter(smokeintensity <= 25)
+
+nhefs_light_smokers
+
+denominator_model <- lm(smkintensity82_71 ~ sex + race + age + I(age^2) + education + 
+                  smokeintensity + I(smokeintensity^2) + 
+                  smokeyrs + I(smokeyrs^2) + exercise + active + 
+                  wt71 + I(wt71^2), data = nhefs_light_smokers)
+
+denominators <- denominator_model %>% 
+  augment(data = nhefs_light_smokers) %>% 
+  mutate(denominator = dnorm(smkintensity82_71, .fitted, mean(.sigma, na.rm = TRUE))) %>% 
+  select(id, denominator)
+
+numerator_model <- lm(smkintensity82_71 ~ 1, data = nhefs_light_smokers)
+
+numerators <- numerator_model %>% 
+  augment(data = nhefs_light_smokers) %>% 
+  mutate(numerator = dnorm(smkintensity82_71, .fitted, mean(.sigma, na.rm = TRUE))) %>% 
+  select(id, numerator)
+
+nhefs_light_smokers <- nhefs_light_smokers %>% 
+  left_join(numerators, by = "id") %>% 
+  left_join(denominators, by = "id") %>% 
+  mutate(swts = numerator / denominator)
+
+ggplot(nhefs_light_smokers, aes(swts)) +
+  geom_density(col = "#E69F00", fill = "#E69F0095") + 
+  scale_x_log10() + 
+  theme_minimal(base_size = 14) + 
+  xlab("log10(Stabilized Weights)")
+
+smk_intensity_model <- lm_robust(wt82_71 ~ smkintensity82_71 + I(smkintensity82_71^2), data = nhefs_light_smokers, weights = swts)
+
+smk_intensity_model_ols <- lm(wt82_71 ~ smkintensity82_71 + I(smkintensity82_71^2), data = nhefs_light_smokers, weights = swts)
+
+smk_intensity_model %>% 
+  tidy()
+
+calculate_contrast <- function(.coefs, x) {
+  .coefs[1] + .coefs[2] * x + .coefs[3] * x^2
+}
+
+boot_contrasts <- function(data, indices) {
+  .df <- data[indices, ]
+  
+  coefs <- lm_robust(wt82_71 ~ smkintensity82_71 + I(smkintensity82_71^2), data = .df, weights = swts) %>% 
+    tidy() %>% 
+    pull(estimate)
+  
+  c(calculate_contrast(coefs, 0), calculate_contrast(coefs, 20))
+}
+
+bootstrap_contrasts <- nhefs_light_smokers %>% 
+  boot(boot_contrasts, R = 2000)
+
+bootstrap_contrasts %>% 
+  tidy(conf.int = TRUE, conf.meth = "bca")
+```
+
+## Program 12.5
+
+```{r}
+logistic_msm <- geeglm(
+  death ~ qsmk, 
+  data = nhefs_complete, 
+  family = binomial(),
+  std.err = "san.se",
+  weights = swts, 
+  id = id, 
+  corstr = "independence"
+) 
+
+tidy(logistic_msm, conf.int = TRUE, exponentiate = TRUE) 
+```
+
+## Program 12.6
+
+```{r}
+numerator_sex <- glm(qsmk ~ sex, data = nhefs_complete, family = binomial())
+
+nhefs_complete <- numerator_sex %>% 
+  augment(type.predict = "response", data = nhefs_complete %>% select(-.fitted:-.std.resid)) %>% 
+  mutate(numerator_sex = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+  select(id, numerator_sex) %>% 
+  left_join(nhefs_complete, by = "id") %>% 
+  mutate(swts_sex = numerator_sex * wts)
+
+nhefs_complete %>% 
+  summarize(mean_wt = mean(swts_sex), sd_wts = sd(swts_sex))
+
+ggplot(nhefs_complete, aes(swts_sex)) +
+  geom_density(col = "#E69F00", fill = "#E69F0095") + 
+  scale_x_log10() + 
+  theme_minimal(base_size = 14) + 
+  xlab("log10(Stabilized Weights)")
+
+lm_robust(wt82_71 ~ qsmk*sex, data = nhefs_complete, weights = swts) %>% 
+  tidy()
+```
+
+## Program 12.7
+
+```{r}
+# using complete data set
+nhefs_censored <- nhefs %>% 
+  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
+         active, wt71)
+
+numerator_sws_model <- glm(qsmk ~ 1, data = nhefs_censored, family = binomial())
+
+numerators_sws <- numerator_sws_model %>% 
+  augment(type.predict = "response", data = nhefs_censored) %>% 
+  mutate(numerator_sw = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+  select(id, numerator_sw)
+
+denominator_sws_model <- glm(
+  qsmk ~ sex + race + age + I(age^2) + education + 
+  smokeintensity + I(smokeintensity^2) + 
+  smokeyrs + I(smokeyrs^2) + exercise + active + 
+  wt71 + I(wt71^2), 
+  data = nhefs_censored, family = binomial()
+)
+
+denominators_sws <- denominator_sws_model %>% 
+  augment(type.predict = "response", data = nhefs_censored) %>% 
+  mutate(denominator_sw = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+  select(id, denominator_sw)
+
+numerator_cens_model <- glm(censored ~ qsmk, data = nhefs_censored, family = binomial())
+
+numerators_cens <- numerator_cens_model %>% 
+  augment(type.predict = "response", data = nhefs_censored) %>% 
+  mutate(numerator_cens = ifelse(censored == 0, 1 - .fitted, 1)) %>% 
+  select(id, numerator_cens)
+
+denominator_cens_model <- glm(
+  censored ~ qsmk + sex + race + age + I(age^2) + education + 
+  smokeintensity + I(smokeintensity^2) + 
+  smokeyrs + I(smokeyrs^2) + exercise + active + 
+  wt71 + I(wt71^2), 
+  data = nhefs_censored, family = binomial()
+)
+
+denominators_cens <- denominator_cens_model %>% 
+  augment(type.predict = "response", data = nhefs_censored) %>% 
+  mutate(denominator_cens = ifelse(censored == 0, 1 - .fitted, 1)) %>% 
+  select(id, denominator_cens)
+
+nhefs_censored_wts <- nhefs_censored %>% 
+  left_join(numerators_sws, by = "id") %>% 
+  left_join(denominators_sws, by = "id") %>% 
+  left_join(numerators_cens, by = "id") %>% 
+  left_join(denominators_cens, by = "id") %>% 
+  mutate(
+    swts = numerator_sw / denominator_sw, 
+    cens_wts = numerator_cens / denominator_cens,
+    wts = swts * cens_wts
+  )
+
+nhefs_censored_wts %>% 
+  summarize(mean_wt = mean(cens_wts), sd_wts = sd(cens_wts))
+
+ggplot(nhefs_censored_wts, aes(cens_wts)) +
+  geom_density(col = "#E69F00", fill = "#E69F0095") + 
+  scale_x_log10() + 
+  theme_minimal(base_size = 14) + 
+  xlab("log10(Stabilized Weights)")
+
+lm_robust(wt82_71 ~ qsmk, data = nhefs_censored_wts, weights = wts) %>% 
+  tidy()
+```
+
