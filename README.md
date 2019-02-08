@@ -1,1 +1,3 @@
-This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). Please see the page "Get Started" at https://bookdown.org/ for how to compile this example.
+# About
+
+This notebook contains R code for part 2 of [*Causal Inference*](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/) by Miguel Hernán and Jamie Robins[@hernan_causal_2019]. 
