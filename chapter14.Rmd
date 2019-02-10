@@ -152,12 +152,8 @@ bootstrapped_psis <- nhefs_censored %>%
   select(-.fitted:-.cooksd) %>% 
   filter(censored == 0) %>% 
   boot(bootstrap_psi, R = 2000)
-  
-beepr::beep(2)
 
 bootstrapped_psis %>% 
   tidy(conf.int = TRUE, conf.method = "bca")
-
-beepr::beep(3)
 ```
 
