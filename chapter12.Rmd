@@ -182,8 +182,12 @@ df <- propensity %>%
     filter(term == "qsmk") %>% 
     pull(estimate)
 }
+```
 
+```{r bootstrap_12point2, cache = TRUE}
 library(boot)
+set.seed(1234)
+
 bootstrap_estimates <- nhefs_complete %>% 
   select(-.fitted:-wts) %>% 
   boot(model_nhefs, R = 2000)
@@ -193,7 +197,9 @@ bootstrap_cis <- bootstrap_estimates %>%
   select(type, estimate = statistic, conf.low, conf.high)
 
 bootstrap_cis
+```
 
+```{r}
 bind_rows(ols_cis, gee_model_cis, robust_lm_model_cis, bootstrap_cis) %>% 
   mutate(width = conf.high - conf.low) %>% 
   arrange(width) %>% 
@@ -273,6 +279,10 @@ smk_intensity_model_ols <- lm(wt82_71 ~ smkintensity82_71 + I(smkintensity82_71^
 
 smk_intensity_model %>% 
   tidy()
+
+```
+
+```{r bootstrap_12point4, cache = TRUE}
 
 calculate_contrast <- function(.coefs, x) {
   .coefs[1] + .coefs[2] * x + .coefs[3] * x^2

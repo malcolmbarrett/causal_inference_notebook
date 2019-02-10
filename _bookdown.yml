@@ -1,2 +1,10 @@
 book_filename: "causal_inference_book"
 delete_merged_file: true
+repo: https://github.com/malcolmbarrett/causal_inference_book
+language:
+  label:
+    fig: "FIGURE "
+    tab: "TABLE "
+  ui:
+    edit: "Edit"
+    chapter_name: "Chapter "
