@@ -47,6 +47,8 @@ ranks %>%
     xlab("change in weight")
 ```
 
+## Program 14.2
+
 ```{r}
 # using complete data set
 nhefs_censored <- nhefs %>% 
@@ -91,13 +93,16 @@ compute_h_psi <- function(psi) {
     select(psi, estimate, p.value)
 }
 
-psi_search <- map_dfr(seq(2, 5, by = .001), compute_h_psi)
+compute_h_psi(3.446)
+
+psi_search <- map_dfr(seq(2, 5, by = .1), compute_h_psi)
 
 psi_search %>% 
   arrange(abs(estimate))
 
 psi_est <- psi_search %>% 
-  filter(near(estimate, 0, .00001)) %>% 
+  arrange(abs(estimate)) %>% 
+  slice(1) %>% 
   select(-estimate, -p.value)
 
 # get minimum and maximum values that have p >= .05 for confidence intervals
@@ -111,7 +116,7 @@ psi_conf_int <- psi_search %>%
 bind_cols(psi_est, psi_conf_int)
 ```
 
-```{r}
+```{r, cache = TRUE}
 psi_formula <- function(weights, outcome, treatment, treatment_pred) {
   numerator <- weights * outcome * (treatment - treatment_pred)
   denominator <- sum(weights * treatment * (treatment - treatment_pred), na.rm = TRUE)
@@ -156,6 +161,8 @@ bootstrapped_psis <- nhefs_censored %>%
 bootstrapped_psis %>% 
   tidy(conf.int = TRUE, conf.method = "bca")
 ```
+
+## Program 14.3
 
 ```{r, warning = FALSE}
 estimate_psi2 <- function(.data) {
