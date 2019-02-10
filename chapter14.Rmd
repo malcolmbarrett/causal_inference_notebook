@@ -55,7 +55,7 @@ nhefs_censored <- nhefs %>%
 
 #  compute unstabilized inverse probability of censoring weights
 cwts_model <- glm(
-  censored ~ sex + race + age + I(age^2) + education + 
+  censored ~ qsmk + sex + race + age + I(age^2) + education + 
   smokeintensity + I(smokeintensity^2) + 
   smokeyrs + I(smokeyrs^2) + exercise + active + 
   wt71 + I(wt71^2), 
@@ -64,7 +64,7 @@ cwts_model <- glm(
 
 nhefs_censored <- cwts_model %>% 
   augment(type.predict = "response", data = nhefs_censored) %>% 
-  mutate(cwts = 1 / ifelse(qsmk == 0, 1 - .fitted, .fitted))
+  mutate(cwts = 1 / ifelse(censored == 0, 1 - .fitted, .fitted))
 
 # compute all values of h(psi)
 compute_h_psi <- function(psi) {
@@ -155,5 +155,60 @@ bootstrapped_psis <- nhefs_censored %>%
 
 bootstrapped_psis %>% 
   tidy(conf.int = TRUE, conf.method = "bca")
+```
+
+```{r, warning = FALSE}
+estimate_psi2 <- function(.data) {
+  glm(
+    qsmk ~ sex + race + age + I(age^2) + education + 
+      smokeintensity + I(smokeintensity^2) + 
+      smokeyrs + I(smokeyrs^2) + exercise + active + 
+      wt71 + I(wt71^2), 
+    data = .data, 
+    family = binomial(),
+    weights = cwts, 
+  ) %>% 
+    augment(data = .data, type.predict = "response") %>% 
+    psi_formula2()
+}
+
+solve_matrix <- function(.data, .names = c("psi1", "psi2")) {
+  cells <- .data %>% 
+    summarise(
+      a1 = sum(qsmk * diff), 
+      a2 = sum(qsmk * smokeintensity  * diff), 
+      a3 = sum(qsmk * smokeintensity * diff), 
+      a4 = sum(qsmk * smokeintensity * smokeintensity * diff),
+      b1 = sum(wt82_71 * diff),
+      b2 = sum(wt82_71 * smokeintensity * diff)
+    )
+  
+  a <- cells %>% 
+    select(a1:a4) %>% 
+    unlist() %>% 
+    matrix(2, 2)
+  
+  b <- cells %>% 
+    select(b1:b2) %>% 
+    unlist() %>% 
+    matrix(2, 1)
+  
+  solve(a, b) %>% 
+    t() %>% 
+    as_tibble(.name_repair = "minimal") %>% 
+    set_names(.names)
+}
+
+psi_formula2 <- function(.data) {
+  .data %>% 
+    mutate(diff = (qsmk - .fitted) * cwts) %>% 
+    drop_na(wt82_71) %>% 
+    solve_matrix()
+}
+
+nhefs_censored %>% 
+  select(-.fitted:-.cooksd) %>% 
+  filter(censored == 0) %>% 
+  estimate_psi2()
 ```
 
