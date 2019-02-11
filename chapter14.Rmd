@@ -118,7 +118,8 @@ bind_cols(psi_est, psi_conf_int)
 
 ```{r}
 psi_search %>% 
-  ggplot(aes(x = psi, y = abs(estimate))) + 
+  ggplot(aes(x = psi, y = estimate)) +       
+    geom_hline(yintercept = 0, col = "grey85", size = 1.3) +
     geom_line(col = "#0072B2", size = 1.2) + 
     geom_point(shape = 21, col = "white", fill = "#0072B2", size = 2.5) + 
     theme_minimal(14)
