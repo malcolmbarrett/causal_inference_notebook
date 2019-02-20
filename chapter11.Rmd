@@ -13,9 +13,11 @@ This is the code for Chapter 11
 library(tidyverse)
 library(broom)
 
-binary_a_df <- data.frame(a = c(rep(1, 8), rep(0, 8)),
-           y = c(200, 150, 220, 110, 50, 180, 90, 170, 
-                 170, 30, 70, 110, 80, 50, 10, 20))
+binary_a_df <- data.frame(
+  a = c(rep(1, 8), rep(0, 8)),
+  y = c(200, 150, 220, 110, 50, 180, 90, 170, 
+        170, 30, 70, 110, 80, 50, 10, 20)
+)
 
 ggplot(binary_a_df, aes(a, y)) +
   geom_point(size = 4, col = "white", fill = "#E69F00", shape = 21) +
@@ -28,7 +30,7 @@ binary_a_df %>%
   group_by(a) %>% 
   summarize(n = n(), mean = mean(y), sd = sd(y), 
             minimum = min(y), maximum = max(y)) %>% 
-  kable(digits = 2)
+  knitr::kable(digits = 2)
 ```
 
 
@@ -47,7 +49,7 @@ ggplot(categorical_a_df, aes(a, y)) +
 categorical_a_df %>% 
   group_by(a) %>% 
   summarize(n = n(), mean = mean(y), sd = sd(y), minimum = min(y), maximum = max(y)) %>% 
-  kable(digits = 2)
+  knitr::kable(digits = 2)
 ```
 
 ## Program 11.2
