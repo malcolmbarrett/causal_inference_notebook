@@ -129,10 +129,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
-<li class="chapter" data-level="1" data-path="chapter-11.html"><a href="chapter-11.html"><i class="fa fa-check"></i><b>1</b> Chapter 11</a><ul>
-<li class="chapter" data-level="1.1" data-path="chapter-11.html"><a href="chapter-11.html#program-11.1"><i class="fa fa-check"></i><b>1.1</b> Program 11.1</a></li>
-<li class="chapter" data-level="1.2" data-path="chapter-11.html"><a href="chapter-11.html#program-11.2"><i class="fa fa-check"></i><b>1.2</b> Program 11.2</a></li>
-<li class="chapter" data-level="1.3" data-path="chapter-11.html"><a href="chapter-11.html#program-11.3"><i class="fa fa-check"></i><b>1.3</b> Program 11.3</a></li>
+<li class="chapter" data-level="1" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html"><i class="fa fa-check"></i><b>1</b> Chapter 11: Why model?</a><ul>
+<li class="chapter" data-level="1.1" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.1"><i class="fa fa-check"></i><b>1.1</b> Program 11.1</a></li>
+<li class="chapter" data-level="1.2" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.2"><i class="fa fa-check"></i><b>1.2</b> Program 11.2</a></li>
+<li class="chapter" data-level="1.3" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.3"><i class="fa fa-check"></i><b>1.3</b> Program 11.3</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="chapter-12.html"><a href="chapter-12.html"><i class="fa fa-check"></i><b>2</b> Chapter 12</a><ul>
 <li class="chapter" data-level="2.1" data-path="chapter-12.html"><a href="chapter-12.html#program-12.1"><i class="fa fa-check"></i><b>2.1</b> Program 12.1</a></li>
@@ -226,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb62-14" data-line-number="14"><span class="st">    </span><span class="kw">theme_minimal</span>(<span class="dv">14</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb62-15" data-line-number="15"><span class="st">    </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">200</span>, <span class="dv">1700</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb62-16" data-line-number="16"><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;change in weight&quot;</span>)</a></code></pre></div>
-<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 </div>
 <div id="program-14.2" class="section level2">
 <h2><span class="header-section-number">4.2</span> Program 14.2</h2>
@@ -320,7 +320,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb69-4" data-line-number="4"><span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">col =</span> <span class="st">&quot;#0072B2&quot;</span>, <span class="dt">size =</span> <span class="fl">1.2</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb69-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">shape =</span> <span class="dv">21</span>, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#0072B2&quot;</span>, <span class="dt">size =</span> <span class="fl">2.5</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb69-6" data-line-number="6"><span class="st">    </span><span class="kw">theme_minimal</span>(<span class="dv">14</span>)</a></code></pre></div>
-<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">psi_formula &lt;-<span class="st"> </span><span class="cf">function</span>(weights, outcome, treatment, treatment_pred) {</a>
 <a class="sourceLine" id="cb70-2" data-line-number="2">  numerator &lt;-<span class="st"> </span>weights <span class="op">*</span><span class="st"> </span>outcome <span class="op">*</span><span class="st"> </span>(treatment <span class="op">-</span><span class="st"> </span>treatment_pred)</a>
 <a class="sourceLine" id="cb70-3" data-line-number="3">  denominator &lt;-<span class="st"> </span><span class="kw">sum</span>(weights <span class="op">*</span><span class="st"> </span>treatment <span class="op">*</span><span class="st"> </span>(treatment <span class="op">-</span><span class="st"> </span>treatment_pred), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>

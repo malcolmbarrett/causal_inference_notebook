@@ -126,7 +126,7 @@ psi_search %>%
 ```
 
 
-```{r, cache = TRUE}
+```{r psi_formula, cache = TRUE}
 psi_formula <- function(weights, outcome, treatment, treatment_pred) {
   numerator <- weights * outcome * (treatment - treatment_pred)
   denominator <- sum(weights * treatment * (treatment - treatment_pred), na.rm = TRUE)

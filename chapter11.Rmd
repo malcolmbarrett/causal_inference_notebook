@@ -3,11 +3,13 @@ title: 'Causal Inference: Chapter 11'
 output: html_document
 ---
 
-# Chapter 11
+# Chapter 11: Why model?
 
-This is the code for Chapter 11
+This is the code for Chapter 11. Throughout this chapter and the rest of the book, we'll use the tidyverse metapackage to load the core tidyverse packages, as well the broom package. In this chapter, the main packages we'll be using are ggplot2 for data visualization, dplyr for data manipulation, and broom for [tidying](https://r4ds.had.co.nz/tidy-data.html) regression model results.
 
 ## Program 11.1
+
+To replicate Program 11.1, we first need to create the data set, `binary_a_df`. 
 
 ```{r, fig.cap="Figure 11.1"}
 library(tidyverse)
@@ -25,14 +27,22 @@ ggplot(binary_a_df, aes(a, y)) +
   theme_minimal(base_size = 20)
 ```
 
+To summarize the data, we'll use dplyr to group the dataset by `a`, then get the sample size, mean, standard deviation, and range. `knitr::kable()` is used to print the results nicely to a table. (For more information on the `%>%` pipe operator, see [R for Data Science](https://r4ds.had.co.nz/pipes.html).)
+
 ```{r skim_data}
 binary_a_df %>% 
   group_by(a) %>% 
-  summarize(n = n(), mean = mean(y), sd = sd(y), 
-            minimum = min(y), maximum = max(y)) %>% 
+  summarize(
+    n = n(), 
+    mean = mean(y), 
+    sd = sd(y), 
+    minimum = min(y), 
+    maximum = max(y)
+  ) %>% 
   knitr::kable(digits = 2)
 ```
 
+Similarly, we'll plot and summarize `categorical_a_df`.
 
 ```{r, fig.cap="Figure 11.2"}
 categorical_a_df <- data.frame(a = sort(rep(1:4, 4)),
@@ -48,61 +58,87 @@ ggplot(categorical_a_df, aes(a, y)) +
 ```{r}
 categorical_a_df %>% 
   group_by(a) %>% 
-  summarize(n = n(), mean = mean(y), sd = sd(y), minimum = min(y), maximum = max(y)) %>% 
+  summarize(
+    n = n(), 
+    mean = mean(y), 
+    sd = sd(y), 
+    minimum = min(y), 
+    maximum = max(y)
+  ) %>% 
   knitr::kable(digits = 2)
 ```
 
 ## Program 11.2
 
-```{r, fig.cap="Figure 11.3"}
-continuous_a_df <- data.frame(a = c(3,11,17,23,29,37,41,53,
-                                    67,79,83,97,60,71,15,45),
-                              y = c(21,54,33,101,85,65,157,120,
-                                    111,200,140,220,230,217,11,190))
+Program 11.2 uses a continuous exposure and outcome data, `continuous_a_df`. Plotting the points is similar to above.
 
+```{r, fig.cap="Figure 11.3"}
+continuous_a_df <- data.frame(
+  a = c(3, 11, 17, 23, 29, 37, 41, 53, 
+        67, 79, 83, 97, 60, 71, 15, 45),
+  y = c(21, 54, 33, 101, 85, 65, 157, 120, 
+        111, 200, 140, 220, 230, 217, 11, 190)
+)
 
 ggplot(continuous_a_df, aes(a, y)) +
   geom_point(size = 4, col = "white", fill = "#E69F00",  shape = 21) +
   theme_minimal(base_size = 20)
 ```
 
+We'll also add a regression line using `geom_smooth()` with `method = "lm"`.
 
 ```{r, fig.cap="Figure 11.4"}
 ggplot(continuous_a_df, aes(a, y)) +
   geom_point(size = 4, col = "white", fill = "grey85", shape = 21) +
-  geom_smooth(method = "lm", se = FALSE, col = "#E69F00", size = 1.2) + 
+  geom_smooth(method = "lm", se = FALSE, col = "#E69F00", size = 1.2) +
   theme_minimal(base_size = 20) 
 ```
+
+To fit an OLS regression model of `a` on `y`, we'll use`lm()` and then tidy the results with `tidy()` from the broom package.
 
 ```{r}
 linear_regression <- lm(y ~ a, data = continuous_a_df)
 
 linear_regression %>% 
+  # get the confidence intervals using `conf.int = TRUE`
   tidy(conf.int = TRUE) %>% 
+  # drop the test statistic and P-value
   select(-statistic, -p.value) %>% 
   knitr::kable(digits = 2)
+```
 
+To predict a value of `y` for when `a = 90`, we pass the linear regression model object `linear_regression` to the `predict()` function. We also give it a new data frame that contains only one value, `a = 90`.
+
+```{r}
 linear_regression %>% 
   predict(newdata = data.frame(a = 90))
 ```
 
+Similarly, using `binary_a_df`, which has a treatmant `a` that is a binary:
+
 ```{r}
 lm(y ~ a, data = binary_a_df) %>% 
-  tidy(conf.int = TRUE) %>% 
+  tidy(conf.int = TRUE) %>%   
   select(-statistic, -p.value) %>% 
   knitr::kable(digits = 2)
 ```
 
 ## Program 11.3
+
+Fitting and tidying a quadratic version of `a` is similar, but we use `I()` to include `a^2`.
+
 ```{r}
 smoothed_regression <- lm(y ~ a + I(a^2), data = continuous_a_df) 
 
 smoothed_regression %>% 
   tidy(conf.int = TRUE) %>% 
   select(-statistic, -p.value) %>% 
+  #  remove `I()` from the term name
   mutate(term = ifelse(term == "I(a^2)", "a^2", term)) %>% 
   knitr::kable(digits = 2) 
 ```
+
+To plot the quadratic function, we give `geom_smooth()` a `formula` argument: `formula = y ~ x + I(x^2)`.
 
 ```{r, fig.cap="Figure 11.5"}
 ggplot(continuous_a_df, aes(a, y)) +
@@ -110,6 +146,8 @@ ggplot(continuous_a_df, aes(a, y)) +
   geom_smooth(method = "lm", se = FALSE, col = "#E69F00", formula = y ~ x + I(x^2), size = 1.2) + 
   theme_minimal(base_size = 20) 
 ```
+
+But predicting is done the same way.
 
 ```{r}
 smoothed_regression %>% 
