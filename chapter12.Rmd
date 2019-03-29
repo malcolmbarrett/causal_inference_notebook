@@ -212,8 +212,8 @@ gee_model <- geeglm(
   data = nhefs_complete, 
   std.err = "san.se", # default robust SE 
   weights = wts, # inverse probability weights
-  id = id, 
-  corstr = "independence" # independent correlation structure
+  id = id, # required ID variable
+  corstr = "independence" # default independent correlation structure
 ) 
 
 gee_model_cis <- tidy(gee_model, conf.int = TRUE) %>% 
@@ -342,6 +342,8 @@ lm_robust(wt82_71 ~ qsmk, data = nhefs_complete, weights = swts) %>%
 
 ## Program 12.4
 
+The workflow for continuous exposures is very similar to binary exposure. The main differences are that the model needs to be appropriate for continuous variable and in how the weights are calculated. We fit the models for smoking intensity, a continuous exposure, using OLS with `lm()`: one for the numerator without predictors and one for the denominator with the confounders. Then, we use `augment` to get the predicted values for smoking intensity (`.fitted`) and their standard error (`.sigma`). Using the template `dnorm(true_value, predicted_value, mean(standard_error, rm.na = TRUE))`, we can fit values to use for the stabilized weights. 
+
 ```{r}
 nhefs_light_smokers <- nhefs %>% 
   drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, active, wt71, wt82, wt82_71, censored) %>% 
@@ -370,21 +372,28 @@ nhefs_light_smokers <- nhefs_light_smokers %>%
   left_join(numerators, by = "id") %>% 
   left_join(denominators, by = "id") %>% 
   mutate(swts = numerator / denominator)
+```
 
+As with binary exposures, we want to check the distribution of our weights for a mean of around 1 and look for any extreme weights.
+
+```{r}
 ggplot(nhefs_light_smokers, aes(swts)) +
   geom_density(col = "#E69F00", fill = "#E69F0095") + 
   scale_x_log10() + 
   theme_minimal(base_size = 20) + 
   xlab("log10(Stabilized Weights)")
+```
 
+Fitting the marginal structural model follow the same pattern as above.
+
+```{r}
 smk_intensity_model <- lm_robust(wt82_71 ~ smkintensity82_71 + I(smkintensity82_71^2), data = nhefs_light_smokers, weights = swts)
-
-smk_intensity_model_ols <- lm(wt82_71 ~ smkintensity82_71 + I(smkintensity82_71^2), data = nhefs_light_smokers, weights = swts)
 
 smk_intensity_model %>% 
   tidy()
-
 ```
+
+To calculate the contrasts for smoking intensity values of 0 and 20, we'll write the function `calculate_contrast()`. We can then bootstrap the confidence intervals. (Here, we don't need to fit the entire process again: just the marginal structural model).
 
 ```{r bootstrap_12point4, cache = TRUE}
 
@@ -411,15 +420,15 @@ bootstrap_contrasts %>%
 
 ## Program 12.5
 
+Fitting a marginal structural model for a binary outcome is almost identical to fitting one for a continuous expsure, but we need to use a model appropriate for binary outcomes. We'll use logistic regression and fit robust standard errors using `geeglm()`. The weightas, `swts`, are the same ones we used in Program 12.3.
+
 ```{r}
 logistic_msm <- geeglm(
   death ~ qsmk, 
   data = nhefs_complete, 
   family = binomial(),
-  std.err = "san.se",
   weights = swts, 
-  id = id, 
-  corstr = "independence"
+  id = id
 ) 
 
 tidy(logistic_msm, conf.int = TRUE, exponentiate = TRUE) 
@@ -427,7 +436,10 @@ tidy(logistic_msm, conf.int = TRUE, exponentiate = TRUE)
 
 ## Program 12.6
 
+While the workflow for marginal structural models with interaction terms is similar to the above, there is one important difference: We need to include the interaction variable in both the numerator and denominator models so that we can safely use it in the marginal structural model.
+
 ```{r}
+#  use a model with sex as a predictor for the numerator
 numerator_sex <- glm(qsmk ~ sex, data = nhefs_complete, family = binomial())
 
 nhefs_complete <- numerator_sex %>% 
@@ -436,7 +448,11 @@ nhefs_complete <- numerator_sex %>%
   select(id, numerator_sex) %>% 
   left_join(nhefs_complete, by = "id") %>% 
   mutate(swts_sex = numerator_sex * wts)
+```
 
+Checking the weights is the same.
+
+```{r}
 nhefs_complete %>% 
   summarize(mean_wt = mean(swts_sex), sd_wts = sd(swts_sex))
 
@@ -452,11 +468,15 @@ lm_robust(wt82_71 ~ qsmk*sex, data = nhefs_complete, weights = swts) %>%
 
 ## Program 12.7
 
+As you can see, the workflow for fitting marginal structural models follows a pattern: fight the weights, inverse or stabilize them, check the weights, and use them in a marginal model with the outcome and expsures of interest. Correcting for selection bias due to censoring uses the same work flow. Since we want to use both the censoring weights and the treatment weights, we can take their product and use the result to weight our marginal structural model. Since we'll use stabilized weights, we have five models: the numerator and denominator for the censoring weights, the numerator and denominartor for the treatment weights, and the marginal structural model.
+
 ```{r}
 # using complete data set
 nhefs_censored <- nhefs %>% 
   drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
          active, wt71)
+
+# Inverse Probability of Treatment Weights --------------------------------
 
 numerator_sws_model <- glm(qsmk ~ 1, data = nhefs_censored, family = binomial())
 
@@ -478,6 +498,9 @@ denominators_sws <- denominator_sws_model %>%
   mutate(denominator_sw = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
   select(id, denominator_sw)
 
+
+# Inverse Probability of Censoring Weights --------------------------------
+
 numerator_cens_model <- glm(censored ~ qsmk, data = nhefs_censored, family = binomial())
 
 numerators_cens <- numerator_cens_model %>% 
@@ -498,17 +521,25 @@ denominators_cens <- denominator_cens_model %>%
   mutate(denominator_cens = ifelse(censored == 0, 1 - .fitted, 1)) %>% 
   select(id, denominator_cens)
 
+#  join all the weights data from above
 nhefs_censored_wts <- nhefs_censored %>% 
   left_join(numerators_sws, by = "id") %>% 
   left_join(denominators_sws, by = "id") %>% 
   left_join(numerators_cens, by = "id") %>% 
   left_join(denominators_cens, by = "id") %>% 
   mutate(
+    #  IPTW 
     swts = numerator_sw / denominator_sw, 
+    #  IPCW
     cens_wts = numerator_cens / denominator_cens,
+    #  Multiply the weights to use in the model
     wts = swts * cens_wts
   )
+```
 
+The censoring weights are a little different but, since they are stabilized, they should still have a mean around 1.
+
+```{r}
 nhefs_censored_wts %>% 
   summarize(mean_wt = mean(cens_wts), sd_wts = sd(cens_wts))
 
@@ -517,8 +548,11 @@ ggplot(nhefs_censored_wts, aes(cens_wts)) +
   scale_x_log10() + 
   theme_minimal(base_size = 20) + 
   xlab("log10(Stabilized Weights)")
+```
 
+To fit both weights, we simply use their product in the marginal structural model.
+
+```{r}
 lm_robust(wt82_71 ~ qsmk, data = nhefs_censored_wts, weights = wts) %>% 
   tidy()
 ```
-
