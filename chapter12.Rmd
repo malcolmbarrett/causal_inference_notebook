@@ -3,9 +3,11 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(knitr)
 ```
 
-# Chapter 12
+# Chapter 12: IP Weighting and Marginal Structural Models
 
-This is the code for Chapter 12
+This is the code for Chapter 12. As before, we'll use the tidyverse metapackage and broom, as well as haven, for reading files from SAS (and other statistical software) and tableone for creating descriptive tables. We'll also use the estimatr package for a robust version of `lm()`, geepack for robust generalized estimating equations modeling,  and the boot package to help with bootstrapping confidence intervals.
+
+The data is available to download on the [*Causal Inference*](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/) website.
 
 ## Program 12.1
 
@@ -14,147 +16,216 @@ library(tidyverse)
 library(haven)
 library(broom)
 library(tableone)
+library(estimatr)
+library(geepack)
+library(boot)
 ```
 
+*Causal Inference* uses data from [NHEFS](https://wwwn.cdc.gov/nchs/nhanes/nhefs/default.aspx/). To read in the SAS file, use `read_sas()` from the haven package.
 
 ```{r}
+#  read the SAS data file
 nhefs <- read_sas("data/nhefs.sas7bdat")
 
 nhefs
 ```
 
-```{r}
+First, we need to clean up the data a little. There's already a variable that could be an ID, `seqn`, but we'll make a simpler one, `id`. We're also going to add a variable called `censored` that is 1 if the weight variable from 1982 is missing and 0 otherwise. We'll also create two categorical variables from `age` and `school`: `older`, a binary variable indicating if the person is older than 50, and `education`, a categorical variable representing years of education. Finally, we'll change all of the categorical variables to have be factors.
 
+```{r}
 nhefs <- nhefs %>% 
-  # add id and censored indicator
-  # recode age > 50 and years of school to categories
   mutate(
+    # add id and censored indicator
     id = 1:n(),
     censored = ifelse(is.na(wt82), 1, 0),
-    older = case_when(is.na(age) ~ NA_real_,
-                      age > 50 ~ 1,
-                      TRUE ~ 0),
-    education = case_when(school <  9 ~ 1,
-                       school <  12 ~ 2,
-                       school == 12 ~ 3,
-                       school < 16 ~ 4,
-                       TRUE ~ 5)
+    # recode age > 50 and years of school to categories
+    older = case_when(
+      is.na(age) ~ NA_real_,
+      age > 50 ~ 1,
+      TRUE ~ 0
+    ),
+    education = case_when(
+      school <  9 ~ 1,
+      school <  12 ~ 2,
+      school == 12 ~ 3,
+      school < 16 ~ 4,
+      TRUE ~ 5
+    )
   ) %>% 
-  # change categorical to factors
+  #  change categorical variables to factors
   mutate_at(vars(sex, race, education, exercise, active), factor)
+```
 
+For the analysis, we'll only use participants with complete covariate data and drop the rest using `drop_na()` from the tidyr package.
 
-# restrict to complete cases
+```{r}
+#  restrict to complete cases
 nhefs_complete <- nhefs %>% 
-  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
-         active, wt71, wt82, wt82_71, censored)
+  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, active, wt71, wt82, wt82_71, censored)
+```
 
+Then we'll summarize the mean and SD for the difference in weight between 1982 and 1971, grouped by whether or not the participant quit smoking.
 
+```{r}
 nhefs_complete %>%
+  #  only show for pts not lost to follow-up
   filter(censored == 0) %>% 
   group_by(qsmk) %>% 
-  summarize(mean_weight_change = mean(wt82_71), sd = sd(wt82_71)) %>% 
+  summarize(
+    mean_weight_change = mean(wt82_71), 
+    sd = sd(wt82_71)
+  ) %>% 
   knitr::kable(digits = 2)
+```
 
+To recreate Table 12.1, we'll use the tableone package, which easily creates descriptive tables. First, we'll clean up the data a little more to have better labels for variable names and the levels within each variable. Then, we pass `tbl1_data` to `CreateTableOne()` and print it as a kable. 
 
-# clean up the data for the table
+```{r}
+#  a helper function to turn into Yes/No factor
 fct_yesno <- function(x) {
   factor(x, labels = c("No", "Yes"))
 }
 
 tbl1_data <- nhefs_complete %>% 
-    filter(censored == 0) %>%
-    mutate(university = fct_yesno(ifelse(education == 5, 1, 0)),
-           no_exercise = fct_yesno(ifelse(exercise == 2, 1, 0)),
-           inactive = fct_yesno(ifelse(active == 2, 1, 0)),
-           qsmk = factor(qsmk, levels = 1:0, c("Ceased Smoking", "Continued Smoking")),
-           sex = factor(sex, levels = 1:0, labels = c("Female", "Male")),
-           race = factor(race, levels = 1:0, labels = c("Other", "White"))) %>% 
-    select(qsmk, age, sex, race, university, wt71, smokeintensity, smokeyrs, no_exercise, 
-           inactive) %>% 
-  rename("Smoking Cessation" = "qsmk",
-         "Age" = "age",
-         "Sex" = "sex",
-         "Race" = "race",
-         "University education" = "university",
-         "Weight, kg" = "wt71", 
-         "Cigarettes/day" = "smokeintensity",
-         "Years smoking" = "smokeyrs",
-         "Little or no exercise" = "no_exercise",
-         "Inactive daily life" = "inactive")
-
-kableone <- function(x, ...) {
-  capture.output(x <- print(x))
-  knitr::kable(x, ...)
-}
+  #  filter out participants lost to follow-up 
+  filter(censored == 0) %>%
+  #  turn categorical variables into factors
+  mutate(
+    university = fct_yesno(ifelse(education == 5, 1, 0)),
+    no_exercise = fct_yesno(ifelse(exercise == 2, 1, 0)),
+    inactive = fct_yesno(ifelse(active == 2, 1, 0)),
+    qsmk = factor(qsmk, levels = 1:0, c("Ceased Smoking", "Continued Smoking")),
+    sex = factor(sex, levels = 1:0, labels = c("Female", "Male")),
+    race = factor(race, levels = 1:0, labels = c("Other", "White"))
+  ) %>% 
+  #  only include a subset of variables in the descriptive tbl
+  select(qsmk, age, sex, race, university, wt71, smokeintensity, smokeyrs, no_exercise, inactive) %>% 
+  #  rename variable names to match Table 12.1
+  rename(
+    "Smoking Cessation" = "qsmk",
+    "Age" = "age",
+    "Sex" = "sex",
+    "Race" = "race",
+    "University education" = "university",
+    "Weight, kg" = "wt71", 
+    "Cigarettes/day" = "smokeintensity",
+    "Years smoking" = "smokeyrs",
+    "Little or no exercise" = "no_exercise",
+    "Inactive daily life" = "inactive"
+  )
 
 tbl1_data %>% 
-  CreateTableOne(vars = select(tbl1_data, -`Smoking Cessation`) %>% names, 
-                 strata = "Smoking Cessation", data = ., test = FALSE) %>% 
+  #  create a descriptive table
+  CreateTableOne(
+    #  pull all variable names but smoking
+    vars = select(tbl1_data, -`Smoking Cessation`) %>% names, 
+    #  stratify by smoking status
+    strata = "Smoking Cessation", 
+    #  use `.` to direct the pipe to the `data` argument
+    data = ., 
+    #  don't show p-values
+    test = FALSE
+  ) %>% 
+  #  print to a kable
   kableone()
 
 ```
 
 ## Program 12.2
 
+Now, we'll fit the weights for the marginal structural model. For logistic regression, we'll use `glm()` to fit a model called `propensity_model`.
+
 ```{r}
-# Estimation of IP weights via a logistic model
+#  estimation of IP weights via a logistic model
+propensity_model <- glm(
+  qsmk ~ sex + 
+    race + age + I(age^2) + education + 
+    smokeintensity + I(smokeintensity^2) + 
+    smokeyrs + I(smokeyrs^2) + exercise + active + 
+    wt71 + I(wt71^2), 
+  family = binomial(), 
+  data = nhefs_complete
+)
+```
 
-propensity <- glm(qsmk ~ sex + race + age + I(age^2) + education + 
-                  smokeintensity + I(smokeintensity^2) + 
-                  smokeyrs + I(smokeyrs^2) + exercise + active + 
-                  wt71 + I(wt71^2), 
-                  family = binomial(), data = nhefs_complete)
+To see the coefficients of the propensity score model: 
 
-propensity %>% 
+```{r}
+propensity_model %>% 
+  #  get confidence intervals and exponentiate estimates
   tidy(conf.int = TRUE, exponentiate = TRUE) %>% 
   select(-statistic, -p.value) %>% 
   knitr::kable(digits = 2)
+```
 
-nhefs_complete <- propensity %>% 
+To predict the weights, we'll use the `augment()` function from broom to add the predicted probabilities of quitting smoking (called `.fitted` by default) to `nhefs_complete`. What we actually need is the probability for each person's observed outcome, so for people who did not quit smoking, we need `1 - .fitted`. Using `mutate()`, we'll add a variable called `wts`, which is 1 divided by this probability.
+
+```{r}
+nhefs_complete <- propensity_model %>% 
   augment(type.predict = "response", data = nhefs_complete) %>% 
   mutate(wts = 1 / ifelse(qsmk == 0, 1 - .fitted, .fitted))
-    
+```
+
+It's important to look at the distribution of the weights to see its shape and if there are any extreme values.
+
+```{r}
 nhefs_complete %>% 
   summarize(mean_wt = mean(wts), sd_wts = sd(wts))
 
 ggplot(nhefs_complete, aes(wts)) +
   geom_density(col = "#E69F00", fill = "#E69F0095") + 
+  #  use a log scale for the x axis
   scale_x_log10() + 
-  theme_minimal(base_size = 14) + 
+  theme_minimal(base_size = 20) + 
   xlab("log10(Weights)")
+```
 
+While OLS regression, using `lm()` with `weights = wts`, will work fine for the estimate, the standard errors tend to be too small when we use weights. We'll get the confidence intervals using for approaches: OLS, GEE, OLS with robust standard errors, and bootstrapped confidence intervals. `tidy_est_cis()` is a [helper function](https://r4ds.had.co.nz/functions.html) to get the estimate and confidence intervals for each model. 
+
+```{r}
 tidy_est_cis <- function(.df, .type) {
   .df %>% 
+    #  add the name of the model to the data
     mutate(type = .type) %>% 
     filter(term == "qsmk") %>% 
     select(type, estimate, conf.low, conf.high)
 }
 
 #  standard error a little too small
-ols_cis <- lm(wt82_71 ~ qsmk, data = nhefs_complete, weights = wts) %>% 
+ols_cis <- lm(
+  wt82_71 ~ qsmk, 
+  data = nhefs_complete, 
+  #  weight by inverse probability
+  weights = wts
+) %>%
   tidy(conf.int = TRUE) %>% 
   tidy_est_cis("ols")
 
 ols_cis
+```
 
-library(geepack)
+`geeglm()` from geepack fits a GEE GLM using robust standard errors. We also need to specify the correlation structure and id variable.
+
+```{r}
 gee_model <- geeglm(
   wt82_71 ~ qsmk, 
   data = nhefs_complete, 
   std.err = "san.se", # default robust SE 
   weights = wts, # inverse probability weights
-  id = id, 
-  corstr = "independence" # independent correlation structure
+  id = id, # required ID variable
+  corstr = "independence" # default independent correlation structure
 ) 
 
 gee_model_cis <- tidy(gee_model, conf.int = TRUE) %>% 
   tidy_est_cis("gee")
 
 gee_model_cis
+```
 
+`lm_robust()` from the estimatr package fits an OLS model but produces robust standard errors by default.
+
+```{r}
 #  easy robust SEs
-library(estimatr)
 robust_lm_model_cis <- lm_robust(
   wt82_71 ~ qsmk, data = nhefs_complete, 
   weights = wts
@@ -163,10 +234,16 @@ robust_lm_model_cis <- lm_robust(
   tidy_est_cis("robust ols")
 
 robust_lm_model_cis
+```
 
+While traditional OLS gives confidence intervals that are a little to narrow, the robust methods give confidence intervals that are a little too wide. Bootstrapping gives CIs somewhere between, but to produce the right CIs, you need to bootstrap the entire fitting process, including the weights. We'll use the boot package and write a function called `model_nhefs()` to fit the weights and marginal structural model. The output for `model_nhefs()` is the coefficient for `qsmk` in the marginal structural model. 
+
+```{r}
 model_nhefs <- function(data, indices) {
-  #  need to bootstrap the entire fitting process, including IPWs
+  #  use bootstrapped data
   df <- data[indices, ]
+  
+  #  need to bootstrap the entire fitting process, including IPWs
   propensity <- glm(qsmk ~ sex + race + age + I(age^2) + education + 
                   smokeintensity + I(smokeintensity^2) + 
                   smokeyrs + I(smokeyrs^2) + exercise + active + 
@@ -180,67 +257,96 @@ df <- propensity %>%
   lm(wt82_71 ~ qsmk, data = df, weights = wts) %>% 
     tidy() %>% 
     filter(term == "qsmk") %>% 
+    #  output the coefficient for `qsmk`
     pull(estimate)
 }
 ```
 
+To get [bias-corrected](https://www.wikiwand.com/en/Bootstrapping_(statistics)#/Methods_for_bootstrap_confidence_intervals) CIs, we'll use 2000 bootstrap replications.
+
 ```{r bootstrap_12point2, cache = TRUE}
-library(boot)
+# set seed for the bootstrapped confidence intervals
 set.seed(1234)
 
 bootstrap_estimates <- nhefs_complete %>% 
+  #  remove the variables added by `augment()` earlier
   select(-.fitted:-wts) %>% 
   boot(model_nhefs, R = 2000)
+
 bootstrap_cis <- bootstrap_estimates %>% 
   tidy(conf.int = TRUE, conf.method = "bca") %>% 
   mutate(type = "bootstrap") %>% 
+  #  rename `statistic` to match the other models
   select(type, estimate = statistic, conf.low, conf.high)
 
 bootstrap_cis
 ```
 
+The estimates are all the same, but the CIs vary a bit by method: the GEE and robust OLS CIs are a bit wider, and the traditional OLS CIs are smaller, with the bootstrapped CIs between.
+
 ```{r}
-bind_rows(ols_cis, gee_model_cis, robust_lm_model_cis, bootstrap_cis) %>% 
+bind_rows(
+  ols_cis, 
+  gee_model_cis, 
+  robust_lm_model_cis, 
+  bootstrap_cis
+) %>% 
+  #  calculate CI width to sort by it
   mutate(width = conf.high - conf.low) %>% 
   arrange(width) %>% 
+  #  fix the order of the model types for the plot  
   mutate(type = fct_inorder(type)) %>% 
   ggplot(aes(x = type, y = estimate, ymin = conf.low, ymax = conf.high)) + 
     geom_pointrange(color = "#0172B1", size = 1, fatten = 3) +
     coord_flip() +
-    theme_minimal(base_size = 14)
+    theme_minimal(base_size = 20)
 ```
 
 ## Program 12.3
+
+Fitting stabilized weights is similar to inverse weights, but we need to fit a model for the numerator. To fit a model with no covariates, we can just put 1 on the right hand side, e.g. `qsmk ~ 1`. Predicting the probabilities for this model is the same as above. We'll use `augment()` and `left_join()` to add the numerator probabilities to `nhefs_complete`, then divide `numerator` by the probabilities fit in Program 12.2 to get stabilized weights.
 
 ```{r}
 numerator <- glm(qsmk ~ 1, data = nhefs_complete, family = binomial())
 
 nhefs_complete <- numerator %>% 
   augment(type.predict = "response", data = nhefs_complete) %>% 
-  mutate(numerator = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+  mutate(numerator = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>%
+  #  take just the numerator probabilities 
   select(id, numerator) %>% 
+  #  join numerator probabilities to `nhefs_complete`
   left_join(nhefs_complete, by = "id") %>% 
+  #  create stabilized weights
   mutate(swts = numerator / ifelse(qsmk == 0, 1 - .fitted, .fitted))
+```
 
+For stabilized weights, we want the mean to be about 1.
+
+```{r}
 nhefs_complete %>% 
   summarize(mean_wt = mean(swts), sd_wts = sd(swts))
 
 ggplot(nhefs_complete, aes(swts)) +
   geom_density(col = "#E69F00", fill = "#E69F0095") + 
   scale_x_log10() + 
-  theme_minimal(base_size = 14) + 
+  theme_minimal(base_size = 20) + 
   xlab("log10(Stabilized Weights)")
+```
 
+Even though it's a little conservative, we'll fit the marginal structural model with robust OLS.
+
+```{r}
 lm_robust(wt82_71 ~ qsmk, data = nhefs_complete, weights = swts) %>% 
   tidy()
 ```
 
 ## Program 12.4
 
+The workflow for continuous exposures is very similar to binary exposure. The main differences are that the model needs to be appropriate for continuous variable and in how the weights are calculated. We fit the models for smoking intensity, a continuous exposure, using OLS with `lm()`: one for the numerator without predictors and one for the denominator with the confounders. Then, we use `augment` to get the predicted values for smoking intensity (`.fitted`) and their standard error (`.sigma`). Using the template `dnorm(true_value, predicted_value, mean(standard_error, rm.na = TRUE))`, we can fit values to use for the stabilized weights. 
+
 ```{r}
 nhefs_light_smokers <- nhefs %>% 
-  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
-         active, wt71, wt82, wt82_71, censored) %>% 
+  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, active, wt71, wt82, wt82_71, censored) %>% 
   filter(smokeintensity <= 25)
 
 nhefs_light_smokers
@@ -266,21 +372,28 @@ nhefs_light_smokers <- nhefs_light_smokers %>%
   left_join(numerators, by = "id") %>% 
   left_join(denominators, by = "id") %>% 
   mutate(swts = numerator / denominator)
+```
 
+As with binary exposures, we want to check the distribution of our weights for a mean of around 1 and look for any extreme weights.
+
+```{r}
 ggplot(nhefs_light_smokers, aes(swts)) +
   geom_density(col = "#E69F00", fill = "#E69F0095") + 
   scale_x_log10() + 
-  theme_minimal(base_size = 14) + 
+  theme_minimal(base_size = 20) + 
   xlab("log10(Stabilized Weights)")
+```
 
+Fitting the marginal structural model follow the same pattern as above.
+
+```{r}
 smk_intensity_model <- lm_robust(wt82_71 ~ smkintensity82_71 + I(smkintensity82_71^2), data = nhefs_light_smokers, weights = swts)
-
-smk_intensity_model_ols <- lm(wt82_71 ~ smkintensity82_71 + I(smkintensity82_71^2), data = nhefs_light_smokers, weights = swts)
 
 smk_intensity_model %>% 
   tidy()
-
 ```
+
+To calculate the contrasts for smoking intensity values of 0 and 20, we'll write the function `calculate_contrast()`. We can then bootstrap the confidence intervals. (Here, we don't need to fit the entire process again: just the marginal structural model).
 
 ```{r bootstrap_12point4, cache = TRUE}
 
@@ -307,15 +420,15 @@ bootstrap_contrasts %>%
 
 ## Program 12.5
 
+Fitting a marginal structural model for a binary outcome is almost identical to fitting one for a continuous expsure, but we need to use a model appropriate for binary outcomes. We'll use logistic regression and fit robust standard errors using `geeglm()`. The weightas, `swts`, are the same ones we used in Program 12.3.
+
 ```{r}
 logistic_msm <- geeglm(
   death ~ qsmk, 
   data = nhefs_complete, 
   family = binomial(),
-  std.err = "san.se",
   weights = swts, 
-  id = id, 
-  corstr = "independence"
+  id = id
 ) 
 
 tidy(logistic_msm, conf.int = TRUE, exponentiate = TRUE) 
@@ -323,7 +436,10 @@ tidy(logistic_msm, conf.int = TRUE, exponentiate = TRUE)
 
 ## Program 12.6
 
+While the workflow for marginal structural models with interaction terms is similar to the above, there is one important difference: We need to include the interaction variable in both the numerator and denominator models so that we can safely use it in the marginal structural model.
+
 ```{r}
+#  use a model with sex as a predictor for the numerator
 numerator_sex <- glm(qsmk ~ sex, data = nhefs_complete, family = binomial())
 
 nhefs_complete <- numerator_sex %>% 
@@ -332,14 +448,18 @@ nhefs_complete <- numerator_sex %>%
   select(id, numerator_sex) %>% 
   left_join(nhefs_complete, by = "id") %>% 
   mutate(swts_sex = numerator_sex * wts)
+```
 
+Checking the weights is the same.
+
+```{r}
 nhefs_complete %>% 
   summarize(mean_wt = mean(swts_sex), sd_wts = sd(swts_sex))
 
 ggplot(nhefs_complete, aes(swts_sex)) +
   geom_density(col = "#E69F00", fill = "#E69F0095") + 
   scale_x_log10() + 
-  theme_minimal(base_size = 14) + 
+  theme_minimal(base_size = 20) + 
   xlab("log10(Stabilized Weights)")
 
 lm_robust(wt82_71 ~ qsmk*sex, data = nhefs_complete, weights = swts) %>% 
@@ -348,11 +468,15 @@ lm_robust(wt82_71 ~ qsmk*sex, data = nhefs_complete, weights = swts) %>%
 
 ## Program 12.7
 
+As you can see, the workflow for fitting marginal structural models follows a pattern: fight the weights, inverse or stabilize them, check the weights, and use them in a marginal model with the outcome and expsures of interest. Correcting for selection bias due to censoring uses the same work flow. Since we want to use both the censoring weights and the treatment weights, we can take their product and use the result to weight our marginal structural model. Since we'll use stabilized weights, we have five models: the numerator and denominator for the censoring weights, the numerator and denominartor for the treatment weights, and the marginal structural model.
+
 ```{r}
 # using complete data set
 nhefs_censored <- nhefs %>% 
   drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
          active, wt71)
+
+# Inverse Probability of Treatment Weights --------------------------------
 
 numerator_sws_model <- glm(qsmk ~ 1, data = nhefs_censored, family = binomial())
 
@@ -374,6 +498,9 @@ denominators_sws <- denominator_sws_model %>%
   mutate(denominator_sw = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
   select(id, denominator_sw)
 
+
+# Inverse Probability of Censoring Weights --------------------------------
+
 numerator_cens_model <- glm(censored ~ qsmk, data = nhefs_censored, family = binomial())
 
 numerators_cens <- numerator_cens_model %>% 
@@ -394,27 +521,38 @@ denominators_cens <- denominator_cens_model %>%
   mutate(denominator_cens = ifelse(censored == 0, 1 - .fitted, 1)) %>% 
   select(id, denominator_cens)
 
+#  join all the weights data from above
 nhefs_censored_wts <- nhefs_censored %>% 
   left_join(numerators_sws, by = "id") %>% 
   left_join(denominators_sws, by = "id") %>% 
   left_join(numerators_cens, by = "id") %>% 
   left_join(denominators_cens, by = "id") %>% 
   mutate(
+    #  IPTW 
     swts = numerator_sw / denominator_sw, 
+    #  IPCW
     cens_wts = numerator_cens / denominator_cens,
+    #  Multiply the weights to use in the model
     wts = swts * cens_wts
   )
+```
 
+The censoring weights are a little different but, since they are stabilized, they should still have a mean around 1.
+
+```{r}
 nhefs_censored_wts %>% 
   summarize(mean_wt = mean(cens_wts), sd_wts = sd(cens_wts))
 
 ggplot(nhefs_censored_wts, aes(cens_wts)) +
   geom_density(col = "#E69F00", fill = "#E69F0095") + 
   scale_x_log10() + 
-  theme_minimal(base_size = 14) + 
+  theme_minimal(base_size = 20) + 
   xlab("log10(Stabilized Weights)")
+```
 
+To fit both weights, we simply use their product in the marginal structural model.
+
+```{r}
 lm_robust(wt82_71 ~ qsmk, data = nhefs_censored_wts, weights = wts) %>% 
   tidy()
 ```
-
