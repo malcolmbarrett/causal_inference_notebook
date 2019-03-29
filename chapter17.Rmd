@@ -6,3 +6,318 @@ output: html_document
 # Chapter 17
 
 This is the code for Chapter 11
+
+## Program 17.1
+
+```{r}
+library(survival)
+nhefs_surv <- nhefs %>% 
+  #  survival time in months based on year and month of death since 1983
+  mutate(survival_time = ifelse(death == 0, 120, (yrdth - 83) * 12 + modth))
+
+km_fit <- survfit(Surv(survival_time, death) ~ qsmk, data = nhefs_surv)
+summary(km_fit, times = c(1, 30, 60, 90, 120))
+
+# autoplot(km_fit, ylim = c(0, 1)) + 
+#   colorblindr::scale_color_OkabeIto() + 
+#   colorblindr::scale_fill_OkabeIto() +
+#   labs(
+#     x = "months",
+#     y = "survival probability",
+#     color = "smoking\ncessation",
+#     fill = "smoking\ncessation"
+#   ) +
+#   theme_minimal(20)
+
+label_data <- data.frame(
+  x = 100,
+  y = c(.93, .7),
+  lbl = c("A = 0", "A = 1"),
+  strata = c("qsmk=0", "qsmk=1")
+)
+
+tidy(km_fit) %>% 
+  ggplot(aes(x = time, y = estimate, color = strata, fill = strata)) + 
+    geom_ribbon(
+      aes(ymin = conf.low, ymax = conf.high), 
+      alpha = .3, 
+      color = NA
+    ) + 
+    geom_step() +
+    geom_text(
+      data = label_data,
+      aes(x = x, y = y, label = lbl),
+      size = 6
+      ) +
+    ylim(0, 1) + 
+    colorblindr::scale_color_OkabeIto() + 
+    colorblindr::scale_fill_OkabeIto() +
+    labs(
+      x = "months",
+      y = "survival probability"
+    ) +
+    theme_minimal(20) +
+    theme(legend.position = "none")
+```
+
+## Program 17.2
+
+```{r}
+nhefs_surv_pt <- nhefs_surv %>% 
+  #  give each person a row for each month alive
+  uncount(survival_time, .remove = FALSE, .id = "time") %>% 
+  group_by(id) %>% 
+  mutate(
+    #  start with time = 0
+    time = time - 1,
+    event = case_when(
+      #  event is always 0 for those who survived
+      death == 0 ~ 0,
+      #  event is 1 for last month of survival for those who died
+      row_number() == n() ~ 1,
+      #  event is 0 for all other rows
+      TRUE ~ 0
+    )
+  ) %>% 
+  ungroup()
+
+nhefs_surv_pt 
+```
+
+```{r}
+pooled_logistic <- glm(event ~ qsmk + time + I(time^2) + qsmk:time + qsmk:I(time^2), family = binomial(), data = nhefs_surv_pt)
+
+pooled_logistic %>% 
+  tidy(conf.int = TRUE, exponentiate = TRUE)
+
+nhefs_surv_0 <- nhefs_surv %>% 
+  uncount(120, .id = "time") %>% 
+  mutate(qsmk = 0, time = time - 1)
+
+nhefs_surv_1 <- nhefs_surv %>%  
+  uncount(120, .id = "time") %>% 
+  mutate(qsmk = 1, time = time - 1)
+
+predicted_survival <- bind_rows(
+  augment(pooled_logistic, newdata = nhefs_surv_0, type.predict = "response"),
+  augment(pooled_logistic, newdata = nhefs_surv_1, type.predict = "response")
+) %>% 
+  mutate(survival_k = 1 - .fitted) %>% 
+  group_by(id, qsmk) %>% 
+  mutate(survival = accumulate(survival_k, `*`))
+
+predicted_survival %>% 
+  filter(time == 119) %>% 
+  group_by(qsmk) %>% 
+  summarize(mean = mean(survival, na.rm = TRUE))
+```
+
+```{r}
+label_data <- data.frame(
+  x = 100,
+  y = c(.93, .7),
+  lbl = c("A = 0", "A = 1"),
+  qsmk = factor(c(0, 1))
+)
+
+predicted_survival %>% 
+  ggplot(aes(x = time, y = survival, color = factor(qsmk), fill = factor(qsmk))) + 
+    geom_line() +
+    geom_text(
+      data = label_data,
+      aes(x = x, y = y, label = lbl),
+      size = 6
+      ) +
+    ylim(0, 1) + 
+    colorblindr::scale_color_OkabeIto() + 
+    colorblindr::scale_fill_OkabeIto() +
+    labs(
+      x = "months",
+      y = "survival probability"
+    ) +
+    theme_minimal(20) +
+    theme(legend.position = "none")
+```
+
+## Program 17.3
+
+```{r}
+numerator_sws_model <- glm(qsmk ~ 1, data = nhefs_surv, family = binomial())
+
+numerators_sws <- numerator_sws_model %>% 
+  augment(type.predict = "response", data = nhefs_surv) %>% 
+  mutate(numerator_sw = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+  select(id, numerator_sw)
+
+denominator_sws_model <- glm(
+  qsmk ~ sex + race + age + I(age^2) + education + 
+  smokeintensity + I(smokeintensity^2) + 
+  smokeyrs + I(smokeyrs^2) + exercise + active + 
+  wt71 + I(wt71^2), 
+  data = nhefs_surv, family = binomial()
+)
+
+sws <- denominator_sws_model %>% 
+  augment(type.predict = "response", data = nhefs_surv) %>% 
+  mutate(denominator_sw = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+  select(id, denominator_sw) %>% 
+  left_join(numerators_sws, by = "id") %>% 
+  mutate(swts = numerator_sw / denominator_sw)
+
+nhefs_surv_swts <- nhefs_surv_pt %>% 
+  left_join(sws, by = "id")
+
+nhefs_surv_swts
+```
+
+
+```{r}
+pooled_logistic <- glm(event ~ qsmk + time + I(time^2) + qsmk:time + qsmk:I(time^2), family = binomial(), data = nhefs_surv_swts, weights = swts)
+
+pooled_logistic %>% 
+  tidy(conf.int = TRUE, exponentiate = TRUE)
+
+nhefs_surv_0 <- nhefs_surv %>% 
+  uncount(120, .id = "time") %>% 
+  mutate(qsmk = 0, time = time - 1)
+
+nhefs_surv_1 <- nhefs_surv %>%  
+  uncount(120, .id = "time") %>% 
+  mutate(qsmk = 1, time = time - 1)
+
+predicted_survival <- bind_rows(
+  augment(pooled_logistic, newdata = nhefs_surv_0, type.predict = "response"),
+  augment(pooled_logistic, newdata = nhefs_surv_1, type.predict = "response")
+) %>% 
+  mutate(survival_k = 1 - .fitted) %>% 
+  group_by(id, qsmk) %>% 
+  mutate(survival = accumulate(survival_k, `*`))
+
+predicted_survival %>% 
+  filter(time == 119) %>% 
+  group_by(qsmk) %>% 
+  summarize(mean = mean(survival, na.rm = TRUE))
+
+predicted_survival %>% 
+  filter(time == 119) %>% 
+  group_by(qsmk) %>% 
+  summarize(mean = mean(survival, na.rm = TRUE)) %>% 
+  spread(qsmk, mean, sep = "_") %>% 
+  summarize(difference = qsmk_1 - qsmk_0)
+```
+
+Should probably modularize this
+
+```{r bootstrap_surv_msm}
+bootstrap_surv_msm <- function(data, indices) {
+  .df <- data %>% 
+    slice(indices) %>% 
+    mutate(boot_id = 1:n())
+  
+  numerator_sws_model <- glm(qsmk ~ 1, data = .df, family = binomial())
+  
+  numerators_sws <- numerator_sws_model %>% 
+    augment(type.predict = "response", data = .df) %>% 
+    mutate(numerator_sw = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+    select(id, numerator_sw)
+  
+  denominator_sws_model <- glm(
+    qsmk ~ sex + race + age + I(age^2) + education + 
+      smokeintensity + I(smokeintensity^2) + 
+      smokeyrs + I(smokeyrs^2) + exercise + active + 
+      wt71 + I(wt71^2), 
+    data = .df, family = binomial()
+  )
+  
+  sws <- denominator_sws_model %>% 
+    augment(type.predict = "response", data = .df) %>% 
+    mutate(denominator_sw = ifelse(qsmk == 0, 1 - .fitted, .fitted)) %>% 
+    select(id, denominator_sw) %>% 
+    left_join(numerators_sws, by = "id") %>% 
+    mutate(swts = numerator_sw / denominator_sw)
+  
+  nhefs_surv_swts_pt <- .df %>% 
+    left_join(sws, by = "id") %>% 
+    uncount(survival_time, .remove = FALSE, .id = "time") %>% 
+    group_by(id) %>% 
+    mutate(
+      time = time - 1,
+      event = case_when(
+        death == 0 ~ 0,
+        row_number() == n() ~ 1,
+        TRUE ~ 0
+      )
+    ) %>% 
+    ungroup()
+  
+  pooled_logistic <- glm(event ~ qsmk + time + I(time^2) + qsmk:time + qsmk:I(time^2), family = binomial(), data = nhefs_surv_swts_pt, weights = swts)
+  
+  nhefs_surv_0 <- nhefs_surv_swts_pt %>% 
+    filter(time == 0) %>% 
+    select(-time) %>% 
+    uncount(120, .id = "time") %>% 
+    mutate(qsmk = 0, time = time - 1)
+  
+  nhefs_surv_1 <- nhefs_surv_swts_pt %>%  
+    filter(time == 0) %>% 
+    select(-time) %>% 
+    uncount(120, .id = "time") %>% 
+    mutate(qsmk = 1, time = time - 1)
+  
+  predicted_survival <- bind_rows(
+    augment(pooled_logistic, newdata = nhefs_surv_0, type.predict = "response"),
+    augment(pooled_logistic, newdata = nhefs_surv_1, type.predict = "response")
+  ) %>% 
+    mutate(survival_k = 1 - .fitted) %>% 
+    group_by(id, qsmk) %>% 
+    mutate(survival = accumulate(survival_k, `*`))
+  
+  predicted_survival %>% 
+    filter(time == 119) %>% 
+    group_by(qsmk) %>% 
+    summarize(mean = mean(survival, na.rm = TRUE))
+  
+  predicted_survival %>% 
+    filter(time == 119) %>% 
+    group_by(qsmk) %>% 
+    summarize(mean = mean(survival, na.rm = TRUE)) %>% 
+    spread(qsmk, mean, sep = "_") %>% 
+    summarize(difference = qsmk_1 - qsmk_0) %>% 
+    pull()
+}
+
+bootstrapped_difference <- boot(nhefs_surv, bootstrap_surv_msm, R = 500)
+bootstrapped_difference %>% 
+  tidy(conf.int = TRUE, conf.meth = "bca")
+```
+
+
+```{r}
+label_data <- data.frame(
+  x = 100,
+  y = c(.93, .7),
+  lbl = c("A = 0", "A = 1"),
+  qsmk = factor(c(0, 1))
+)
+
+predicted_survival %>% 
+  ggplot(aes(x = time, y = survival, color = factor(qsmk), fill = factor(qsmk))) + 
+    geom_line() +
+    geom_text(
+      data = label_data,
+      aes(x = x, y = y, label = lbl),
+      size = 6
+      ) +
+    ylim(0, 1) + 
+    colorblindr::scale_color_OkabeIto() + 
+    colorblindr::scale_fill_OkabeIto() +
+    labs(
+      x = "months",
+      y = "survival probability"
+    ) +
+    theme_minimal(20) +
+    theme(legend.position = "none")
+```
+
+## Program 17.4
+## Program 17.5
