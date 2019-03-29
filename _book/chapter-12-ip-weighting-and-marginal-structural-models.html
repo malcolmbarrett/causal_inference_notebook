@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>2 Chapter 12: IP Weighting and Marginal Structural Models | Coding Causal Inference in R</title>
+  <meta name="description" content="2 Chapter 12: IP Weighting and Marginal Structural Models | Coding Causal Inference in R">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="2 Chapter 12: IP Weighting and Marginal Structural Models | Coding Causal Inference in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Chapter 12: IP Weighting and Marginal Structural Models | Coding Causal Inference in R" />
+  
+  
+  
+
+
+
+<meta name="date" content="2019-03-29">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="chapter-11-why-model.html">
+<link rel="next" href="chapter-13.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Causal Inference Notebook</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html"><i class="fa fa-check"></i><b>1</b> Chapter 11: Why model?</a><ul>
+<li class="chapter" data-level="1.1" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.1"><i class="fa fa-check"></i><b>1.1</b> Program 11.1</a></li>
+<li class="chapter" data-level="1.2" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.2"><i class="fa fa-check"></i><b>1.2</b> Program 11.2</a></li>
+<li class="chapter" data-level="1.3" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.3"><i class="fa fa-check"></i><b>1.3</b> Program 11.3</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html"><i class="fa fa-check"></i><b>2</b> Chapter 12: IP Weighting and Marginal Structural Models</a><ul>
+<li class="chapter" data-level="2.1" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.1"><i class="fa fa-check"></i><b>2.1</b> Program 12.1</a></li>
+<li class="chapter" data-level="2.2" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.2"><i class="fa fa-check"></i><b>2.2</b> Program 12.2</a></li>
+<li class="chapter" data-level="2.3" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.3"><i class="fa fa-check"></i><b>2.3</b> Program 12.3</a></li>
+<li class="chapter" data-level="2.4" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.4"><i class="fa fa-check"></i><b>2.4</b> Program 12.4</a></li>
+<li class="chapter" data-level="2.5" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.5"><i class="fa fa-check"></i><b>2.5</b> Program 12.5</a></li>
+<li class="chapter" data-level="2.6" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.6"><i class="fa fa-check"></i><b>2.6</b> Program 12.6</a></li>
+<li class="chapter" data-level="2.7" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.7"><i class="fa fa-check"></i><b>2.7</b> Program 12.7</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="chapter-13.html"><a href="chapter-13.html"><i class="fa fa-check"></i><b>3</b> Chapter 13</a></li>
+<li class="chapter" data-level="4" data-path="chapter-14.html"><a href="chapter-14.html"><i class="fa fa-check"></i><b>4</b> Chapter 14</a><ul>
+<li class="chapter" data-level="4.1" data-path="chapter-14.html"><a href="chapter-14.html#program-14.1"><i class="fa fa-check"></i><b>4.1</b> Program 14.1</a></li>
+<li class="chapter" data-level="4.2" data-path="chapter-14.html"><a href="chapter-14.html#program-14.2"><i class="fa fa-check"></i><b>4.2</b> Program 14.2</a></li>
+<li class="chapter" data-level="4.3" data-path="chapter-14.html"><a href="chapter-14.html#program-14.3"><i class="fa fa-check"></i><b>4.3</b> Program 14.3</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="chapter-15.html"><a href="chapter-15.html"><i class="fa fa-check"></i><b>5</b> Chapter 15</a></li>
+<li class="chapter" data-level="6" data-path="chapter-16.html"><a href="chapter-16.html"><i class="fa fa-check"></i><b>6</b> Chapter 16</a></li>
+<li class="chapter" data-level="7" data-path="chapter-17.html"><a href="chapter-17.html"><i class="fa fa-check"></i><b>7</b> Chapter 17</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Coding Causal Inference in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="chapter-12-ip-weighting-and-marginal-structural-models" class="section level1">
+<h1><span class="header-section-number">2</span> Chapter 12: IP Weighting and Marginal Structural Models</h1>
+<p>This is the code for Chapter 12. As before, we’ll use the tidyverse metapackage and broom, as well as haven, for reading files from SAS (and other statistical software) and tableone for creating descriptive tables. We’ll also use the estimatr package for a robust version of <code>lm()</code>, geepack for robust generalized estimating equations modeling, and the boot package to help with bootstrapping confidence intervals.</p>
+<p>The data is available to download on the <a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/"><em>Causal Inference</em></a> website.</p>
+<div id="program-12.1" class="section level2">
+<h2><span class="header-section-number">2.1</span> Program 12.1</h2>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(haven)
+<span class="kw">library</span>(broom)
+<span class="kw">library</span>(tableone)
+<span class="kw">library</span>(estimatr)
+<span class="kw">library</span>(geepack)
+<span class="kw">library</span>(boot)</code></pre>
+<p><em>Causal Inference</em> uses data from <a href="https://wwwn.cdc.gov/nchs/nhanes/nhefs/default.aspx/">NHEFS</a>. To read in the SAS file, use <code>read_sas()</code> from the haven package.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  read the SAS data file</span>
+nhefs &lt;-<span class="st"> </span><span class="kw">read_sas</span>(<span class="st">&quot;data/nhefs.sas7bdat&quot;</span>)
+
+nhefs</code></pre>
+<pre><code>## # A tibble: 1,629 x 64
+##     seqn  qsmk death yrdth modth dadth   sbp   dbp   sex   age  race income
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1   233     0     0    NA    NA    NA   175    96     0    42     1     19
+##  2   235     0     0    NA    NA    NA   123    80     0    36     0     18
+##  3   244     0     0    NA    NA    NA   115    75     1    56     1     15
+##  4   245     0     1    85     2    14   148    78     0    68     1     15
+##  5   252     0     0    NA    NA    NA   118    77     0    40     0     18
+##  6   257     0     0    NA    NA    NA   141    83     1    43     1     11
+##  7   262     0     0    NA    NA    NA   132    69     1    56     0     19
+##  8   266     0     0    NA    NA    NA   100    53     1    29     0     22
+##  9   419     0     1    84    10    13   163    79     0    51     0     18
+## 10   420     0     1    86    10    17   184   106     0    43     0     16
+## # … with 1,619 more rows, and 52 more variables: marital &lt;dbl&gt;,
+## #   school &lt;dbl&gt;, education &lt;dbl&gt;, ht &lt;dbl&gt;, wt71 &lt;dbl&gt;, wt82 &lt;dbl&gt;,
+## #   wt82_71 &lt;dbl&gt;, birthplace &lt;dbl&gt;, smokeintensity &lt;dbl&gt;,
+## #   smkintensity82_71 &lt;dbl&gt;, smokeyrs &lt;dbl&gt;, asthma &lt;dbl&gt;, bronch &lt;dbl&gt;,
+## #   tb &lt;dbl&gt;, hf &lt;dbl&gt;, hbp &lt;dbl&gt;, pepticulcer &lt;dbl&gt;, colitis &lt;dbl&gt;,
+## #   hepatitis &lt;dbl&gt;, chroniccough &lt;dbl&gt;, hayfever &lt;dbl&gt;, diabetes &lt;dbl&gt;,
+## #   polio &lt;dbl&gt;, tumor &lt;dbl&gt;, nervousbreak &lt;dbl&gt;, alcoholpy &lt;dbl&gt;,
+## #   alcoholfreq &lt;dbl&gt;, alcoholtype &lt;dbl&gt;, alcoholhowmuch &lt;dbl&gt;,
+## #   pica &lt;dbl&gt;, headache &lt;dbl&gt;, otherpain &lt;dbl&gt;, weakheart &lt;dbl&gt;,
+## #   allergies &lt;dbl&gt;, nerves &lt;dbl&gt;, lackpep &lt;dbl&gt;, hbpmed &lt;dbl&gt;,
+## #   boweltrouble &lt;dbl&gt;, wtloss &lt;dbl&gt;, infection &lt;dbl&gt;, active &lt;dbl&gt;,
+## #   exercise &lt;dbl&gt;, birthcontrol &lt;dbl&gt;, pregnancies &lt;dbl&gt;,
+## #   cholesterol &lt;dbl&gt;, hightax82 &lt;dbl&gt;, price71 &lt;dbl&gt;, price82 &lt;dbl&gt;,
+## #   tax71 &lt;dbl&gt;, tax82 &lt;dbl&gt;, price71_82 &lt;dbl&gt;, tax71_82 &lt;dbl&gt;</code></pre>
+<p>First, we need to clean up the data a little. There’s already a variable that could be an ID, <code>seqn</code>, but we’ll make a simpler one, <code>id</code>. We’re also going to add a variable called <code>censored</code> that is 1 if the weight variable from 1982 is missing and 0 otherwise. We’ll also create two categorical variables from <code>age</code> and <code>school</code>: <code>older</code>, a binary variable indicating if the person is older than 50, and <code>education</code>, a categorical variable representing years of education. Finally, we’ll change all of the categorical variables to have be factors.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="co"># add id and censored indicator</span>
+    <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>(),
+    <span class="dt">censored =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(wt82), <span class="dv">1</span>, <span class="dv">0</span>),
+    <span class="co"># recode age &gt; 50 and years of school to categories</span>
+    <span class="dt">older =</span> <span class="kw">case_when</span>(
+      <span class="kw">is.na</span>(age) <span class="op">~</span><span class="st"> </span><span class="ot">NA_real_</span>,
+      age <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>
+    ),
+    <span class="dt">education =</span> <span class="kw">case_when</span>(
+      school <span class="op">&lt;</span><span class="st">  </span><span class="dv">9</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+      school <span class="op">&lt;</span><span class="st">  </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,
+      school <span class="op">==</span><span class="st"> </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="dv">3</span>,
+      school <span class="op">&lt;</span><span class="st"> </span><span class="dv">16</span> <span class="op">~</span><span class="st"> </span><span class="dv">4</span>,
+      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">5</span>
+    )
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  change categorical variables to factors</span>
+<span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(sex, race, education, exercise, active), factor)</code></pre>
+<p>For the analysis, we’ll only use participants with complete covariate data and drop the rest using <code>drop_na()</code> from the tidyr package.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  restrict to complete cases</span>
+nhefs_complete &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, active, wt71, wt82, wt82_<span class="dv">71</span>, censored)</code></pre>
+<p>Then we’ll summarize the mean and SD for the difference in weight between 1982 and 1971, grouped by whether or not the participant quit smoking.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_complete <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co">#  only show for pts not lost to follow-up</span>
+<span class="st">  </span><span class="kw">filter</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(qsmk) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(
+    <span class="dt">mean_weight_change =</span> <span class="kw">mean</span>(wt82_<span class="dv">71</span>), 
+    <span class="dt">sd =</span> <span class="kw">sd</span>(wt82_<span class="dv">71</span>)
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">qsmk</th>
+<th align="right">mean_weight_change</th>
+<th align="right">sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1.98</td>
+<td align="right">7.45</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">4.53</td>
+<td align="right">8.75</td>
+</tr>
+</tbody>
+</table>
+<p>To recreate Table 12.1, we’ll use the tableone package, which easily creates descriptive tables. First, we’ll clean up the data a little more to have better labels for variable names and the levels within each variable. Then, we pass <code>tbl1_data</code> to <code>CreateTableOne()</code> and print it as a kable.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  a helper function to turn into Yes/No factor</span>
+fct_yesno &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+  <span class="kw">factor</span>(x, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>))
+}
+
+tbl1_data &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  filter out participants lost to follow-up </span>
+<span class="st">  </span><span class="kw">filter</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co">#  turn categorical variables into factors</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">university =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(education <span class="op">==</span><span class="st"> </span><span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">0</span>)),
+    <span class="dt">no_exercise =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(exercise <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>)),
+    <span class="dt">inactive =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(active <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>)),
+    <span class="dt">qsmk =</span> <span class="kw">factor</span>(qsmk, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="kw">c</span>(<span class="st">&quot;Ceased Smoking&quot;</span>, <span class="st">&quot;Continued Smoking&quot;</span>)),
+    <span class="dt">sex =</span> <span class="kw">factor</span>(sex, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>)),
+    <span class="dt">race =</span> <span class="kw">factor</span>(race, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Other&quot;</span>, <span class="st">&quot;White&quot;</span>))
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  only include a subset of variables in the descriptive tbl</span>
+<span class="st">  </span><span class="kw">select</span>(qsmk, age, sex, race, university, wt71, smokeintensity, smokeyrs, no_exercise, inactive) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  rename variable names to match Table 12.1</span>
+<span class="st">  </span><span class="kw">rename</span>(
+    <span class="st">&quot;Smoking Cessation&quot;</span> =<span class="st"> &quot;qsmk&quot;</span>,
+    <span class="st">&quot;Age&quot;</span> =<span class="st"> &quot;age&quot;</span>,
+    <span class="st">&quot;Sex&quot;</span> =<span class="st"> &quot;sex&quot;</span>,
+    <span class="st">&quot;Race&quot;</span> =<span class="st"> &quot;race&quot;</span>,
+    <span class="st">&quot;University education&quot;</span> =<span class="st"> &quot;university&quot;</span>,
+    <span class="st">&quot;Weight, kg&quot;</span> =<span class="st"> &quot;wt71&quot;</span>, 
+    <span class="st">&quot;Cigarettes/day&quot;</span> =<span class="st"> &quot;smokeintensity&quot;</span>,
+    <span class="st">&quot;Years smoking&quot;</span> =<span class="st"> &quot;smokeyrs&quot;</span>,
+    <span class="st">&quot;Little or no exercise&quot;</span> =<span class="st"> &quot;no_exercise&quot;</span>,
+    <span class="st">&quot;Inactive daily life&quot;</span> =<span class="st"> &quot;inactive&quot;</span>
+  )
+
+tbl1_data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  create a descriptive table</span>
+<span class="st">  </span><span class="kw">CreateTableOne</span>(
+    <span class="co">#  pull all variable names but smoking</span>
+    <span class="dt">vars =</span> <span class="kw">select</span>(tbl1_data, <span class="op">-</span><span class="st">`</span><span class="dt">Smoking Cessation</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>names, 
+    <span class="co">#  stratify by smoking status</span>
+    <span class="dt">strata =</span> <span class="st">&quot;Smoking Cessation&quot;</span>, 
+    <span class="co">#  use `.` to direct the pipe to the `data` argument</span>
+    <span class="dt">data =</span> ., 
+    <span class="co">#  don&#39;t show p-values</span>
+    <span class="dt">test =</span> <span class="ot">FALSE</span>
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  print to a kable</span>
+<span class="st">  </span><span class="kw">kableone</span>()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">Ceased Smoking</th>
+<th align="left">Continued Smoking</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>n</td>
+<td align="left">403</td>
+<td align="left">1163</td>
+</tr>
+<tr class="even">
+<td>Age (mean (SD))</td>
+<td align="left">46.17 (12.21)</td>
+<td align="left">42.79 (11.79)</td>
+</tr>
+<tr class="odd">
+<td>Sex = Male (%)</td>
+<td align="left">220 (54.6)</td>
+<td align="left">542 (46.6)</td>
+</tr>
+<tr class="even">
+<td>Race = White (%)</td>
+<td align="left">367 (91.1)</td>
+<td align="left">993 (85.4)</td>
+</tr>
+<tr class="odd">
+<td>University education = Yes (%)</td>
+<td align="left">62 (15.4)</td>
+<td align="left">115 ( 9.9)</td>
+</tr>
+<tr class="even">
+<td>Weight, kg (mean (SD))</td>
+<td align="left">72.35 (15.63)</td>
+<td align="left">70.30 (15.18)</td>
+</tr>
+<tr class="odd">
+<td>Cigarettes/day (mean (SD))</td>
+<td align="left">18.60 (12.40)</td>
+<td align="left">21.19 (11.48)</td>
+</tr>
+<tr class="even">
+<td>Years smoking (mean (SD))</td>
+<td align="left">26.03 (12.74)</td>
+<td align="left">24.09 (11.71)</td>
+</tr>
+<tr class="odd">
+<td>Little or no exercise = Yes (%)</td>
+<td align="left">164 (40.7)</td>
+<td align="left">441 (37.9)</td>
+</tr>
+<tr class="even">
+<td>Inactive daily life = Yes (%)</td>
+<td align="left">45 (11.2)</td>
+<td align="left">104 ( 8.9)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="program-12.2" class="section level2">
+<h2><span class="header-section-number">2.2</span> Program 12.2</h2>
+<p>Now, we’ll fit the weights for the marginal structural model. For logistic regression, we’ll use <code>glm()</code> to fit a model called <code>propensity_model</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  estimation of IP weights via a logistic model</span>
+propensity_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
+  qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+  <span class="dt">family =</span> <span class="kw">binomial</span>(), 
+  <span class="dt">data =</span> nhefs_complete
+)</code></pre>
+<p>To see the coefficients of the propensity score model:</p>
+<pre class="sourceCode r"><code class="sourceCode r">propensity_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  get confidence intervals and exponentiate estimates</span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>statistic, <span class="op">-</span>p.value) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.11</td>
+<td align="right">1.38</td>
+<td align="right">0.01</td>
+<td align="right">1.56</td>
+</tr>
+<tr class="even">
+<td align="left">sex1</td>
+<td align="right">0.59</td>
+<td align="right">0.15</td>
+<td align="right">0.44</td>
+<td align="right">0.80</td>
+</tr>
+<tr class="odd">
+<td align="left">race1</td>
+<td align="right">0.43</td>
+<td align="right">0.21</td>
+<td align="right">0.28</td>
+<td align="right">0.64</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">1.13</td>
+<td align="right">0.05</td>
+<td align="right">1.02</td>
+<td align="right">1.25</td>
+</tr>
+<tr class="odd">
+<td align="left">I(age^2)</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+</tr>
+<tr class="even">
+<td align="left">education2</td>
+<td align="right">0.97</td>
+<td align="right">0.20</td>
+<td align="right">0.66</td>
+<td align="right">1.43</td>
+</tr>
+<tr class="odd">
+<td align="left">education3</td>
+<td align="right">1.09</td>
+<td align="right">0.18</td>
+<td align="right">0.77</td>
+<td align="right">1.55</td>
+</tr>
+<tr class="even">
+<td align="left">education4</td>
+<td align="right">1.07</td>
+<td align="right">0.27</td>
+<td align="right">0.62</td>
+<td align="right">1.81</td>
+</tr>
+<tr class="odd">
+<td align="left">education5</td>
+<td align="right">1.61</td>
+<td align="right">0.23</td>
+<td align="right">1.03</td>
+<td align="right">2.51</td>
+</tr>
+<tr class="even">
+<td align="left">smokeintensity</td>
+<td align="right">0.93</td>
+<td align="right">0.02</td>
+<td align="right">0.90</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="odd">
+<td align="left">I(smokeintensity^2)</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+</tr>
+<tr class="even">
+<td align="left">smokeyrs</td>
+<td align="right">0.93</td>
+<td align="right">0.03</td>
+<td align="right">0.88</td>
+<td align="right">0.98</td>
+</tr>
+<tr class="odd">
+<td align="left">I(smokeyrs^2)</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+</tr>
+<tr class="even">
+<td align="left">exercise1</td>
+<td align="right">1.43</td>
+<td align="right">0.18</td>
+<td align="right">1.01</td>
+<td align="right">2.04</td>
+</tr>
+<tr class="odd">
+<td align="left">exercise2</td>
+<td align="right">1.49</td>
+<td align="right">0.19</td>
+<td align="right">1.03</td>
+<td align="right">2.15</td>
+</tr>
+<tr class="even">
+<td align="left">active1</td>
+<td align="right">1.03</td>
+<td align="right">0.13</td>
+<td align="right">0.80</td>
+<td align="right">1.34</td>
+</tr>
+<tr class="odd">
+<td align="left">active2</td>
+<td align="right">1.19</td>
+<td align="right">0.21</td>
+<td align="right">0.78</td>
+<td align="right">1.81</td>
+</tr>
+<tr class="even">
+<td align="left">wt71</td>
+<td align="right">0.98</td>
+<td align="right">0.03</td>
+<td align="right">0.94</td>
+<td align="right">1.04</td>
+</tr>
+<tr class="odd">
+<td align="left">I(wt71^2)</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+</tr>
+</tbody>
+</table>
+<p>To predict the weights, we’ll use the <code>augment()</code> function from broom to add the predicted probabilities of quitting smoking (called <code>.fitted</code> by default) to <code>nhefs_complete</code>. What we actually need is the probability for each person’s observed outcome, so for people who did not quit smoking, we need <code>1 - .fitted</code>. Using <code>mutate()</code>, we’ll add a variable called <code>wts</code>, which is 1 divided by this probability.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_complete &lt;-<span class="st"> </span>propensity_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">wts =</span> <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))</code></pre>
+<p>It’s important to look at the distribution of the weights to see its shape and if there are any extreme values.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(wts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(wts))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   mean_wt sd_wts
+##     &lt;dbl&gt;  &lt;dbl&gt;
+## 1    2.00   1.47</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(wts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  use a log scale for the x axis</span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">20</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Weights)&quot;</span>)</code></pre>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>While OLS regression, using <code>lm()</code> with <code>weights = wts</code>, will work fine for the estimate, the standard errors tend to be too small when we use weights. We’ll get the confidence intervals using for approaches: OLS, GEE, OLS with robust standard errors, and bootstrapped confidence intervals. <code>tidy_est_cis()</code> is a <a href="https://r4ds.had.co.nz/functions.html">helper function</a> to get the estimate and confidence intervals for each model.</p>
+<pre class="sourceCode r"><code class="sourceCode r">tidy_est_cis &lt;-<span class="st"> </span><span class="cf">function</span>(.df, .type) {
+  .df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="co">#  add the name of the model to the data</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">type =</span> .type) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;qsmk&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">select</span>(type, estimate, conf.low, conf.high)
+}
+
+<span class="co">#  standard error a little too small</span>
+ols_cis &lt;-<span class="st"> </span><span class="kw">lm</span>(
+  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, 
+  <span class="dt">data =</span> nhefs_complete, 
+  <span class="co">#  weight by inverse probability</span>
+  <span class="dt">weights =</span> wts
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;ols&quot;</span>)
+
+ols_cis</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##   type  estimate conf.low conf.high
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 ols       3.44     2.64      4.24</code></pre>
+<p><code>geeglm()</code> from geepack fits a GEE GLM using robust standard errors. We also need to specify the correlation structure and id variable.</p>
+<pre class="sourceCode r"><code class="sourceCode r">gee_model &lt;-<span class="st"> </span><span class="kw">geeglm</span>(
+  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, 
+  <span class="dt">data =</span> nhefs_complete, 
+  <span class="dt">std.err =</span> <span class="st">&quot;san.se&quot;</span>, <span class="co"># default robust SE </span>
+  <span class="dt">weights =</span> wts, <span class="co"># inverse probability weights</span>
+  <span class="dt">id =</span> id, <span class="co"># required ID variable</span>
+  <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span> <span class="co"># default independent correlation structure</span>
+) 
+
+gee_model_cis &lt;-<span class="st"> </span><span class="kw">tidy</span>(gee_model, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;gee&quot;</span>)
+
+gee_model_cis</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##   type  estimate conf.low conf.high
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 gee       3.44     2.41      4.47</code></pre>
+<p><code>lm_robust()</code> from the estimatr package fits an OLS model but produces robust standard errors by default.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  easy robust SEs</span>
+robust_lm_model_cis &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(
+  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_complete, 
+  <span class="dt">weights =</span> wts
+) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;robust ols&quot;</span>)
+
+robust_lm_model_cis</code></pre>
+<pre><code>##         type estimate conf.low conf.high
+## 1 robust ols 3.440535 2.407886  4.473185</code></pre>
+<p>While traditional OLS gives confidence intervals that are a little to narrow, the robust methods give confidence intervals that are a little too wide. Bootstrapping gives CIs somewhere between, but to produce the right CIs, you need to bootstrap the entire fitting process, including the weights. We’ll use the boot package and write a function called <code>model_nhefs()</code> to fit the weights and marginal structural model. The output for <code>model_nhefs()</code> is the coefficient for <code>qsmk</code> in the marginal structural model.</p>
+<pre class="sourceCode r"><code class="sourceCode r">model_nhefs &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {
+  <span class="co">#  use bootstrapped data</span>
+  df &lt;-<span class="st"> </span>data[indices, ]
+  
+  <span class="co">#  need to bootstrap the entire fitting process, including IPWs</span>
+  propensity &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+                  <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> df)
+
+df &lt;-<span class="st"> </span>propensity <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> df) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">wts =</span> <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))
+
+  <span class="kw">lm</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> df, <span class="dt">weights =</span> wts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;qsmk&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="co">#  output the coefficient for `qsmk`</span>
+<span class="st">    </span><span class="kw">pull</span>(estimate)
+}</code></pre>
+<p>To get <a href="https://www.wikiwand.com/en/Bootstrapping_(statistics)#/Methods_for_bootstrap_confidence_intervals">bias-corrected</a> CIs, we’ll use 2000 bootstrap replications.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set seed for the bootstrapped confidence intervals</span>
+<span class="kw">set.seed</span>(<span class="dv">1234</span>)
+
+bootstrap_estimates &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  remove the variables added by `augment()` earlier</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>.fitted<span class="op">:-</span>wts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">boot</span>(model_nhefs, <span class="dt">R =</span> <span class="dv">2000</span>)
+
+bootstrap_cis &lt;-<span class="st"> </span>bootstrap_estimates <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.method =</span> <span class="st">&quot;bca&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">type =</span> <span class="st">&quot;bootstrap&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  rename `statistic` to match the other models</span>
+<span class="st">  </span><span class="kw">select</span>(type, <span class="dt">estimate =</span> statistic, conf.low, conf.high)
+
+bootstrap_cis</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##   type      estimate conf.low conf.high
+##   &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 bootstrap     3.44     2.47      4.43</code></pre>
+<p>The estimates are all the same, but the CIs vary a bit by method: the GEE and robust OLS CIs are a bit wider, and the traditional OLS CIs are smaller, with the bootstrapped CIs between.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(
+  ols_cis, 
+  gee_model_cis, 
+  robust_lm_model_cis, 
+  bootstrap_cis
+) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  calculate CI width to sort by it</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">width =</span> conf.high <span class="op">-</span><span class="st"> </span>conf.low) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(width) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  fix the order of the model types for the plot  </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">type =</span> <span class="kw">fct_inorder</span>(type)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> type, <span class="dt">y =</span> estimate, <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high)) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_pointrange</span>(<span class="dt">color =</span> <span class="st">&quot;#0172B1&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">fatten =</span> <span class="dv">3</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">coord_flip</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">20</span>)</code></pre>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+<div id="program-12.3" class="section level2">
+<h2><span class="header-section-number">2.3</span> Program 12.3</h2>
+<p>Fitting stabilized weights is similar to inverse weights, but we need to fit a model for the numerator. To fit a model with no covariates, we can just put 1 on the right hand side, e.g. <code>qsmk ~ 1</code>. Predicting the probabilities for this model is the same as above. We’ll use <code>augment()</code> and <code>left_join()</code> to add the numerator probabilities to <code>nhefs_complete</code>, then divide <code>numerator</code> by the probabilities fit in Program 12.2 to get stabilized weights.</p>
+<pre class="sourceCode r"><code class="sourceCode r">numerator &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_complete, <span class="dt">family =</span> <span class="kw">binomial</span>())
+
+nhefs_complete &lt;-<span class="st"> </span>numerator <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co">#  take just the numerator probabilities </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  join numerator probabilities to `nhefs_complete`</span>
+<span class="st">  </span><span class="kw">left_join</span>(nhefs_complete, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#  create stabilized weights</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts =</span> numerator <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))</code></pre>
+<p>For stabilized weights, we want the mean to be about 1.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(swts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(swts))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   mean_wt sd_wts
+##     &lt;dbl&gt;  &lt;dbl&gt;
+## 1   0.999  0.288</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(swts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">20</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</code></pre>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>Even though it’s a little conservative, we’ll fit the marginal structural model with robust OLS.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_complete, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>()</code></pre>
+<pre><code>##          term estimate std.error statistic      p.value conf.low conf.high
+## 1 (Intercept) 1.779978 0.2248362  7.916778 4.581734e-15 1.338966  2.220990
+## 2        qsmk 3.440535 0.5264638  6.535179 8.573524e-11 2.407886  4.473185
+##     df outcome
+## 1 1564 wt82_71
+## 2 1564 wt82_71</code></pre>
+</div>
+<div id="program-12.4" class="section level2">
+<h2><span class="header-section-number">2.4</span> Program 12.4</h2>
+<p>The workflow for continuous exposures is very similar to binary exposure. The main differences are that the model needs to be appropriate for continuous variable and in how the weights are calculated. We fit the models for smoking intensity, a continuous exposure, using OLS with <code>lm()</code>: one for the numerator without predictors and one for the denominator with the confounders. Then, we use <code>augment</code> to get the predicted values for smoking intensity (<code>.fitted</code>) and their standard error (<code>.sigma</code>). Using the template <code>dnorm(true_value, predicted_value, mean(standard_error, rm.na = TRUE))</code>, we can fit values to use for the stabilized weights.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_light_smokers &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, active, wt71, wt82, wt82_<span class="dv">71</span>, censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(smokeintensity <span class="op">&lt;=</span><span class="st"> </span><span class="dv">25</span>)
+
+nhefs_light_smokers</code></pre>
+<pre><code>## # A tibble: 1,162 x 67
+##     seqn  qsmk death yrdth modth dadth   sbp   dbp sex     age race  income
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt;
+##  1   235     0     0    NA    NA    NA   123    80 0        36 0         18
+##  2   244     0     0    NA    NA    NA   115    75 1        56 1         15
+##  3   245     0     1    85     2    14   148    78 0        68 1         15
+##  4   252     0     0    NA    NA    NA   118    77 0        40 0         18
+##  5   257     0     0    NA    NA    NA   141    83 1        43 1         11
+##  6   262     0     0    NA    NA    NA   132    69 1        56 0         19
+##  7   266     0     0    NA    NA    NA   100    53 1        29 0         22
+##  8   419     0     1    84    10    13   163    79 0        51 0         18
+##  9   420     0     1    86    10    17   184   106 0        43 0         16
+## 10   434     0     0    NA    NA    NA   127    80 1        54 0         16
+## # … with 1,152 more rows, and 55 more variables: marital &lt;dbl&gt;,
+## #   school &lt;dbl&gt;, education &lt;fct&gt;, ht &lt;dbl&gt;, wt71 &lt;dbl&gt;, wt82 &lt;dbl&gt;,
+## #   wt82_71 &lt;dbl&gt;, birthplace &lt;dbl&gt;, smokeintensity &lt;dbl&gt;,
+## #   smkintensity82_71 &lt;dbl&gt;, smokeyrs &lt;dbl&gt;, asthma &lt;dbl&gt;, bronch &lt;dbl&gt;,
+## #   tb &lt;dbl&gt;, hf &lt;dbl&gt;, hbp &lt;dbl&gt;, pepticulcer &lt;dbl&gt;, colitis &lt;dbl&gt;,
+## #   hepatitis &lt;dbl&gt;, chroniccough &lt;dbl&gt;, hayfever &lt;dbl&gt;, diabetes &lt;dbl&gt;,
+## #   polio &lt;dbl&gt;, tumor &lt;dbl&gt;, nervousbreak &lt;dbl&gt;, alcoholpy &lt;dbl&gt;,
+## #   alcoholfreq &lt;dbl&gt;, alcoholtype &lt;dbl&gt;, alcoholhowmuch &lt;dbl&gt;,
+## #   pica &lt;dbl&gt;, headache &lt;dbl&gt;, otherpain &lt;dbl&gt;, weakheart &lt;dbl&gt;,
+## #   allergies &lt;dbl&gt;, nerves &lt;dbl&gt;, lackpep &lt;dbl&gt;, hbpmed &lt;dbl&gt;,
+## #   boweltrouble &lt;dbl&gt;, wtloss &lt;dbl&gt;, infection &lt;dbl&gt;, active &lt;fct&gt;,
+## #   exercise &lt;fct&gt;, birthcontrol &lt;dbl&gt;, pregnancies &lt;dbl&gt;,
+## #   cholesterol &lt;dbl&gt;, hightax82 &lt;dbl&gt;, price71 &lt;dbl&gt;, price82 &lt;dbl&gt;,
+## #   tax71 &lt;dbl&gt;, tax82 &lt;dbl&gt;, price71_82 &lt;dbl&gt;, tax71_82 &lt;dbl&gt;, id &lt;int&gt;,
+## #   censored &lt;dbl&gt;, older &lt;dbl&gt;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">denominator_model &lt;-<span class="st"> </span><span class="kw">lm</span>(smkintensity82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> nhefs_light_smokers)
+
+denominators &lt;-<span class="st"> </span>denominator_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">data =</span> nhefs_light_smokers) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator =</span> <span class="kw">dnorm</span>(smkintensity82_<span class="dv">71</span>, .fitted, <span class="kw">mean</span>(.sigma, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, denominator)
+
+numerator_model &lt;-<span class="st"> </span><span class="kw">lm</span>(smkintensity82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_light_smokers)
+
+numerators &lt;-<span class="st"> </span>numerator_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">data =</span> nhefs_light_smokers) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator =</span> <span class="kw">dnorm</span>(smkintensity82_<span class="dv">71</span>, .fitted, <span class="kw">mean</span>(.sigma, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator)
+
+nhefs_light_smokers &lt;-<span class="st"> </span>nhefs_light_smokers <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(numerators, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(denominators, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts =</span> numerator <span class="op">/</span><span class="st"> </span>denominator)</code></pre>
+<p>As with binary exposures, we want to check the distribution of our weights for a mean of around 1 and look for any extreme weights.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_light_smokers, <span class="kw">aes</span>(swts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">20</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</code></pre>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>Fitting the marginal structural model follow the same pattern as above.</p>
+<pre class="sourceCode r"><code class="sourceCode r">smk_intensity_model &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>smkintensity82_<span class="dv">71</span> <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smkintensity82_<span class="dv">71</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> nhefs_light_smokers, <span class="dt">weights =</span> swts)
+
+smk_intensity_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>()</code></pre>
+<pre><code>##                     term     estimate   std.error statistic      p.value
+## 1            (Intercept)  2.004524173 0.304377051  6.585661 6.851793e-11
+## 2      smkintensity82_71 -0.108988851 0.032772315 -3.325638 9.097994e-04
+## 3 I(smkintensity82_71^2)  0.002694946 0.002625509  1.026447 3.048951e-01
+##       conf.low    conf.high   df outcome
+## 1  1.407332469  2.601715878 1159 wt82_71
+## 2 -0.173288557 -0.044689144 1159 wt82_71
+## 3 -0.002456336  0.007846227 1159 wt82_71</code></pre>
+<p>To calculate the contrasts for smoking intensity values of 0 and 20, we’ll write the function <code>calculate_contrast()</code>. We can then bootstrap the confidence intervals. (Here, we don’t need to fit the entire process again: just the marginal structural model).</p>
+<pre class="sourceCode r"><code class="sourceCode r">calculate_contrast &lt;-<span class="st"> </span><span class="cf">function</span>(.coefs, x) {
+  .coefs[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>.coefs[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>.coefs[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>x<span class="op">^</span><span class="dv">2</span>
+}
+
+boot_contrasts &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {
+  .df &lt;-<span class="st"> </span>data[indices, ]
+  
+  coefs &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>smkintensity82_<span class="dv">71</span> <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smkintensity82_<span class="dv">71</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> .df, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">pull</span>(estimate)
+  
+  <span class="kw">c</span>(<span class="kw">calculate_contrast</span>(coefs, <span class="dv">0</span>), <span class="kw">calculate_contrast</span>(coefs, <span class="dv">20</span>))
+}
+
+bootstrap_contrasts &lt;-<span class="st"> </span>nhefs_light_smokers <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">boot</span>(boot_contrasts, <span class="dt">R =</span> <span class="dv">2000</span>)
+
+bootstrap_contrasts <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.meth =</span> <span class="st">&quot;bca&quot;</span>)</code></pre>
+<pre><code>## # A tibble: 2 x 5
+##   statistic    bias std.error conf.low conf.high
+##       &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1     2.00  -0.0338     0.300     1.44      2.63
+## 2     0.903  0.221      1.38     -1.27      3.88</code></pre>
+</div>
+<div id="program-12.5" class="section level2">
+<h2><span class="header-section-number">2.5</span> Program 12.5</h2>
+<p>Fitting a marginal structural model for a binary outcome is almost identical to fitting one for a continuous expsure, but we need to use a model appropriate for binary outcomes. We’ll use logistic regression and fit robust standard errors using <code>geeglm()</code>. The weightas, <code>swts</code>, are the same ones we used in Program 12.3.</p>
+<pre class="sourceCode r"><code class="sourceCode r">logistic_msm &lt;-<span class="st"> </span><span class="kw">geeglm</span>(
+  death <span class="op">~</span><span class="st"> </span>qsmk, 
+  <span class="dt">data =</span> nhefs_complete, 
+  <span class="dt">family =</span> <span class="kw">binomial</span>(),
+  <span class="dt">weights =</span> swts, 
+  <span class="dt">id =</span> id
+) 
+
+<span class="kw">tidy</span>(logistic_msm, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) </code></pre>
+<pre><code>## # A tibble: 2 x 7
+##   term        estimate std.error statistic p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)    0.225    0.0789  356.       0        0.193     0.263
+## 2 qsmk           1.03     0.157     0.0367   0.848    0.757     1.40</code></pre>
+</div>
+<div id="program-12.6" class="section level2">
+<h2><span class="header-section-number">2.6</span> Program 12.6</h2>
+<p>While the workflow for marginal structural models with interaction terms is similar to the above, there is one important difference: We need to include the interaction variable in both the numerator and denominator models so that we can safely use it in the marginal structural model.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  use a model with sex as a predictor for the numerator</span>
+numerator_sex &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span>sex, <span class="dt">data =</span> nhefs_complete, <span class="dt">family =</span> <span class="kw">binomial</span>())
+
+nhefs_complete &lt;-<span class="st"> </span>numerator_sex <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>.fitted<span class="op">:-</span>.std.resid)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_sex =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator_sex) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(nhefs_complete, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts_sex =</span> numerator_sex <span class="op">*</span><span class="st"> </span>wts)</code></pre>
+<p>Checking the weights is the same.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(swts_sex), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(swts_sex))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   mean_wt sd_wts
+##     &lt;dbl&gt;  &lt;dbl&gt;
+## 1   0.999  0.271</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(swts_sex)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">20</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</code></pre>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk<span class="op">*</span>sex, <span class="dt">data =</span> nhefs_complete, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>()</code></pre>
+<pre><code>##          term     estimate std.error   statistic      p.value   conf.low
+## 1 (Intercept)  1.784446876 0.3101597  5.75331559 1.051124e-08  1.1760735
+## 2        qsmk  3.521977634 0.6585705  5.34791301 1.021696e-07  2.2302023
+## 3        sex1 -0.008724784 0.4492401 -0.01942121 9.845076e-01 -0.8899019
+## 4   qsmk:sex1 -0.159478525 1.0498718 -0.15190286 8.792832e-01 -2.2187851
+##   conf.high   df outcome
+## 1 2.3928202 1562 wt82_71
+## 2 4.8137530 1562 wt82_71
+## 3 0.8724524 1562 wt82_71
+## 4 1.8998280 1562 wt82_71</code></pre>
+</div>
+<div id="program-12.7" class="section level2">
+<h2><span class="header-section-number">2.7</span> Program 12.7</h2>
+<p>As you can see, the workflow for fitting marginal structural models follows a pattern: fight the weights, inverse or stabilize them, check the weights, and use them in a marginal model with the outcome and expsures of interest. Correcting for selection bias due to censoring uses the same work flow. Since we want to use both the censoring weights and the treatment weights, we can take their product and use the result to weight our marginal structural model. Since we’ll use stabilized weights, we have five models: the numerator and denominator for the censoring weights, the numerator and denominartor for the treatment weights, and the marginal structural model.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># using complete data set</span>
+nhefs_censored &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
+         active, wt71)
+
+<span class="co"># Inverse Probability of Treatment Weights --------------------------------</span>
+
+numerator_sws_model &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>())
+
+numerators_sws &lt;-<span class="st"> </span>numerator_sws_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_sw =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator_sw)
+
+denominator_sws_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
+  qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+  <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>()
+)
+
+denominators_sws &lt;-<span class="st"> </span>denominator_sws_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator_sw =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, denominator_sw)
+
+
+<span class="co"># Inverse Probability of Censoring Weights --------------------------------</span>
+
+numerator_cens_model &lt;-<span class="st"> </span><span class="kw">glm</span>(censored <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>())
+
+numerators_cens &lt;-<span class="st"> </span>numerator_cens_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_cens =</span> <span class="kw">ifelse</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator_cens)
+
+denominator_cens_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
+  censored <span class="op">~</span><span class="st"> </span>qsmk <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+  <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>()
+)
+
+denominators_cens &lt;-<span class="st"> </span>denominator_cens_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator_cens =</span> <span class="kw">ifelse</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, denominator_cens)
+
+<span class="co">#  join all the weights data from above</span>
+nhefs_censored_wts &lt;-<span class="st"> </span>nhefs_censored <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(numerators_sws, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(denominators_sws, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(numerators_cens, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(denominators_cens, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="co">#  IPTW </span>
+    <span class="dt">swts =</span> numerator_sw <span class="op">/</span><span class="st"> </span>denominator_sw, 
+    <span class="co">#  IPCW</span>
+    <span class="dt">cens_wts =</span> numerator_cens <span class="op">/</span><span class="st"> </span>denominator_cens,
+    <span class="co">#  Multiply the weights to use in the model</span>
+    <span class="dt">wts =</span> swts <span class="op">*</span><span class="st"> </span>cens_wts
+  )</code></pre>
+<p>The censoring weights are a little different but, since they are stabilized, they should still have a mean around 1.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_censored_wts <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(cens_wts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(cens_wts))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   mean_wt sd_wts
+##     &lt;dbl&gt;  &lt;dbl&gt;
+## 1   0.999 0.0519</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_censored_wts, <span class="kw">aes</span>(cens_wts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">20</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</code></pre>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>To fit both weights, we simply use their product in the marginal structural model.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_censored_wts, <span class="dt">weights =</span> wts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>()</code></pre>
+<pre><code>##          term estimate std.error statistic      p.value conf.low conf.high
+## 1 (Intercept) 1.661990 0.2328693  7.137009 1.454358e-12 1.205221  2.118759
+## 2        qsmk 3.496493 0.5265564  6.640301 4.305944e-11 2.463662  4.529324
+##     df outcome
+## 1 1564 wt82_71
+## 2 1564 wt82_71</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="chapter-11-why-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chapter-13.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter12.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
