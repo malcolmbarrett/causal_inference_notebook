@@ -146,21 +146,25 @@ To get valid confidence intervals for the estimated average treatment effect, we
 
 ```{r}
 fit_gformula <- function(data, indices) {
+  #  resample data set
   .df <- data[indices, ]
   
-  standardized_model <- glm(
+  #  fit the standardized regression model using the resampled observed data
+  standardized_model <- lm(
     wt82_71 ~ qsmk + I(qsmk * smokeintensity) + smokeintensity + 
       I(smokeintensity^2) + sex + race + age + I(age^2) + education + smokeyrs + 
       I(smokeyrs^2) + exercise + active + wt71 + I(wt71^2), 
     data = .df
   )
   
+  #  clone the data and set each to given exposure level
   kept_smoking <- nhefs_complete %>% 
     mutate(qsmk = 0)
   
   quit_smoking <- nhefs_complete %>% 
     mutate(qsmk = 1)
   
+  #  predict on the cloned data
   predicted_kept_smoking <- standardized_model %>% 
     augment(newdata = kept_smoking) %>%
     select(kept_smoking = .fitted)
@@ -169,6 +173,7 @@ fit_gformula <- function(data, indices) {
     augment(newdata = quit_smoking) %>%
     select(quit_smoking = .fitted)
   
+  #  summarize the mean difference and pull from data frame
   bind_cols(predicted_kept_smoking, predicted_quit_smoking) %>% 
     summarise(
       mean_quit_smoking = mean(quit_smoking),
