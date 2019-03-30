@@ -18,3 +18,11 @@ library(knitr)
 This notebook contains R code for part 2 of [*Causal Inference*](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/) by Miguel Hernán and Jamie Robins [@hernan_causal_2019]. While R, SAS, Stata, and Python code are available on the website for *Causal Inference*, we focus on doing causal inference using the [tidyverse](https://www.tidyverse.org/) ecosystem of R packages, particularly ggplot2, dplyr, and broom. 
 
 [This notebook is hosted on GitHub](https://github.com/malcolmbarrett/causal_inference_book); please post any issues or suggestions there.
+
+The data used in this notebook can be downloaded from the [*Causal Inference*](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/) website, as well as on the [GitHub repository](https://github.com/malcolmbarrett/causal_inference_book). Alternatively, cleaned versions of the data are available in the `cidata` package, which you can install from GitHub:
+
+```r 
+# if you don't have the remotes package:
+# install.packages("remotes")
+remotes::install_github("malcolmbarrett/cidata") 
+```
