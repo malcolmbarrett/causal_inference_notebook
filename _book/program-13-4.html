@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>9 Chapter 15 | Coding Causal Inference in R</title>
-  <meta name="description" content="9 Chapter 15 | Coding Causal Inference in R">
+  <title>7 Program 13.4 | Coding Causal Inference in R</title>
+  <meta name="description" content="7 Program 13.4 | Coding Causal Inference in R">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="9 Chapter 15 | Coding Causal Inference in R" />
+  <meta property="og:title" content="7 Program 13.4 | Coding Causal Inference in R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="9 Chapter 15 | Coding Causal Inference in R" />
+  <meta name="twitter:title" content="7 Program 13.4 | Coding Causal Inference in R" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="chapter-14.html">
-<link rel="next" href="chapter-16.html">
+<link rel="prev" href="program-13-3.html">
+<link rel="next" href="chapter-14.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -177,9 +177,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="chapter-15" class="section level1">
-<h1><span class="header-section-number">9</span> Chapter 15</h1>
-<p>This is the code for Chapter 15</p>
+<div id="program-13.4" class="section level1">
+<h1><span class="header-section-number">7</span> Program 13.4</h1>
+<pre class="sourceCode r"><code class="sourceCode r">fit_gformula &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {
+  .df &lt;-<span class="st"> </span>data[indices, ]
+  
+  standardized_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
+    wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(qsmk <span class="op">*</span><span class="st"> </span>smokeintensity) <span class="op">+</span><span class="st"> </span>smokeintensity <span class="op">+</span><span class="st"> </span>
+<span class="st">      </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>smokeyrs <span class="op">+</span><span class="st"> </span>
+<span class="st">      </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+    <span class="dt">data =</span> .df
+  )
+  
+  kept_smoking &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">qsmk =</span> <span class="dv">0</span>)
+  
+  quit_smoking &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">qsmk =</span> <span class="dv">1</span>)
+  
+  predicted_kept_smoking &lt;-<span class="st"> </span>standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">augment</span>(<span class="dt">newdata =</span> kept_smoking) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="dt">kept_smoking =</span> .fitted)
+  
+  predicted_quit_smoking &lt;-<span class="st"> </span>standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">augment</span>(<span class="dt">newdata =</span> quit_smoking) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="dt">quit_smoking =</span> .fitted)
+  
+  <span class="kw">bind_cols</span>(predicted_kept_smoking, predicted_quit_smoking) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarise</span>(
+      <span class="dt">mean_quit_smoking =</span> <span class="kw">mean</span>(quit_smoking),
+      <span class="dt">mean_kept_smoking =</span> <span class="kw">mean</span>(kept_smoking),
+      <span class="dt">difference =</span> mean_quit_smoking <span class="op">-</span><span class="st"> </span>mean_kept_smoking
+    ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">pull</span>(difference)
+}
+
+bootstrapped_gformula &lt;-<span class="st"> </span><span class="kw">boot</span>(nhefs_complete, fit_gformula, <span class="dt">R =</span> <span class="dv">2000</span>)
+
+bootstrapped_gformula <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.meth =</span> <span class="st">&quot;bca&quot;</span>)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   statistic      bias std.error conf.low conf.high
+##       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1      3.52 -0.000109     0.490     2.61      4.49</code></pre>
 
 </div>
             </section>
@@ -187,8 +227,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="chapter-14.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="chapter-16.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="program-13-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chapter-14.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -218,7 +258,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter15.Rmd",
+"link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter13.Rmd",
 "text": "Edit"
 },
 "history": {

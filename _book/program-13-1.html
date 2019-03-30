@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>9 Chapter 15 | Coding Causal Inference in R</title>
-  <meta name="description" content="9 Chapter 15 | Coding Causal Inference in R">
+  <title>4 Program 13.1 | Coding Causal Inference in R</title>
+  <meta name="description" content="4 Program 13.1 | Coding Causal Inference in R">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="9 Chapter 15 | Coding Causal Inference in R" />
+  <meta property="og:title" content="4 Program 13.1 | Coding Causal Inference in R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="9 Chapter 15 | Coding Causal Inference in R" />
+  <meta name="twitter:title" content="4 Program 13.1 | Coding Causal Inference in R" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="chapter-14.html">
-<link rel="next" href="chapter-16.html">
+<link rel="prev" href="chapter-13.html">
+<link rel="next" href="program-13-2.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -177,18 +177,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="chapter-15" class="section level1">
-<h1><span class="header-section-number">9</span> Chapter 15</h1>
-<p>This is the code for Chapter 15</p>
+<div id="program-13.1" class="section level1">
+<h1><span class="header-section-number">4</span> Program 13.1</h1>
+<pre class="sourceCode r"><code class="sourceCode r">standardized_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
+  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(qsmk <span class="op">*</span><span class="st"> </span>smokeintensity) <span class="op">+</span><span class="st"> </span>smokeintensity <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>smokeyrs <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+  <span class="dt">data =</span> nhefs_complete
+)
 
+<span class="co"># fit using the values of the covariates that this participant has</span>
+standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> <span class="kw">filter</span>(nhefs_complete, seqn <span class="op">==</span><span class="st"> </span><span class="dv">24770</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(.fitted) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">.fitted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.34</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># predict on all combonations of covariates present in the data</span>
+standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise_each</span>(<span class="kw">funs</span>(mean, min, max), .fitted) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">mean</th>
+<th align="right">min</th>
+<th align="right">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2.64</td>
+<td align="right">-10.88</td>
+<td align="right">9.88</td>
+</tr>
+</tbody>
+</table>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="chapter-14.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="chapter-16.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="chapter-13.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="program-13-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -218,7 +261,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter15.Rmd",
+"link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter13.Rmd",
 "text": "Edit"
 },
 "history": {

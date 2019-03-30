@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Coding Causal Inference in R</title>
-  <meta name="description" content="Coding Causal Inference in R">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>2 Chapter 12 | Coding Causal Inference in R</title>
+  <meta name="description" content="2 Chapter 12 | Coding Causal Inference in R">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Coding Causal Inference in R" />
+  <meta property="og:title" content="2 Chapter 12 | Coding Causal Inference in R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,14 +17,14 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Coding Causal Inference in R" />
+  <meta name="twitter:title" content="2 Chapter 12 | Coding Causal Inference in R" />
   
   
   
 
 
 
-<meta name="date" content="2019-02-19">
+<meta name="date" content="2019-03-29">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,6 +35,7 @@
 <link rel="next" href="chapter-13.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -144,14 +145,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.7" data-path="chapter-12.html"><a href="chapter-12.html#program-12.7"><i class="fa fa-check"></i><b>2.7</b> Program 12.7</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chapter-13.html"><a href="chapter-13.html"><i class="fa fa-check"></i><b>3</b> Chapter 13</a></li>
-<li class="chapter" data-level="4" data-path="chapter-14.html"><a href="chapter-14.html"><i class="fa fa-check"></i><b>4</b> Chapter 14</a><ul>
-<li class="chapter" data-level="4.1" data-path="chapter-14.html"><a href="chapter-14.html#program-14.1"><i class="fa fa-check"></i><b>4.1</b> Program 14.1</a></li>
-<li class="chapter" data-level="4.2" data-path="chapter-14.html"><a href="chapter-14.html#program-14.2"><i class="fa fa-check"></i><b>4.2</b> Program 14.2</a></li>
-<li class="chapter" data-level="4.3" data-path="chapter-14.html"><a href="chapter-14.html#program-14.3"><i class="fa fa-check"></i><b>4.3</b> Program 14.3</a></li>
+<li class="chapter" data-level="4" data-path="program-13-1.html"><a href="program-13-1.html"><i class="fa fa-check"></i><b>4</b> Program 13.1</a></li>
+<li class="chapter" data-level="5" data-path="program-13-2.html"><a href="program-13-2.html"><i class="fa fa-check"></i><b>5</b> Program 13.2</a></li>
+<li class="chapter" data-level="6" data-path="program-13-3.html"><a href="program-13-3.html"><i class="fa fa-check"></i><b>6</b> Program 13.3</a></li>
+<li class="chapter" data-level="7" data-path="program-13-4.html"><a href="program-13-4.html"><i class="fa fa-check"></i><b>7</b> Program 13.4</a></li>
+<li class="chapter" data-level="8" data-path="chapter-14.html"><a href="chapter-14.html"><i class="fa fa-check"></i><b>8</b> Chapter 14</a><ul>
+<li class="chapter" data-level="8.1" data-path="chapter-14.html"><a href="chapter-14.html#program-14.1"><i class="fa fa-check"></i><b>8.1</b> Program 14.1</a></li>
+<li class="chapter" data-level="8.2" data-path="chapter-14.html"><a href="chapter-14.html#program-14.2"><i class="fa fa-check"></i><b>8.2</b> Program 14.2</a></li>
+<li class="chapter" data-level="8.3" data-path="chapter-14.html"><a href="chapter-14.html#program-14.3"><i class="fa fa-check"></i><b>8.3</b> Program 14.3</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="chapter-15.html"><a href="chapter-15.html"><i class="fa fa-check"></i><b>5</b> Chapter 15</a></li>
-<li class="chapter" data-level="6" data-path="chapter-16.html"><a href="chapter-16.html"><i class="fa fa-check"></i><b>6</b> Chapter 16</a></li>
-<li class="chapter" data-level="7" data-path="chapter-17.html"><a href="chapter-17.html"><i class="fa fa-check"></i><b>7</b> Chapter 17</a></li>
+<li class="chapter" data-level="9" data-path="chapter-15.html"><a href="chapter-15.html"><i class="fa fa-check"></i><b>9</b> Chapter 15</a></li>
+<li class="chapter" data-level="10" data-path="chapter-16.html"><a href="chapter-16.html"><i class="fa fa-check"></i><b>10</b> Chapter 16</a></li>
+<li class="chapter" data-level="11" data-path="chapter-17.html"><a href="chapter-17.html"><i class="fa fa-check"></i><b>11</b> Chapter 17</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -177,13 +182,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This is the code for Chapter 12</p>
 <div id="program-12.1" class="section level2">
 <h2><span class="header-section-number">2.1</span> Program 12.1</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">library</span>(haven)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">library</span>(broom)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw">library</span>(tableone)</a></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">nhefs &lt;-<span class="st"> </span><span class="kw">read_sas</span>(<span class="st">&quot;data/nhefs.sas7bdat&quot;</span>)</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">nhefs</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(haven)
+<span class="kw">library</span>(broom)
+<span class="kw">library</span>(tableone)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs &lt;-<span class="st"> </span><span class="kw">read_sas</span>(<span class="st">&quot;data/nhefs.sas7bdat&quot;</span>)
+
+nhefs</code></pre>
 <pre><code>## # A tibble: 1,629 x 64
 ##     seqn  qsmk death yrdth modth dadth   sbp   dbp   sex   age  race income
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
@@ -211,36 +216,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## #   exercise &lt;dbl&gt;, birthcontrol &lt;dbl&gt;, pregnancies &lt;dbl&gt;,
 ## #   cholesterol &lt;dbl&gt;, hightax82 &lt;dbl&gt;, price71 &lt;dbl&gt;, price82 &lt;dbl&gt;,
 ## #   tax71 &lt;dbl&gt;, tax82 &lt;dbl&gt;, price71_82 &lt;dbl&gt;, tax71_82 &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">nhefs &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="co"># add id and censored indicator</span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="st">  </span><span class="co"># recode age &gt; 50 and years of school to categories</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">    <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>(),</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">    <span class="dt">censored =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(wt82), <span class="dv">1</span>, <span class="dv">0</span>),</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7">    <span class="dt">older =</span> <span class="kw">case_when</span>(<span class="kw">is.na</span>(age) <span class="op">~</span><span class="st"> </span><span class="ot">NA_real_</span>,</a>
-<a class="sourceLine" id="cb18-8" data-line-number="8">                      age <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb18-9" data-line-number="9">                      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>),</a>
-<a class="sourceLine" id="cb18-10" data-line-number="10">    <span class="dt">education =</span> <span class="kw">case_when</span>(school <span class="op">&lt;</span><span class="st">  </span><span class="dv">9</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb18-11" data-line-number="11">                       school <span class="op">&lt;</span><span class="st">  </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb18-12" data-line-number="12">                       school <span class="op">==</span><span class="st"> </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb18-13" data-line-number="13">                       school <span class="op">&lt;</span><span class="st"> </span><span class="dv">16</span> <span class="op">~</span><span class="st"> </span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb18-14" data-line-number="14">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb18-15" data-line-number="15">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="st">  </span><span class="co"># change categorical to factors</span></a>
-<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(sex, race, education, exercise, active), factor)</a>
-<a class="sourceLine" id="cb18-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb18-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co"># restrict to complete cases</span></a>
-<a class="sourceLine" id="cb18-21" data-line-number="21">nhefs_complete &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, </a>
-<a class="sourceLine" id="cb18-23" data-line-number="23">         active, wt71, wt82, wt82_<span class="dv">71</span>, censored)</a>
-<a class="sourceLine" id="cb18-24" data-line-number="24"></a>
-<a class="sourceLine" id="cb18-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb18-26" data-line-number="26">nhefs_complete <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb18-27" data-line-number="27"><span class="st">  </span><span class="kw">filter</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-28" data-line-number="28"><span class="st">  </span><span class="kw">group_by</span>(qsmk) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-29" data-line-number="29"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_weight_change =</span> <span class="kw">mean</span>(wt82_<span class="dv">71</span>), <span class="dt">sd =</span> <span class="kw">sd</span>(wt82_<span class="dv">71</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-30" data-line-number="30"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># add id and censored indicator</span>
+<span class="st">  </span><span class="co"># recode age &gt; 50 and years of school to categories</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>(),
+    <span class="dt">censored =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(wt82), <span class="dv">1</span>, <span class="dv">0</span>),
+    <span class="dt">older =</span> <span class="kw">case_when</span>(<span class="kw">is.na</span>(age) <span class="op">~</span><span class="st"> </span><span class="ot">NA_real_</span>,
+                      age <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+                      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>),
+    <span class="dt">education =</span> <span class="kw">case_when</span>(school <span class="op">&lt;</span><span class="st">  </span><span class="dv">9</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+                       school <span class="op">&lt;</span><span class="st">  </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,
+                       school <span class="op">==</span><span class="st"> </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="dv">3</span>,
+                       school <span class="op">&lt;</span><span class="st"> </span><span class="dv">16</span> <span class="op">~</span><span class="st"> </span><span class="dv">4</span>,
+                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">5</span>)
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># change categorical to factors</span>
+<span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(sex, race, education, exercise, active), factor)
+
+
+<span class="co"># restrict to complete cases</span>
+nhefs_complete &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
+         active, wt71, wt82, wt82_<span class="dv">71</span>, censored)
+
+
+nhefs_complete <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(qsmk) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_weight_change =</span> <span class="kw">mean</span>(wt82_<span class="dv">71</span>), <span class="dt">sd =</span> <span class="kw">sd</span>(wt82_<span class="dv">71</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -262,41 +267,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># clean up the data for the table</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">fct_yesno &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">  <span class="kw">factor</span>(x, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>))</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb19-6" data-line-number="6">tbl1_data &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="st">    </span><span class="kw">filter</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb19-8" data-line-number="8"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">university =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(education <span class="op">==</span><span class="st"> </span><span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">0</span>)),</a>
-<a class="sourceLine" id="cb19-9" data-line-number="9">           <span class="dt">no_exercise =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(exercise <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>)),</a>
-<a class="sourceLine" id="cb19-10" data-line-number="10">           <span class="dt">inactive =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(active <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>)),</a>
-<a class="sourceLine" id="cb19-11" data-line-number="11">           <span class="dt">qsmk =</span> <span class="kw">factor</span>(qsmk, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="kw">c</span>(<span class="st">&quot;Ceased Smoking&quot;</span>, <span class="st">&quot;Continued Smoking&quot;</span>)),</a>
-<a class="sourceLine" id="cb19-12" data-line-number="12">           <span class="dt">sex =</span> <span class="kw">factor</span>(sex, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>)),</a>
-<a class="sourceLine" id="cb19-13" data-line-number="13">           <span class="dt">race =</span> <span class="kw">factor</span>(race, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Other&quot;</span>, <span class="st">&quot;White&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb19-14" data-line-number="14"><span class="st">    </span><span class="kw">select</span>(qsmk, age, sex, race, university, wt71, smokeintensity, smokeyrs, no_exercise, </a>
-<a class="sourceLine" id="cb19-15" data-line-number="15">           inactive) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb19-16" data-line-number="16"><span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;Smoking Cessation&quot;</span> =<span class="st"> &quot;qsmk&quot;</span>,</a>
-<a class="sourceLine" id="cb19-17" data-line-number="17">         <span class="st">&quot;Age&quot;</span> =<span class="st"> &quot;age&quot;</span>,</a>
-<a class="sourceLine" id="cb19-18" data-line-number="18">         <span class="st">&quot;Sex&quot;</span> =<span class="st"> &quot;sex&quot;</span>,</a>
-<a class="sourceLine" id="cb19-19" data-line-number="19">         <span class="st">&quot;Race&quot;</span> =<span class="st"> &quot;race&quot;</span>,</a>
-<a class="sourceLine" id="cb19-20" data-line-number="20">         <span class="st">&quot;University education&quot;</span> =<span class="st"> &quot;university&quot;</span>,</a>
-<a class="sourceLine" id="cb19-21" data-line-number="21">         <span class="st">&quot;Weight, kg&quot;</span> =<span class="st"> &quot;wt71&quot;</span>, </a>
-<a class="sourceLine" id="cb19-22" data-line-number="22">         <span class="st">&quot;Cigarettes/day&quot;</span> =<span class="st"> &quot;smokeintensity&quot;</span>,</a>
-<a class="sourceLine" id="cb19-23" data-line-number="23">         <span class="st">&quot;Years smoking&quot;</span> =<span class="st"> &quot;smokeyrs&quot;</span>,</a>
-<a class="sourceLine" id="cb19-24" data-line-number="24">         <span class="st">&quot;Little or no exercise&quot;</span> =<span class="st"> &quot;no_exercise&quot;</span>,</a>
-<a class="sourceLine" id="cb19-25" data-line-number="25">         <span class="st">&quot;Inactive daily life&quot;</span> =<span class="st"> &quot;inactive&quot;</span>)</a>
-<a class="sourceLine" id="cb19-26" data-line-number="26"></a>
-<a class="sourceLine" id="cb19-27" data-line-number="27">kableone &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
-<a class="sourceLine" id="cb19-28" data-line-number="28">  <span class="kw">capture.output</span>(x &lt;-<span class="st"> </span><span class="kw">print</span>(x))</a>
-<a class="sourceLine" id="cb19-29" data-line-number="29">  knitr<span class="op">::</span><span class="kw">kable</span>(x, ...)</a>
-<a class="sourceLine" id="cb19-30" data-line-number="30">}</a>
-<a class="sourceLine" id="cb19-31" data-line-number="31"></a>
-<a class="sourceLine" id="cb19-32" data-line-number="32">tbl1_data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb19-33" data-line-number="33"><span class="st">  </span><span class="kw">CreateTableOne</span>(<span class="dt">vars =</span> <span class="kw">select</span>(tbl1_data, <span class="op">-</span><span class="st">`</span><span class="dt">Smoking Cessation</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>names, </a>
-<a class="sourceLine" id="cb19-34" data-line-number="34">                 <span class="dt">strata =</span> <span class="st">&quot;Smoking Cessation&quot;</span>, <span class="dt">data =</span> ., <span class="dt">test =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb19-35" data-line-number="35"><span class="st">  </span><span class="kw">kableone</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># clean up the data for the table</span>
+fct_yesno &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+  <span class="kw">factor</span>(x, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>))
+}
+
+tbl1_data &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">university =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(education <span class="op">==</span><span class="st"> </span><span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">0</span>)),
+           <span class="dt">no_exercise =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(exercise <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>)),
+           <span class="dt">inactive =</span> <span class="kw">fct_yesno</span>(<span class="kw">ifelse</span>(active <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>)),
+           <span class="dt">qsmk =</span> <span class="kw">factor</span>(qsmk, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="kw">c</span>(<span class="st">&quot;Ceased Smoking&quot;</span>, <span class="st">&quot;Continued Smoking&quot;</span>)),
+           <span class="dt">sex =</span> <span class="kw">factor</span>(sex, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>)),
+           <span class="dt">race =</span> <span class="kw">factor</span>(race, <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">0</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Other&quot;</span>, <span class="st">&quot;White&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">select</span>(qsmk, age, sex, race, university, wt71, smokeintensity, smokeyrs, no_exercise, 
+           inactive) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;Smoking Cessation&quot;</span> =<span class="st"> &quot;qsmk&quot;</span>,
+         <span class="st">&quot;Age&quot;</span> =<span class="st"> &quot;age&quot;</span>,
+         <span class="st">&quot;Sex&quot;</span> =<span class="st"> &quot;sex&quot;</span>,
+         <span class="st">&quot;Race&quot;</span> =<span class="st"> &quot;race&quot;</span>,
+         <span class="st">&quot;University education&quot;</span> =<span class="st"> &quot;university&quot;</span>,
+         <span class="st">&quot;Weight, kg&quot;</span> =<span class="st"> &quot;wt71&quot;</span>, 
+         <span class="st">&quot;Cigarettes/day&quot;</span> =<span class="st"> &quot;smokeintensity&quot;</span>,
+         <span class="st">&quot;Years smoking&quot;</span> =<span class="st"> &quot;smokeyrs&quot;</span>,
+         <span class="st">&quot;Little or no exercise&quot;</span> =<span class="st"> &quot;no_exercise&quot;</span>,
+         <span class="st">&quot;Inactive daily life&quot;</span> =<span class="st"> &quot;inactive&quot;</span>)
+
+kableone &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {
+  <span class="kw">capture.output</span>(x &lt;-<span class="st"> </span><span class="kw">print</span>(x))
+  knitr<span class="op">::</span><span class="kw">kable</span>(x, ...)
+}
+
+tbl1_data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">CreateTableOne</span>(<span class="dt">vars =</span> <span class="kw">select</span>(tbl1_data, <span class="op">-</span><span class="st">`</span><span class="dt">Smoking Cessation</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>names, 
+                 <span class="dt">strata =</span> <span class="st">&quot;Smoking Cessation&quot;</span>, <span class="dt">data =</span> ., <span class="dt">test =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">kableone</span>()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -312,7 +317,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">1163</td>
 </tr>
 <tr class="even">
-<td>Age (mean (sd))</td>
+<td>Age (mean (SD))</td>
 <td align="left">46.17 (12.21)</td>
 <td align="left">42.79 (11.79)</td>
 </tr>
@@ -332,17 +337,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">115 ( 9.9)</td>
 </tr>
 <tr class="even">
-<td>Weight, kg (mean (sd))</td>
+<td>Weight, kg (mean (SD))</td>
 <td align="left">72.35 (15.63)</td>
 <td align="left">70.30 (15.18)</td>
 </tr>
 <tr class="odd">
-<td>Cigarettes/day (mean (sd))</td>
+<td>Cigarettes/day (mean (SD))</td>
 <td align="left">18.60 (12.40)</td>
 <td align="left">21.19 (11.48)</td>
 </tr>
 <tr class="even">
-<td>Years smoking (mean (sd))</td>
+<td>Years smoking (mean (SD))</td>
 <td align="left">26.03 (12.74)</td>
 <td align="left">24.09 (11.71)</td>
 </tr>
@@ -361,18 +366,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="program-12.2" class="section level2">
 <h2><span class="header-section-number">2.2</span> Program 12.2</h2>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># Estimation of IP weights via a logistic model</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">propensity &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="st">                  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="st">                  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="st">                  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), </a>
-<a class="sourceLine" id="cb20-7" data-line-number="7">                  <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> nhefs_complete)</a>
-<a class="sourceLine" id="cb20-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb20-9" data-line-number="9">propensity <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb20-10" data-line-number="10"><span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb20-11" data-line-number="11"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>statistic, <span class="op">-</span>p.value) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb20-12" data-line-number="12"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Estimation of IP weights via a logistic model</span>
+
+propensity &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+                  <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> nhefs_complete)
+
+propensity <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>statistic, <span class="op">-</span>p.value) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -519,138 +524,138 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">nhefs_complete &lt;-<span class="st"> </span>propensity <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">wts =</span> <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">    </a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(wts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(wts))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_complete &lt;-<span class="st"> </span>propensity <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">wts =</span> <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))
+    
+nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(wts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(wts))</code></pre>
 <pre><code>## # A tibble: 1 x 2
 ##   mean_wt sd_wts
 ##     &lt;dbl&gt;  &lt;dbl&gt;
 ## 1    2.00   1.47</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(wts)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Weights)&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(wts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Weights)&quot;</span>)</code></pre>
 <p><img src="causal_inference_book_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">tidy_est_cis &lt;-<span class="st"> </span><span class="cf">function</span>(.df, .type) {</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">  .df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">type =</span> .type) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="st">    </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;qsmk&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="st">    </span><span class="kw">select</span>(type, estimate, conf.low, conf.high)</a>
-<a class="sourceLine" id="cb24-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb24-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb24-8" data-line-number="8"><span class="co">#  standard error a little too small</span></a>
-<a class="sourceLine" id="cb24-9" data-line-number="9">ols_cis &lt;-<span class="st"> </span><span class="kw">lm</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_complete, <span class="dt">weights =</span> wts) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-10" data-line-number="10"><span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-11" data-line-number="11"><span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;ols&quot;</span>)</a>
-<a class="sourceLine" id="cb24-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb24-13" data-line-number="13">ols_cis</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">tidy_est_cis &lt;-<span class="st"> </span><span class="cf">function</span>(.df, .type) {
+  .df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">type =</span> .type) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;qsmk&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">select</span>(type, estimate, conf.low, conf.high)
+}
+
+<span class="co">#  standard error a little too small</span>
+ols_cis &lt;-<span class="st"> </span><span class="kw">lm</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_complete, <span class="dt">weights =</span> wts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;ols&quot;</span>)
+
+ols_cis</code></pre>
 <pre><code>## # A tibble: 1 x 4
 ##   type  estimate conf.low conf.high
 ##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 ols       3.44     2.64      4.24</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">library</span>(geepack)</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2">gee_model &lt;-<span class="st"> </span><span class="kw">geeglm</span>(</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3">  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, </a>
-<a class="sourceLine" id="cb26-4" data-line-number="4">  <span class="dt">data =</span> nhefs_complete, </a>
-<a class="sourceLine" id="cb26-5" data-line-number="5">  <span class="dt">std.err =</span> <span class="st">&quot;san.se&quot;</span>, <span class="co"># default robust SE </span></a>
-<a class="sourceLine" id="cb26-6" data-line-number="6">  <span class="dt">weights =</span> wts, <span class="co"># inverse probability weights</span></a>
-<a class="sourceLine" id="cb26-7" data-line-number="7">  <span class="dt">id =</span> id, </a>
-<a class="sourceLine" id="cb26-8" data-line-number="8">  <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span> <span class="co"># independent correlation structure</span></a>
-<a class="sourceLine" id="cb26-9" data-line-number="9">) </a>
-<a class="sourceLine" id="cb26-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb26-11" data-line-number="11">gee_model_cis &lt;-<span class="st"> </span><span class="kw">tidy</span>(gee_model, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb26-12" data-line-number="12"><span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;gee&quot;</span>)</a>
-<a class="sourceLine" id="cb26-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb26-14" data-line-number="14">gee_model_cis</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(geepack)
+gee_model &lt;-<span class="st"> </span><span class="kw">geeglm</span>(
+  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, 
+  <span class="dt">data =</span> nhefs_complete, 
+  <span class="dt">std.err =</span> <span class="st">&quot;san.se&quot;</span>, <span class="co"># default robust SE </span>
+  <span class="dt">weights =</span> wts, <span class="co"># inverse probability weights</span>
+  <span class="dt">id =</span> id, 
+  <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span> <span class="co"># independent correlation structure</span>
+) 
+
+gee_model_cis &lt;-<span class="st"> </span><span class="kw">tidy</span>(gee_model, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;gee&quot;</span>)
+
+gee_model_cis</code></pre>
 <pre><code>## # A tibble: 1 x 4
 ##   type  estimate conf.low conf.high
 ##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 gee       3.44     2.41      4.47</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co">#  easy robust SEs</span></a>
-<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">library</span>(estimatr)</a>
-<a class="sourceLine" id="cb28-3" data-line-number="3">robust_lm_model_cis &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(</a>
-<a class="sourceLine" id="cb28-4" data-line-number="4">  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_complete, </a>
-<a class="sourceLine" id="cb28-5" data-line-number="5">  <span class="dt">weights =</span> wts</a>
-<a class="sourceLine" id="cb28-6" data-line-number="6">) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb28-7" data-line-number="7"><span class="st">  </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb28-8" data-line-number="8"><span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;robust ols&quot;</span>)</a>
-<a class="sourceLine" id="cb28-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb28-10" data-line-number="10">robust_lm_model_cis</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  easy robust SEs</span>
+<span class="kw">library</span>(estimatr)
+robust_lm_model_cis &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(
+  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_complete, 
+  <span class="dt">weights =</span> wts
+) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy_est_cis</span>(<span class="st">&quot;robust ols&quot;</span>)
+
+robust_lm_model_cis</code></pre>
 <pre><code>##         type estimate conf.low conf.high
 ## 1 robust ols 3.440535 2.407886  4.473185</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">model_nhefs &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {</a>
-<a class="sourceLine" id="cb30-2" data-line-number="2">  <span class="co">#  need to bootstrap the entire fitting process, including IPWs</span></a>
-<a class="sourceLine" id="cb30-3" data-line-number="3">  df &lt;-<span class="st"> </span>data[indices, ]</a>
-<a class="sourceLine" id="cb30-4" data-line-number="4">  propensity &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="st">                  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="st">                  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-7" data-line-number="7"><span class="st">                  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), </a>
-<a class="sourceLine" id="cb30-8" data-line-number="8">                  <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> df)</a>
-<a class="sourceLine" id="cb30-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb30-10" data-line-number="10">df &lt;-<span class="st"> </span>propensity <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-11" data-line-number="11"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> df) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-12" data-line-number="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">wts =</span> <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))</a>
-<a class="sourceLine" id="cb30-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb30-14" data-line-number="14">  <span class="kw">lm</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> df, <span class="dt">weights =</span> wts) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-15" data-line-number="15"><span class="st">    </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-16" data-line-number="16"><span class="st">    </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;qsmk&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-17" data-line-number="17"><span class="st">    </span><span class="kw">pull</span>(estimate)</a>
-<a class="sourceLine" id="cb30-18" data-line-number="18">}</a></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">library</span>(boot)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">bootstrap_estimates &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>.fitted<span class="op">:-</span>wts) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-6" data-line-number="6"><span class="st">  </span><span class="kw">boot</span>(model_nhefs, <span class="dt">R =</span> <span class="dv">2000</span>)</a>
-<a class="sourceLine" id="cb31-7" data-line-number="7">bootstrap_cis &lt;-<span class="st"> </span>bootstrap_estimates <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-8" data-line-number="8"><span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.method =</span> <span class="st">&quot;bca&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-9" data-line-number="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">type =</span> <span class="st">&quot;bootstrap&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-10" data-line-number="10"><span class="st">  </span><span class="kw">select</span>(type, <span class="dt">estimate =</span> statistic, conf.low, conf.high)</a>
-<a class="sourceLine" id="cb31-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb31-12" data-line-number="12">bootstrap_cis</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_nhefs &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {
+  <span class="co">#  need to bootstrap the entire fitting process, including IPWs</span>
+  df &lt;-<span class="st"> </span>data[indices, ]
+  propensity &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+                  <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> df)
+
+df &lt;-<span class="st"> </span>propensity <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> df) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">wts =</span> <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))
+
+  <span class="kw">lm</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> df, <span class="dt">weights =</span> wts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;qsmk&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">pull</span>(estimate)
+}</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(boot)
+<span class="kw">set.seed</span>(<span class="dv">1234</span>)
+
+bootstrap_estimates &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>.fitted<span class="op">:-</span>wts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">boot</span>(model_nhefs, <span class="dt">R =</span> <span class="dv">2000</span>)
+bootstrap_cis &lt;-<span class="st"> </span>bootstrap_estimates <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.method =</span> <span class="st">&quot;bca&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">type =</span> <span class="st">&quot;bootstrap&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(type, <span class="dt">estimate =</span> statistic, conf.low, conf.high)
+
+bootstrap_cis</code></pre>
 <pre><code>## # A tibble: 1 x 4
 ##   type      estimate conf.low conf.high
 ##   &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 bootstrap     3.44     2.47      4.43</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">bind_rows</span>(ols_cis, gee_model_cis, robust_lm_model_cis, bootstrap_cis) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">width =</span> conf.high <span class="op">-</span><span class="st"> </span>conf.low) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="st">  </span><span class="kw">arrange</span>(width) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb33-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">type =</span> <span class="kw">fct_inorder</span>(type)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> type, <span class="dt">y =</span> estimate, <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb33-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_pointrange</span>(<span class="dt">color =</span> <span class="st">&quot;#0172B1&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">fatten =</span> <span class="dv">3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-7" data-line-number="7"><span class="st">    </span><span class="kw">coord_flip</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-8" data-line-number="8"><span class="st">    </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(ols_cis, gee_model_cis, robust_lm_model_cis, bootstrap_cis) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">width =</span> conf.high <span class="op">-</span><span class="st"> </span>conf.low) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(width) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">type =</span> <span class="kw">fct_inorder</span>(type)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> type, <span class="dt">y =</span> estimate, <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high)) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_pointrange</span>(<span class="dt">color =</span> <span class="st">&quot;#0172B1&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">fatten =</span> <span class="dv">3</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">coord_flip</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>)</code></pre>
 <p><img src="causal_inference_book_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
 <div id="program-12.3" class="section level2">
 <h2><span class="header-section-number">2.3</span> Program 12.3</h2>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">numerator &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_complete, <span class="dt">family =</span> <span class="kw">binomial</span>())</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb34-3" data-line-number="3">nhefs_complete &lt;-<span class="st"> </span>numerator <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-4" data-line-number="4"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-6" data-line-number="6"><span class="st">  </span><span class="kw">select</span>(id, numerator) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-7" data-line-number="7"><span class="st">  </span><span class="kw">left_join</span>(nhefs_complete, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-8" data-line-number="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts =</span> numerator <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))</a>
-<a class="sourceLine" id="cb34-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb34-10" data-line-number="10">nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-11" data-line-number="11"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(swts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(swts))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">numerator &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_complete, <span class="dt">family =</span> <span class="kw">binomial</span>())
+
+nhefs_complete &lt;-<span class="st"> </span>numerator <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(nhefs_complete, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts =</span> numerator <span class="op">/</span><span class="st"> </span><span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted))
+
+nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(swts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(swts))</code></pre>
 <pre><code>## # A tibble: 1 x 2
 ##   mean_wt sd_wts
 ##     &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   0.999  0.288</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(swts)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-4" data-line-number="4"><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(swts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</code></pre>
 <p><img src="causal_inference_book_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_complete, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="st">  </span><span class="kw">tidy</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_complete, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>()</code></pre>
 <pre><code>##          term estimate std.error statistic      p.value conf.low conf.high
 ## 1 (Intercept) 1.779978 0.2248362  7.916778 4.581734e-15 1.338966  2.220990
 ## 2        qsmk 3.440535 0.5264638  6.535179 8.573524e-11 2.407886  4.473185
@@ -660,12 +665,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="program-12.4" class="section level2">
 <h2><span class="header-section-number">2.4</span> Program 12.4</h2>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">nhefs_light_smokers &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, </a>
-<a class="sourceLine" id="cb39-3" data-line-number="3">         active, wt71, wt82, wt82_<span class="dv">71</span>, censored) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(smokeintensity <span class="op">&lt;=</span><span class="st"> </span><span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb39-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb39-6" data-line-number="6">nhefs_light_smokers</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">nhefs_light_smokers &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
+         active, wt71, wt82, wt82_<span class="dv">71</span>, censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(smokeintensity <span class="op">&lt;=</span><span class="st"> </span><span class="dv">25</span>)
+
+nhefs_light_smokers</code></pre>
 <pre><code>## # A tibble: 1,162 x 67
 ##     seqn  qsmk death yrdth modth dadth   sbp   dbp sex     age race  income
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt;
@@ -694,40 +699,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## #   cholesterol &lt;dbl&gt;, hightax82 &lt;dbl&gt;, price71 &lt;dbl&gt;, price82 &lt;dbl&gt;,
 ## #   tax71 &lt;dbl&gt;, tax82 &lt;dbl&gt;, price71_82 &lt;dbl&gt;, tax71_82 &lt;dbl&gt;, id &lt;int&gt;,
 ## #   censored &lt;dbl&gt;, older &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">denominator_model &lt;-<span class="st"> </span><span class="kw">lm</span>(smkintensity82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="st">                  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="st">                  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-4" data-line-number="4"><span class="st">                  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> nhefs_light_smokers)</a>
-<a class="sourceLine" id="cb41-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb41-6" data-line-number="6">denominators &lt;-<span class="st"> </span>denominator_model <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-7" data-line-number="7"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">data =</span> nhefs_light_smokers) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-8" data-line-number="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator =</span> <span class="kw">dnorm</span>(smkintensity82_<span class="dv">71</span>, .fitted, <span class="kw">mean</span>(.sigma, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-9" data-line-number="9"><span class="st">  </span><span class="kw">select</span>(id, denominator)</a>
-<a class="sourceLine" id="cb41-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb41-11" data-line-number="11">numerator_model &lt;-<span class="st"> </span><span class="kw">lm</span>(smkintensity82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_light_smokers)</a>
-<a class="sourceLine" id="cb41-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb41-13" data-line-number="13">numerators &lt;-<span class="st"> </span>numerator_model <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-14" data-line-number="14"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">data =</span> nhefs_light_smokers) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-15" data-line-number="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator =</span> <span class="kw">dnorm</span>(smkintensity82_<span class="dv">71</span>, .fitted, <span class="kw">mean</span>(.sigma, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-16" data-line-number="16"><span class="st">  </span><span class="kw">select</span>(id, numerator)</a>
-<a class="sourceLine" id="cb41-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb41-18" data-line-number="18">nhefs_light_smokers &lt;-<span class="st"> </span>nhefs_light_smokers <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-19" data-line-number="19"><span class="st">  </span><span class="kw">left_join</span>(numerators, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-20" data-line-number="20"><span class="st">  </span><span class="kw">left_join</span>(denominators, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-21" data-line-number="21"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts =</span> numerator <span class="op">/</span><span class="st"> </span>denominator)</a>
-<a class="sourceLine" id="cb41-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb41-23" data-line-number="23"><span class="kw">ggplot</span>(nhefs_light_smokers, <span class="kw">aes</span>(swts)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-25" data-line-number="25"><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-26" data-line-number="26"><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-27" data-line-number="27"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">denominator_model &lt;-<span class="st"> </span><span class="kw">lm</span>(smkintensity82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">                  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> nhefs_light_smokers)
+
+denominators &lt;-<span class="st"> </span>denominator_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">data =</span> nhefs_light_smokers) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator =</span> <span class="kw">dnorm</span>(smkintensity82_<span class="dv">71</span>, .fitted, <span class="kw">mean</span>(.sigma, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, denominator)
+
+numerator_model &lt;-<span class="st"> </span><span class="kw">lm</span>(smkintensity82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_light_smokers)
+
+numerators &lt;-<span class="st"> </span>numerator_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">data =</span> nhefs_light_smokers) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator =</span> <span class="kw">dnorm</span>(smkintensity82_<span class="dv">71</span>, .fitted, <span class="kw">mean</span>(.sigma, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator)
+
+nhefs_light_smokers &lt;-<span class="st"> </span>nhefs_light_smokers <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(numerators, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(denominators, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts =</span> numerator <span class="op">/</span><span class="st"> </span>denominator)
+
+<span class="kw">ggplot</span>(nhefs_light_smokers, <span class="kw">aes</span>(swts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</code></pre>
 <p><img src="causal_inference_book_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">smk_intensity_model &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>smkintensity82_<span class="dv">71</span> <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smkintensity82_<span class="dv">71</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> nhefs_light_smokers, <span class="dt">weights =</span> swts)</a>
-<a class="sourceLine" id="cb42-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb42-3" data-line-number="3">smk_intensity_model_ols &lt;-<span class="st"> </span><span class="kw">lm</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>smkintensity82_<span class="dv">71</span> <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smkintensity82_<span class="dv">71</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> nhefs_light_smokers, <span class="dt">weights =</span> swts)</a>
-<a class="sourceLine" id="cb42-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb42-5" data-line-number="5">smk_intensity_model <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb42-6" data-line-number="6"><span class="st">  </span><span class="kw">tidy</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">smk_intensity_model &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>smkintensity82_<span class="dv">71</span> <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smkintensity82_<span class="dv">71</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> nhefs_light_smokers, <span class="dt">weights =</span> swts)
+
+smk_intensity_model_ols &lt;-<span class="st"> </span><span class="kw">lm</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>smkintensity82_<span class="dv">71</span> <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smkintensity82_<span class="dv">71</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> nhefs_light_smokers, <span class="dt">weights =</span> swts)
+
+smk_intensity_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>()</code></pre>
 <pre><code>##                     term     estimate   std.error statistic      p.value
 ## 1            (Intercept)  2.004524173 0.304377051  6.585661 6.851793e-11
 ## 2      smkintensity82_71 -0.108988851 0.032772315 -3.325638 9.097994e-04
@@ -736,25 +741,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 1  1.407332469  2.601715878 1159 wt82_71
 ## 2 -0.173288557 -0.044689144 1159 wt82_71
 ## 3 -0.002456336  0.007846227 1159 wt82_71</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">calculate_contrast &lt;-<span class="st"> </span><span class="cf">function</span>(.coefs, x) {</a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">  .coefs[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>.coefs[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>.coefs[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>x<span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb44-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb44-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb44-5" data-line-number="5">boot_contrasts &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {</a>
-<a class="sourceLine" id="cb44-6" data-line-number="6">  .df &lt;-<span class="st"> </span>data[indices, ]</a>
-<a class="sourceLine" id="cb44-7" data-line-number="7">  </a>
-<a class="sourceLine" id="cb44-8" data-line-number="8">  coefs &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>smkintensity82_<span class="dv">71</span> <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smkintensity82_<span class="dv">71</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> .df, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb44-9" data-line-number="9"><span class="st">    </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb44-10" data-line-number="10"><span class="st">    </span><span class="kw">pull</span>(estimate)</a>
-<a class="sourceLine" id="cb44-11" data-line-number="11">  </a>
-<a class="sourceLine" id="cb44-12" data-line-number="12">  <span class="kw">c</span>(<span class="kw">calculate_contrast</span>(coefs, <span class="dv">0</span>), <span class="kw">calculate_contrast</span>(coefs, <span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb44-13" data-line-number="13">}</a>
-<a class="sourceLine" id="cb44-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb44-15" data-line-number="15">bootstrap_contrasts &lt;-<span class="st"> </span>nhefs_light_smokers <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb44-16" data-line-number="16"><span class="st">  </span><span class="kw">boot</span>(boot_contrasts, <span class="dt">R =</span> <span class="dv">2000</span>)</a>
-<a class="sourceLine" id="cb44-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb44-18" data-line-number="18">bootstrap_contrasts <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb44-19" data-line-number="19"><span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.meth =</span> <span class="st">&quot;bca&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">calculate_contrast &lt;-<span class="st"> </span><span class="cf">function</span>(.coefs, x) {
+  .coefs[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>.coefs[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>.coefs[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>x<span class="op">^</span><span class="dv">2</span>
+}
+
+boot_contrasts &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {
+  .df &lt;-<span class="st"> </span>data[indices, ]
+  
+  coefs &lt;-<span class="st"> </span><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>smkintensity82_<span class="dv">71</span> <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smkintensity82_<span class="dv">71</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">data =</span> .df, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">pull</span>(estimate)
+  
+  <span class="kw">c</span>(<span class="kw">calculate_contrast</span>(coefs, <span class="dv">0</span>), <span class="kw">calculate_contrast</span>(coefs, <span class="dv">20</span>))
+}
+
+bootstrap_contrasts &lt;-<span class="st"> </span>nhefs_light_smokers <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">boot</span>(boot_contrasts, <span class="dt">R =</span> <span class="dv">2000</span>)
+
+bootstrap_contrasts <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.meth =</span> <span class="st">&quot;bca&quot;</span>)</code></pre>
 <pre><code>## # A tibble: 2 x 5
 ##   statistic    bias std.error conf.low conf.high
 ##       &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -763,17 +768,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="program-12.5" class="section level2">
 <h2><span class="header-section-number">2.5</span> Program 12.5</h2>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">logistic_msm &lt;-<span class="st"> </span><span class="kw">geeglm</span>(</a>
-<a class="sourceLine" id="cb46-2" data-line-number="2">  death <span class="op">~</span><span class="st"> </span>qsmk, </a>
-<a class="sourceLine" id="cb46-3" data-line-number="3">  <span class="dt">data =</span> nhefs_complete, </a>
-<a class="sourceLine" id="cb46-4" data-line-number="4">  <span class="dt">family =</span> <span class="kw">binomial</span>(),</a>
-<a class="sourceLine" id="cb46-5" data-line-number="5">  <span class="dt">std.err =</span> <span class="st">&quot;san.se&quot;</span>,</a>
-<a class="sourceLine" id="cb46-6" data-line-number="6">  <span class="dt">weights =</span> swts, </a>
-<a class="sourceLine" id="cb46-7" data-line-number="7">  <span class="dt">id =</span> id, </a>
-<a class="sourceLine" id="cb46-8" data-line-number="8">  <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span></a>
-<a class="sourceLine" id="cb46-9" data-line-number="9">) </a>
-<a class="sourceLine" id="cb46-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb46-11" data-line-number="11"><span class="kw">tidy</span>(logistic_msm, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) </a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">logistic_msm &lt;-<span class="st"> </span><span class="kw">geeglm</span>(
+  death <span class="op">~</span><span class="st"> </span>qsmk, 
+  <span class="dt">data =</span> nhefs_complete, 
+  <span class="dt">family =</span> <span class="kw">binomial</span>(),
+  <span class="dt">std.err =</span> <span class="st">&quot;san.se&quot;</span>,
+  <span class="dt">weights =</span> swts, 
+  <span class="dt">id =</span> id, 
+  <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>
+) 
+
+<span class="kw">tidy</span>(logistic_msm, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) </code></pre>
 <pre><code>## # A tibble: 2 x 7
 ##   term        estimate std.error statistic p.value conf.low conf.high
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -782,29 +787,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="program-12.6" class="section level2">
 <h2><span class="header-section-number">2.6</span> Program 12.6</h2>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">numerator_sex &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span>sex, <span class="dt">data =</span> nhefs_complete, <span class="dt">family =</span> <span class="kw">binomial</span>())</a>
-<a class="sourceLine" id="cb48-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb48-3" data-line-number="3">nhefs_complete &lt;-<span class="st"> </span>numerator_sex <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-4" data-line-number="4"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>.fitted<span class="op">:-</span>.std.resid)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_sex =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-6" data-line-number="6"><span class="st">  </span><span class="kw">select</span>(id, numerator_sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-7" data-line-number="7"><span class="st">  </span><span class="kw">left_join</span>(nhefs_complete, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-8" data-line-number="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts_sex =</span> numerator_sex <span class="op">*</span><span class="st"> </span>wts)</a>
-<a class="sourceLine" id="cb48-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb48-10" data-line-number="10">nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-11" data-line-number="11"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(swts_sex), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(swts_sex))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">numerator_sex &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span>sex, <span class="dt">data =</span> nhefs_complete, <span class="dt">family =</span> <span class="kw">binomial</span>())
+
+nhefs_complete &lt;-<span class="st"> </span>numerator_sex <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>.fitted<span class="op">:-</span>.std.resid)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_sex =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator_sex) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(nhefs_complete, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">swts_sex =</span> numerator_sex <span class="op">*</span><span class="st"> </span>wts)
+
+nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(swts_sex), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(swts_sex))</code></pre>
 <pre><code>## # A tibble: 1 x 2
 ##   mean_wt sd_wts
 ##     &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   0.999  0.271</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(swts_sex)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb50-5" data-line-number="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_complete, <span class="kw">aes</span>(swts_sex)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</code></pre>
 <p><img src="causal_inference_book_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk<span class="op">*</span>sex, <span class="dt">data =</span> nhefs_complete, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="st">  </span><span class="kw">tidy</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk<span class="op">*</span>sex, <span class="dt">data =</span> nhefs_complete, <span class="dt">weights =</span> swts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>()</code></pre>
 <pre><code>##          term     estimate std.error   statistic      p.value   conf.low
 ## 1 (Intercept)  1.784446876 0.3101597  5.75331559 1.051124e-08  1.1760735
 ## 2        qsmk  3.521977634 0.6585705  5.34791301 1.021696e-07  2.2302023
@@ -818,76 +823,76 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="program-12.7" class="section level2">
 <h2><span class="header-section-number">2.7</span> Program 12.7</h2>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># using complete data set</span></a>
-<a class="sourceLine" id="cb53-2" data-line-number="2">nhefs_censored &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, </a>
-<a class="sourceLine" id="cb53-4" data-line-number="4">         active, wt71)</a>
-<a class="sourceLine" id="cb53-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb53-6" data-line-number="6">numerator_sws_model &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>())</a>
-<a class="sourceLine" id="cb53-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb53-8" data-line-number="8">numerators_sws &lt;-<span class="st"> </span>numerator_sws_model <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-9" data-line-number="9"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-10" data-line-number="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_sw =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-11" data-line-number="11"><span class="st">  </span><span class="kw">select</span>(id, numerator_sw)</a>
-<a class="sourceLine" id="cb53-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb53-13" data-line-number="13">denominator_sws_model &lt;-<span class="st"> </span><span class="kw">glm</span>(</a>
-<a class="sourceLine" id="cb53-14" data-line-number="14">  qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-15" data-line-number="15"><span class="st">  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-16" data-line-number="16"><span class="st">  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-17" data-line-number="17"><span class="st">  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), </a>
-<a class="sourceLine" id="cb53-18" data-line-number="18">  <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>()</a>
-<a class="sourceLine" id="cb53-19" data-line-number="19">)</a>
-<a class="sourceLine" id="cb53-20" data-line-number="20"></a>
-<a class="sourceLine" id="cb53-21" data-line-number="21">denominators_sws &lt;-<span class="st"> </span>denominator_sws_model <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-22" data-line-number="22"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-23" data-line-number="23"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator_sw =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-24" data-line-number="24"><span class="st">  </span><span class="kw">select</span>(id, denominator_sw)</a>
-<a class="sourceLine" id="cb53-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb53-26" data-line-number="26">numerator_cens_model &lt;-<span class="st"> </span><span class="kw">glm</span>(censored <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>())</a>
-<a class="sourceLine" id="cb53-27" data-line-number="27"></a>
-<a class="sourceLine" id="cb53-28" data-line-number="28">numerators_cens &lt;-<span class="st"> </span>numerator_cens_model <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-29" data-line-number="29"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-30" data-line-number="30"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_cens =</span> <span class="kw">ifelse</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-31" data-line-number="31"><span class="st">  </span><span class="kw">select</span>(id, numerator_cens)</a>
-<a class="sourceLine" id="cb53-32" data-line-number="32"></a>
-<a class="sourceLine" id="cb53-33" data-line-number="33">denominator_cens_model &lt;-<span class="st"> </span><span class="kw">glm</span>(</a>
-<a class="sourceLine" id="cb53-34" data-line-number="34">  censored <span class="op">~</span><span class="st"> </span>qsmk <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-35" data-line-number="35"><span class="st">  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-36" data-line-number="36"><span class="st">  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-37" data-line-number="37"><span class="st">  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), </a>
-<a class="sourceLine" id="cb53-38" data-line-number="38">  <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>()</a>
-<a class="sourceLine" id="cb53-39" data-line-number="39">)</a>
-<a class="sourceLine" id="cb53-40" data-line-number="40"></a>
-<a class="sourceLine" id="cb53-41" data-line-number="41">denominators_cens &lt;-<span class="st"> </span>denominator_cens_model <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-42" data-line-number="42"><span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-43" data-line-number="43"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator_cens =</span> <span class="kw">ifelse</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-44" data-line-number="44"><span class="st">  </span><span class="kw">select</span>(id, denominator_cens)</a>
-<a class="sourceLine" id="cb53-45" data-line-number="45"></a>
-<a class="sourceLine" id="cb53-46" data-line-number="46">nhefs_censored_wts &lt;-<span class="st"> </span>nhefs_censored <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-47" data-line-number="47"><span class="st">  </span><span class="kw">left_join</span>(numerators_sws, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-48" data-line-number="48"><span class="st">  </span><span class="kw">left_join</span>(denominators_sws, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-49" data-line-number="49"><span class="st">  </span><span class="kw">left_join</span>(numerators_cens, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-50" data-line-number="50"><span class="st">  </span><span class="kw">left_join</span>(denominators_cens, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-51" data-line-number="51"><span class="st">  </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb53-52" data-line-number="52">    <span class="dt">swts =</span> numerator_sw <span class="op">/</span><span class="st"> </span>denominator_sw, </a>
-<a class="sourceLine" id="cb53-53" data-line-number="53">    <span class="dt">cens_wts =</span> numerator_cens <span class="op">/</span><span class="st"> </span>denominator_cens,</a>
-<a class="sourceLine" id="cb53-54" data-line-number="54">    <span class="dt">wts =</span> swts <span class="op">*</span><span class="st"> </span>cens_wts</a>
-<a class="sourceLine" id="cb53-55" data-line-number="55">  )</a>
-<a class="sourceLine" id="cb53-56" data-line-number="56"></a>
-<a class="sourceLine" id="cb53-57" data-line-number="57">nhefs_censored_wts <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb53-58" data-line-number="58"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(cens_wts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(cens_wts))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># using complete data set</span>
+nhefs_censored &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
+         active, wt71)
+
+numerator_sws_model &lt;-<span class="st"> </span><span class="kw">glm</span>(qsmk <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>())
+
+numerators_sws &lt;-<span class="st"> </span>numerator_sws_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_sw =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator_sw)
+
+denominator_sws_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
+  qsmk <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+  <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>()
+)
+
+denominators_sws &lt;-<span class="st"> </span>denominator_sws_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator_sw =</span> <span class="kw">ifelse</span>(qsmk <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, .fitted)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, denominator_sw)
+
+numerator_cens_model &lt;-<span class="st"> </span><span class="kw">glm</span>(censored <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>())
+
+numerators_cens &lt;-<span class="st"> </span>numerator_cens_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">numerator_cens =</span> <span class="kw">ifelse</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, numerator_cens)
+
+denominator_cens_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
+  censored <span class="op">~</span><span class="st"> </span>qsmk <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>smokeintensity <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>smokeyrs <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+  <span class="dt">data =</span> nhefs_censored, <span class="dt">family =</span> <span class="kw">binomial</span>()
+)
+
+denominators_cens &lt;-<span class="st"> </span>denominator_cens_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">data =</span> nhefs_censored) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">denominator_cens =</span> <span class="kw">ifelse</span>(censored <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>.fitted, <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, denominator_cens)
+
+nhefs_censored_wts &lt;-<span class="st"> </span>nhefs_censored <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(numerators_sws, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(denominators_sws, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(numerators_cens, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(denominators_cens, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">swts =</span> numerator_sw <span class="op">/</span><span class="st"> </span>denominator_sw, 
+    <span class="dt">cens_wts =</span> numerator_cens <span class="op">/</span><span class="st"> </span>denominator_cens,
+    <span class="dt">wts =</span> swts <span class="op">*</span><span class="st"> </span>cens_wts
+  )
+
+nhefs_censored_wts <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_wt =</span> <span class="kw">mean</span>(cens_wts), <span class="dt">sd_wts =</span> <span class="kw">sd</span>(cens_wts))</code></pre>
 <pre><code>## # A tibble: 1 x 2
 ##   mean_wt sd_wts
 ##     &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   0.999 0.0519</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">ggplot</span>(nhefs_censored_wts, <span class="kw">aes</span>(cens_wts)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb55-3" data-line-number="3"><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb55-4" data-line-number="4"><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb55-5" data-line-number="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(nhefs_censored_wts, <span class="kw">aes</span>(cens_wts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">col =</span> <span class="st">&quot;#E69F00&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#E69F0095&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log10(Stabilized Weights)&quot;</span>)</code></pre>
 <p><img src="causal_inference_book_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_censored_wts, <span class="dt">weights =</span> wts) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb56-2" data-line-number="2"><span class="st">  </span><span class="kw">tidy</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm_robust</span>(wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk, <span class="dt">data =</span> nhefs_censored_wts, <span class="dt">weights =</span> wts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>()</code></pre>
 <pre><code>##          term estimate std.error statistic      p.value conf.low conf.high
 ## 1 (Intercept) 1.661990 0.2328693  7.137009 1.454358e-12 1.205221  2.118759
 ## 2        qsmk 3.496493 0.5265564  6.640301 4.305944e-11 2.463662  4.529324
@@ -923,7 +928,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -935,6 +940,10 @@ gitbook.start({
 "edit": {
 "link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter12.Rmd",
 "text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
 },
 "download": null,
 "toc": {

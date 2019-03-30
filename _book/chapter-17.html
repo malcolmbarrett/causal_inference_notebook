@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Coding Causal Inference in R</title>
-  <meta name="description" content="Coding Causal Inference in R">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title>11 Chapter 17 | Coding Causal Inference in R</title>
+  <meta name="description" content="11 Chapter 17 | Coding Causal Inference in R">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Coding Causal Inference in R" />
+  <meta property="og:title" content="11 Chapter 17 | Coding Causal Inference in R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,14 +17,14 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Coding Causal Inference in R" />
+  <meta name="twitter:title" content="11 Chapter 17 | Coding Causal Inference in R" />
   
   
   
 
 
 
-<meta name="date" content="2019-02-19">
+<meta name="date" content="2019-03-29">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,6 +35,7 @@
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -144,14 +145,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.7" data-path="chapter-12.html"><a href="chapter-12.html#program-12.7"><i class="fa fa-check"></i><b>2.7</b> Program 12.7</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chapter-13.html"><a href="chapter-13.html"><i class="fa fa-check"></i><b>3</b> Chapter 13</a></li>
-<li class="chapter" data-level="4" data-path="chapter-14.html"><a href="chapter-14.html"><i class="fa fa-check"></i><b>4</b> Chapter 14</a><ul>
-<li class="chapter" data-level="4.1" data-path="chapter-14.html"><a href="chapter-14.html#program-14.1"><i class="fa fa-check"></i><b>4.1</b> Program 14.1</a></li>
-<li class="chapter" data-level="4.2" data-path="chapter-14.html"><a href="chapter-14.html#program-14.2"><i class="fa fa-check"></i><b>4.2</b> Program 14.2</a></li>
-<li class="chapter" data-level="4.3" data-path="chapter-14.html"><a href="chapter-14.html#program-14.3"><i class="fa fa-check"></i><b>4.3</b> Program 14.3</a></li>
+<li class="chapter" data-level="4" data-path="program-13-1.html"><a href="program-13-1.html"><i class="fa fa-check"></i><b>4</b> Program 13.1</a></li>
+<li class="chapter" data-level="5" data-path="program-13-2.html"><a href="program-13-2.html"><i class="fa fa-check"></i><b>5</b> Program 13.2</a></li>
+<li class="chapter" data-level="6" data-path="program-13-3.html"><a href="program-13-3.html"><i class="fa fa-check"></i><b>6</b> Program 13.3</a></li>
+<li class="chapter" data-level="7" data-path="program-13-4.html"><a href="program-13-4.html"><i class="fa fa-check"></i><b>7</b> Program 13.4</a></li>
+<li class="chapter" data-level="8" data-path="chapter-14.html"><a href="chapter-14.html"><i class="fa fa-check"></i><b>8</b> Chapter 14</a><ul>
+<li class="chapter" data-level="8.1" data-path="chapter-14.html"><a href="chapter-14.html#program-14.1"><i class="fa fa-check"></i><b>8.1</b> Program 14.1</a></li>
+<li class="chapter" data-level="8.2" data-path="chapter-14.html"><a href="chapter-14.html#program-14.2"><i class="fa fa-check"></i><b>8.2</b> Program 14.2</a></li>
+<li class="chapter" data-level="8.3" data-path="chapter-14.html"><a href="chapter-14.html#program-14.3"><i class="fa fa-check"></i><b>8.3</b> Program 14.3</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="chapter-15.html"><a href="chapter-15.html"><i class="fa fa-check"></i><b>5</b> Chapter 15</a></li>
-<li class="chapter" data-level="6" data-path="chapter-16.html"><a href="chapter-16.html"><i class="fa fa-check"></i><b>6</b> Chapter 16</a></li>
-<li class="chapter" data-level="7" data-path="chapter-17.html"><a href="chapter-17.html"><i class="fa fa-check"></i><b>7</b> Chapter 17</a></li>
+<li class="chapter" data-level="9" data-path="chapter-15.html"><a href="chapter-15.html"><i class="fa fa-check"></i><b>9</b> Chapter 15</a></li>
+<li class="chapter" data-level="10" data-path="chapter-16.html"><a href="chapter-16.html"><i class="fa fa-check"></i><b>10</b> Chapter 16</a></li>
+<li class="chapter" data-level="11" data-path="chapter-17.html"><a href="chapter-17.html"><i class="fa fa-check"></i><b>11</b> Chapter 17</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -173,7 +178,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="chapter-17" class="section level1">
-<h1><span class="header-section-number">7</span> Chapter 17</h1>
+<h1><span class="header-section-number">11</span> Chapter 17</h1>
 <p>This is the code for Chapter 11</p>
 
 <div id="refs" class="references">
@@ -208,7 +213,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -220,6 +225,10 @@ gitbook.start({
 "edit": {
 "link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter17.Rmd",
 "text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
 },
 "download": null,
 "toc": {

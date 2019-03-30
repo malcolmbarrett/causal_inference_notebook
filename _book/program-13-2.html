@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>9 Chapter 15 | Coding Causal Inference in R</title>
-  <meta name="description" content="9 Chapter 15 | Coding Causal Inference in R">
+  <title>5 Program 13.2 | Coding Causal Inference in R</title>
+  <meta name="description" content="5 Program 13.2 | Coding Causal Inference in R">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="9 Chapter 15 | Coding Causal Inference in R" />
+  <meta property="og:title" content="5 Program 13.2 | Coding Causal Inference in R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="9 Chapter 15 | Coding Causal Inference in R" />
+  <meta name="twitter:title" content="5 Program 13.2 | Coding Causal Inference in R" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="chapter-14.html">
-<link rel="next" href="chapter-16.html">
+<link rel="prev" href="program-13-1.html">
+<link rel="next" href="program-13-3.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -177,18 +177,184 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="chapter-15" class="section level1">
-<h1><span class="header-section-number">9</span> Chapter 15</h1>
-<p>This is the code for Chapter 15</p>
+<div id="program-13.2" class="section level1">
+<h1><span class="header-section-number">5</span> Program 13.2</h1>
+<pre class="sourceCode r"><code class="sourceCode r">zero &lt;-<span class="st"> </span><span class="cf">function</span>(n) <span class="kw">rep</span>(<span class="dv">0</span>, n)
+one &lt;-<span class="st"> </span><span class="cf">function</span>(n) <span class="kw">rep</span>(<span class="dv">1</span>, n)
+observed_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+  <span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&quot;Rheia&quot;</span>, <span class="st">&quot;Kronos&quot;</span>, <span class="st">&quot;Demeter&quot;</span>, <span class="st">&quot;Hades&quot;</span>, <span class="st">&quot;Hestia&quot;</span>, <span class="st">&quot;Poseidon&quot;</span>, <span class="st">&quot;Hera&quot;</span>, <span class="st">&quot;Zeus&quot;</span>, <span class="st">&quot;Artemis&quot;</span>,<span class="st">&quot;Apollo&quot;</span>, <span class="st">&quot;Leto&quot;</span>, <span class="st">&quot;Ares&quot;</span>, <span class="st">&quot;Athena&quot;</span>, <span class="st">&quot;Hephaestus&quot;</span>, <span class="st">&quot;Aphrodite&quot;</span>, <span class="st">&quot;Cyclope&quot;</span>, <span class="st">&quot;Persephone&quot;</span>, <span class="st">&quot;Hermes&quot;</span>, <span class="st">&quot;Hebe&quot;</span>, <span class="st">&quot;Dionysus&quot;</span>),
+  <span class="dt">l =</span> <span class="kw">c</span>(<span class="kw">zero</span>(<span class="dv">8</span>), <span class="kw">one</span>(<span class="dv">12</span>)),
+  <span class="dt">a =</span> <span class="kw">c</span>(<span class="kw">zero</span>(<span class="dv">4</span>), <span class="kw">one</span>(<span class="dv">4</span>), <span class="kw">zero</span>(<span class="dv">3</span>), <span class="kw">one</span>(<span class="dv">9</span>)),
+  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="kw">zero</span>(<span class="dv">5</span>), <span class="kw">one</span>(<span class="dv">3</span>), <span class="dv">0</span>, <span class="kw">one</span>(<span class="dv">6</span>), <span class="kw">zero</span>(<span class="dv">3</span>))
+)
 
+knitr<span class="op">::</span><span class="kw">kable</span>(observed_data)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">l</th>
+<th align="right">a</th>
+<th align="right">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Rheia</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Kronos</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Demeter</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Hades</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Hestia</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Poseidon</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Hera</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Zeus</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Artemis</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Apollo</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Leto</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Ares</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Athena</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Hephaestus</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Aphrodite</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Cyclope</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Persephone</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Hermes</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Hebe</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Dionysus</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r">untreated_data &lt;-<span class="st"> </span>observed_data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="dv">0</span>)
+
+treated_data &lt;-<span class="st"> </span>observed_data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="dv">1</span>)
+
+model_greeks &lt;-<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>a <span class="op">*</span><span class="st"> </span>l, <span class="dt">data =</span> observed_data)
+
+predicted_untreated &lt;-<span class="st"> </span>model_greeks <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> untreated_data) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">untreated =</span> .fitted)
+
+predicted_treated &lt;-<span class="st"> </span>model_greeks <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> treated_data) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">treated =</span> .fitted)
+
+<span class="kw">bind_cols</span>(predicted_untreated, predicted_treated) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(
+    <span class="dt">mean_treated =</span> <span class="kw">mean</span>(treated),
+    <span class="dt">mean_untreated =</span> <span class="kw">mean</span>(untreated),
+    <span class="dt">difference =</span> mean_treated <span class="op">-</span><span class="st"> </span>mean_untreated
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   mean_treated mean_untreated difference
+##          &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
+## 1        0.500            0.5  -1.67e-16</code></pre>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="chapter-14.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="chapter-16.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="program-13-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="program-13-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -218,7 +384,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter15.Rmd",
+"link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter13.Rmd",
 "text": "Edit"
 },
 "history": {
