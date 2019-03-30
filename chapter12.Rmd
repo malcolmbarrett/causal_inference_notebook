@@ -7,7 +7,11 @@ library(knitr)
 
 This is the code for Chapter 12. As before, we'll use the tidyverse metapackage and broom, as well as haven, for reading files from SAS (and other statistical software) and tableone for creating descriptive tables. We'll also use the estimatr package for a robust version of `lm()`, geepack for robust generalized estimating equations modeling,  and the boot package to help with bootstrapping confidence intervals.
 
-The data is available to download on the [*Causal Inference*](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/) website.
+The data is available to download on the [*Causal Inference*](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/) website. Alternatively, the data created below (`nhefs` and `nhefs_complete`) are available in the `cidata` package, which you can install from GitHub:
+
+```r 
+remotes::install_github("malcolmbarrett/cidata") 
+```
 
 ## Program 12.1
 

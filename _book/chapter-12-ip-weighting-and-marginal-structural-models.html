@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2019-03-29">
+<meta name="date" content="2019-03-30">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -176,7 +176,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="chapter-12-ip-weighting-and-marginal-structural-models" class="section level1">
 <h1><span class="header-section-number">2</span> Chapter 12: IP Weighting and Marginal Structural Models</h1>
 <p>This is the code for Chapter 12. As before, we’ll use the tidyverse metapackage and broom, as well as haven, for reading files from SAS (and other statistical software) and tableone for creating descriptive tables. We’ll also use the estimatr package for a robust version of <code>lm()</code>, geepack for robust generalized estimating equations modeling, and the boot package to help with bootstrapping confidence intervals.</p>
-<p>The data is available to download on the <a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/"><em>Causal Inference</em></a> website.</p>
+<p>The data is available to download on the <a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/"><em>Causal Inference</em></a> website. Alternatively, the data created below (<code>nhefs</code> and <code>nhefs_complete</code>) are available in the <code>cidata</code> package, which you can install from GitHub:</p>
+<pre class="sourceCode r"><code class="sourceCode r">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;malcolmbarrett/cidata&quot;</span>) </code></pre>
 <div id="program-12.1" class="section level2">
 <h2><span class="header-section-number">2.1</span> Program 12.1</h2>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
