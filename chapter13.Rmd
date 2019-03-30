@@ -2,6 +2,172 @@
 title: 'Causal Inference: Chapter 13'
 output: html_document
 ---
-# Chapter 13
+
+# Chapter 13: Standardization and the Parametric G-Formula
 
 This is the code for Chapter 13
+
+```{r}
+library(tidyverse)
+library(haven)
+library(broom)
+library(boot)
+```
+
+
+```{r}
+nhefs <- read_sas("data/nhefs.sas7bdat") %>% 
+  # add id and censored indicator
+  # recode age > 50 and years of school to categories
+  mutate(
+    id = 1:n(),
+    censored = ifelse(is.na(wt82), 1, 0),
+    older = case_when(is.na(age) ~ NA_real_,
+                      age > 50 ~ 1,
+                      TRUE ~ 0),
+    education = case_when(school <  9 ~ 1,
+                       school <  12 ~ 2,
+                       school == 12 ~ 3,
+                       school < 16 ~ 4,
+                       TRUE ~ 5)
+  ) %>% 
+  # change categorical to factors
+  mutate_at(vars(sex, race, education, exercise, active), factor)
+
+
+# restrict to complete cases
+nhefs_complete <- nhefs %>% 
+  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
+         active, wt71, wt82, wt82_71, censored)
+```
+
+## Program 13.1
+
+```{r}
+standardized_model <- glm(
+  wt82_71 ~ qsmk + I(qsmk * smokeintensity) + smokeintensity + 
+    I(smokeintensity^2) + sex + race + age + I(age^2) + education + smokeyrs + 
+    I(smokeyrs^2) + exercise + active + wt71 + I(wt71^2), 
+  data = nhefs_complete
+)
+
+# fit using the values of the covariates that this participant has
+standardized_model %>% 
+  augment(newdata = filter(nhefs_complete, seqn == 24770)) %>% 
+  select(.fitted) %>% 
+  knitr::kable(digits = 2)
+
+# predict on all combonations of covariates present in the data
+standardized_model %>% 
+  augment() %>% 
+  summarise_each(funs(mean, min, max), .fitted) %>% 
+  knitr::kable(digits = 2)
+```
+
+## Program 13.2
+
+```{r}
+zero <- function(n) rep(0, n)
+one <- function(n) rep(1, n)
+observed_data <- tibble(
+  name = c("Rheia", "Kronos", "Demeter", "Hades", "Hestia", "Poseidon", "Hera", "Zeus", "Artemis","Apollo", "Leto", "Ares", "Athena", "Hephaestus", "Aphrodite", "Cyclope", "Persephone", "Hermes", "Hebe", "Dionysus"),
+  l = c(zero(8), one(12)),
+  a = c(zero(4), one(4), zero(3), one(9)),
+  y = c(0, 1, zero(5), one(3), 0, one(6), zero(3))
+)
+
+knitr::kable(observed_data)
+```
+
+```{r}
+untreated_data <- observed_data %>% 
+  mutate(a = 0)
+
+treated_data <- observed_data %>% 
+  mutate(a = 1)
+
+model_greeks <- glm(y ~ a * l, data = observed_data)
+
+predicted_untreated <- model_greeks %>% 
+  augment(newdata = untreated_data) %>%
+  select(untreated = .fitted)
+
+predicted_treated <- model_greeks %>% 
+  augment(newdata = treated_data) %>%
+  select(treated = .fitted)
+
+bind_cols(predicted_untreated, predicted_treated) %>% 
+  summarise(
+    mean_treated = mean(treated),
+    mean_untreated = mean(untreated),
+    difference = mean_treated - mean_untreated
+  )
+```
+
+
+## Program 13.3
+
+```{r}
+kept_smoking <- nhefs_complete %>% 
+  mutate(qsmk = 0)
+
+quit_smoking <- nhefs_complete %>% 
+  mutate(qsmk = 1)
+
+predicted_kept_smoking <- standardized_model %>% 
+  augment(newdata = kept_smoking) %>%
+  select(kept_smoking = .fitted)
+
+predicted_quit_smoking <- standardized_model %>% 
+  augment(newdata = quit_smoking) %>%
+  select(quit_smoking = .fitted)
+
+bind_cols(predicted_kept_smoking, predicted_quit_smoking) %>% 
+  summarise(
+    mean_quit_smoking = mean(quit_smoking),
+    mean_kept_smoking = mean(kept_smoking),
+    difference = mean_quit_smoking - mean_kept_smoking
+  )
+```
+
+## Program 13.4
+
+```{r boot_gformula, cache=TRUE}
+fit_gformula <- function(data, indices) {
+  .df <- data[indices, ]
+  
+  standardized_model <- glm(
+    wt82_71 ~ qsmk + I(qsmk * smokeintensity) + smokeintensity + 
+      I(smokeintensity^2) + sex + race + age + I(age^2) + education + smokeyrs + 
+      I(smokeyrs^2) + exercise + active + wt71 + I(wt71^2), 
+    data = .df
+  )
+  
+  kept_smoking <- nhefs_complete %>% 
+    mutate(qsmk = 0)
+  
+  quit_smoking <- nhefs_complete %>% 
+    mutate(qsmk = 1)
+  
+  predicted_kept_smoking <- standardized_model %>% 
+    augment(newdata = kept_smoking) %>%
+    select(kept_smoking = .fitted)
+  
+  predicted_quit_smoking <- standardized_model %>% 
+    augment(newdata = quit_smoking) %>%
+    select(quit_smoking = .fitted)
+  
+  bind_cols(predicted_kept_smoking, predicted_quit_smoking) %>% 
+    summarise(
+      mean_quit_smoking = mean(quit_smoking),
+      mean_kept_smoking = mean(kept_smoking),
+      difference = mean_quit_smoking - mean_kept_smoking
+    ) %>% 
+    pull(difference)
+}
+
+bootstrapped_gformula <- boot(nhefs_complete, fit_gformula, R = 2000)
+
+bootstrapped_gformula %>% 
+  tidy(conf.int = TRUE, conf.meth = "bca")
+```
