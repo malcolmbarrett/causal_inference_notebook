@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2019-03-29">
+<meta name="date" content="2019-03-30">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -185,29 +185,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="kw">library</span>(haven)
 <span class="kw">library</span>(broom)
 <span class="kw">library</span>(boot)</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">nhefs &lt;-<span class="st"> </span><span class="kw">read_sas</span>(<span class="st">&quot;data/nhefs.sas7bdat&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="co"># add id and censored indicator</span>
-<span class="st">  </span><span class="co"># recode age &gt; 50 and years of school to categories</span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>(),
-    <span class="dt">censored =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(wt82), <span class="dv">1</span>, <span class="dv">0</span>),
-    <span class="dt">older =</span> <span class="kw">case_when</span>(<span class="kw">is.na</span>(age) <span class="op">~</span><span class="st"> </span><span class="ot">NA_real_</span>,
-                      age <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
-                      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>),
-    <span class="dt">education =</span> <span class="kw">case_when</span>(school <span class="op">&lt;</span><span class="st">  </span><span class="dv">9</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
-                       school <span class="op">&lt;</span><span class="st">  </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,
-                       school <span class="op">==</span><span class="st"> </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="dv">3</span>,
-                       school <span class="op">&lt;</span><span class="st"> </span><span class="dv">16</span> <span class="op">~</span><span class="st"> </span><span class="dv">4</span>,
-                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">5</span>)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="co"># change categorical to factors</span>
-<span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(sex, race, education, exercise, active), factor)
-
-
-<span class="co"># restrict to complete cases</span>
-nhefs_complete &lt;-<span class="st"> </span>nhefs <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">drop_na</span>(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
-         active, wt71, wt82, wt82_<span class="dv">71</span>, censored)</code></pre>
+<p>Instead of recleaning the data from Chapter 12, we can load it with the <code>cidata</code> package, which contains all the data we need for this chapter.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(cidata)
+<span class="co"># contains `nhefs`, `nhefs_codebook`, and `greek_data`, as well</span>
+nhefs_complete</code></pre>
+<pre><code>## # A tibble: 1,566 x 78
+##       id numerator_sex numerator  seqn  qsmk death yrdth modth dadth   sbp
+##    &lt;int&gt;         &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1     1         0.711     0.743   233     0     0    NA    NA    NA   175
+##  2     2         0.711     0.743   235     0     0    NA    NA    NA   123
+##  3     3         0.772     0.743   244     0     0    NA    NA    NA   115
+##  4     4         0.711     0.743   245     0     1    85     2    14   148
+##  5     5         0.711     0.743   252     0     0    NA    NA    NA   118
+##  6     6         0.772     0.743   257     0     0    NA    NA    NA   141
+##  7     7         0.772     0.743   262     0     0    NA    NA    NA   132
+##  8     8         0.772     0.743   266     0     0    NA    NA    NA   100
+##  9     9         0.711     0.743   419     0     1    84    10    13   163
+## 10    10         0.711     0.743   420     0     1    86    10    17   184
+## # … with 1,556 more rows, and 68 more variables: dbp &lt;dbl&gt;, sex &lt;fct&gt;,
+## #   age &lt;dbl&gt;, race &lt;fct&gt;, income &lt;dbl&gt;, marital &lt;dbl&gt;, school &lt;dbl&gt;,
+## #   education &lt;fct&gt;, ht &lt;dbl&gt;, wt71 &lt;dbl&gt;, wt82 &lt;dbl&gt;, wt82_71 &lt;dbl&gt;,
+## #   birthplace &lt;dbl&gt;, smokeintensity &lt;dbl&gt;, smkintensity82_71 &lt;dbl&gt;,
+## #   smokeyrs &lt;dbl&gt;, asthma &lt;dbl&gt;, bronch &lt;dbl&gt;, tb &lt;dbl&gt;, hf &lt;dbl&gt;,
+## #   hbp &lt;dbl&gt;, pepticulcer &lt;dbl&gt;, colitis &lt;dbl&gt;, hepatitis &lt;dbl&gt;,
+## #   chroniccough &lt;dbl&gt;, hayfever &lt;dbl&gt;, diabetes &lt;dbl&gt;, polio &lt;dbl&gt;,
+## #   tumor &lt;dbl&gt;, nervousbreak &lt;dbl&gt;, alcoholpy &lt;dbl&gt;, alcoholfreq &lt;dbl&gt;,
+## #   alcoholtype &lt;dbl&gt;, alcoholhowmuch &lt;dbl&gt;, pica &lt;dbl&gt;, headache &lt;dbl&gt;,
+## #   otherpain &lt;dbl&gt;, weakheart &lt;dbl&gt;, allergies &lt;dbl&gt;, nerves &lt;dbl&gt;,
+## #   lackpep &lt;dbl&gt;, hbpmed &lt;dbl&gt;, boweltrouble &lt;dbl&gt;, wtloss &lt;dbl&gt;,
+## #   infection &lt;dbl&gt;, active &lt;fct&gt;, exercise &lt;fct&gt;, birthcontrol &lt;dbl&gt;,
+## #   pregnancies &lt;dbl&gt;, cholesterol &lt;dbl&gt;, hightax82 &lt;dbl&gt;, price71 &lt;dbl&gt;,
+## #   price82 &lt;dbl&gt;, tax71 &lt;dbl&gt;, tax82 &lt;dbl&gt;, price71_82 &lt;dbl&gt;,
+## #   tax71_82 &lt;dbl&gt;, censored &lt;dbl&gt;, older &lt;dbl&gt;, .fitted &lt;dbl&gt;,
+## #   .resid &lt;dbl&gt;, .std.resid &lt;dbl&gt;, .hat &lt;dbl&gt;, .sigma &lt;dbl&gt;,
+## #   .cooksd &lt;dbl&gt;, wts &lt;dbl&gt;, swts &lt;dbl&gt;, swts_sex &lt;dbl&gt;</code></pre>
 <div id="program-13.1" class="section level2">
 <h2><span class="header-section-number">3.1</span> Program 13.1</h2>
 <pre class="sourceCode r"><code class="sourceCode r">standardized_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
