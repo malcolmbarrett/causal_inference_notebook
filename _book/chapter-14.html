@@ -232,7 +232,7 @@ ranks <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">theme_minimal</span>(<span class="dv">14</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">200</span>, <span class="dv">1700</span>)) <span class="op">+</span>
 <span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;change in weight&quot;</span>)</code></pre>
-<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
 </div>
 <div id="program-14.2" class="section level2">
 <h2><span class="header-section-number">4.2</span> Program 14.2</h2>
@@ -326,7 +326,7 @@ psi_conf_int &lt;-<span class="st"> </span>psi_search <span class="op">%&gt;%</s
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">col =</span> <span class="st">&quot;#0072B2&quot;</span>, <span class="dt">size =</span> <span class="fl">1.2</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">shape =</span> <span class="dv">21</span>, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#0072B2&quot;</span>, <span class="dt">size =</span> <span class="fl">2.5</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">theme_minimal</span>(<span class="dv">14</span>)</code></pre>
-<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<p><img src="causal_inference_book_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">psi_formula &lt;-<span class="st"> </span><span class="cf">function</span>(weights, outcome, treatment, treatment_pred) {
   numerator &lt;-<span class="st"> </span>weights <span class="op">*</span><span class="st"> </span>outcome <span class="op">*</span><span class="st"> </span>(treatment <span class="op">-</span><span class="st"> </span>treatment_pred)
   denominator &lt;-<span class="st"> </span><span class="kw">sum</span>(weights <span class="op">*</span><span class="st"> </span>treatment <span class="op">*</span><span class="st"> </span>(treatment <span class="op">-</span><span class="st"> </span>treatment_pred), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)

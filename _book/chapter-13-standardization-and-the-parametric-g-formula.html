@@ -185,9 +185,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="kw">library</span>(haven)
 <span class="kw">library</span>(broom)
 <span class="kw">library</span>(boot)</code></pre>
-<p>Instead of recleaning the data from Chapter 12, we can load it with the <code>cidata</code> package, which contains all the data we need for this chapter.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(cidata)
-<span class="co"># contains `nhefs`, `nhefs_codebook`, and `greek_data`, as well</span>
+<p>Instead of re-cleaning the NHEFS data we used in Chapter 12, we will load it with the <code>cidata</code> package, which contains all the data we need for this chapter.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># contains `nhefs`, `nhefs_codebook`, and `greek_data`, as well</span>
+<span class="kw">library</span>(cidata)
+
 nhefs_complete</code></pre>
 <pre><code>## # A tibble: 1,566 x 78
 ##       id numerator_sex numerator  seqn  qsmk death yrdth modth dadth   sbp
@@ -221,14 +222,15 @@ nhefs_complete</code></pre>
 ## #   .cooksd &lt;dbl&gt;, wts &lt;dbl&gt;, swts &lt;dbl&gt;, swts_sex &lt;dbl&gt;</code></pre>
 <div id="program-13.1" class="section level2">
 <h2><span class="header-section-number">3.1</span> Program 13.1</h2>
-<pre class="sourceCode r"><code class="sourceCode r">standardized_model &lt;-<span class="st"> </span><span class="kw">glm</span>(
+<p>The parametric G-Formula uses parametric models, like linear regression, to predict mean risk under different counterfactual outcomes. To do so, we need to fit a model with the observed data. Like in Chapter 12, we’ll fit a linear regression model with <code>wt82_71</code> as the outcome and <code>qmk</code> as the exposure, but we’ll also control for the covariates directly instead of via weights from a propensity score model. In this model, we’ll also include an interaction term between smoking cessation and smoking intensity, <code>I(qsmk * smokeintensity)</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">standardized_model &lt;-<span class="st"> </span><span class="kw">lm</span>(
   wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(qsmk <span class="op">*</span><span class="st"> </span>smokeintensity) <span class="op">+</span><span class="st"> </span>smokeintensity <span class="op">+</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>smokeyrs <span class="op">+</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
   <span class="dt">data =</span> nhefs_complete
-)
-
-<span class="co"># fit using the values of the covariates that this participant has</span>
+)</code></pre>
+<p>A model can be used to predict any combination of covariates. For example, to compute the predicted effects of having the covariates set to the same values as the participant with <code>seqn == 24770</code>, we can pass that row to <code>augment()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fit using the values of the covariates that this participant has</span>
 standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> <span class="kw">filter</span>(nhefs_complete, seqn <span class="op">==</span><span class="st"> </span><span class="dv">24770</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(.fitted) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -245,6 +247,7 @@ standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
 </tr>
 </tbody>
 </table>
+<p>To do so on all the data, we just need to use <code>augment()</code> directly.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># predict on all combonations of covariates present in the data</span>
 standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span>
@@ -269,16 +272,8 @@ standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
 </div>
 <div id="program-13.2" class="section level2">
 <h2><span class="header-section-number">3.2</span> Program 13.2</h2>
-<pre class="sourceCode r"><code class="sourceCode r">zero &lt;-<span class="st"> </span><span class="cf">function</span>(n) <span class="kw">rep</span>(<span class="dv">0</span>, n)
-one &lt;-<span class="st"> </span><span class="cf">function</span>(n) <span class="kw">rep</span>(<span class="dv">1</span>, n)
-observed_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(
-  <span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&quot;Rheia&quot;</span>, <span class="st">&quot;Kronos&quot;</span>, <span class="st">&quot;Demeter&quot;</span>, <span class="st">&quot;Hades&quot;</span>, <span class="st">&quot;Hestia&quot;</span>, <span class="st">&quot;Poseidon&quot;</span>, <span class="st">&quot;Hera&quot;</span>, <span class="st">&quot;Zeus&quot;</span>, <span class="st">&quot;Artemis&quot;</span>,<span class="st">&quot;Apollo&quot;</span>, <span class="st">&quot;Leto&quot;</span>, <span class="st">&quot;Ares&quot;</span>, <span class="st">&quot;Athena&quot;</span>, <span class="st">&quot;Hephaestus&quot;</span>, <span class="st">&quot;Aphrodite&quot;</span>, <span class="st">&quot;Cyclope&quot;</span>, <span class="st">&quot;Persephone&quot;</span>, <span class="st">&quot;Hermes&quot;</span>, <span class="st">&quot;Hebe&quot;</span>, <span class="st">&quot;Dionysus&quot;</span>),
-  <span class="dt">l =</span> <span class="kw">c</span>(<span class="kw">zero</span>(<span class="dv">8</span>), <span class="kw">one</span>(<span class="dv">12</span>)),
-  <span class="dt">a =</span> <span class="kw">c</span>(<span class="kw">zero</span>(<span class="dv">4</span>), <span class="kw">one</span>(<span class="dv">4</span>), <span class="kw">zero</span>(<span class="dv">3</span>), <span class="kw">one</span>(<span class="dv">9</span>)),
-  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="kw">zero</span>(<span class="dv">5</span>), <span class="kw">one</span>(<span class="dv">3</span>), <span class="dv">0</span>, <span class="kw">one</span>(<span class="dv">6</span>), <span class="kw">zero</span>(<span class="dv">3</span>))
-)
-
-knitr<span class="op">::</span><span class="kw">kable</span>(observed_data)</code></pre>
+<p>The data from Table 2.2 is available as <code>greek_data</code> in the <code>cidata</code> package.</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(greek_data)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -411,22 +406,28 @@ knitr<span class="op">::</span><span class="kw">kable</span>(observed_data)</cod
 </tr>
 </tbody>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r">untreated_data &lt;-<span class="st"> </span>observed_data <span class="op">%&gt;%</span><span class="st"> </span>
+<p>The first step in the parametric G-Formula is to fit a model using the observed data. We’ll use linear regression with an interaction term between <code>a</code> and <code>l</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">model_greeks &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>a <span class="op">*</span><span class="st"> </span>l, <span class="dt">data =</span> greek_data)</code></pre>
+<p>Instead of predicting on the observed data, we’ll clone our data twice. In the first clone, we’ll set everyone to be untreated (<code>a</code> = 0), and in the second, we’ll set everyone to be treated (<code>a</code> = 1).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  set all participants to have a = 0</span>
+untreated_data &lt;-<span class="st"> </span>greek_data <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="dv">0</span>)
 
-treated_data &lt;-<span class="st"> </span>observed_data <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="dv">1</span>)
-
-model_greeks &lt;-<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>a <span class="op">*</span><span class="st"> </span>l, <span class="dt">data =</span> observed_data)
-
+<span class="co">#  set all participants to have a = 1</span>
+treated_data &lt;-<span class="st"> </span>greek_data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="dv">1</span>)</code></pre>
+<p>Then, we’ll use these data sets to get predicted values of <code>y</code> for each participant under both counterfactual exposures.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  predict under the data where everyone is untreated</span>
 predicted_untreated &lt;-<span class="st"> </span>model_greeks <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> untreated_data) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="dt">untreated =</span> .fitted)
 
+<span class="co">#  predict under the data where everyone is treated</span>
 predicted_treated &lt;-<span class="st"> </span>model_greeks <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> treated_data) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="dt">treated =</span> .fitted)
-
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">treated =</span> .fitted)</code></pre>
+<p>The average treatment effect is simply the difference in the mean of the predicted values. Here, there is no difference between the two groups.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  join the two sets of predictions together</span>
 <span class="kw">bind_cols</span>(predicted_untreated, predicted_treated) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(
     <span class="dt">mean_treated =</span> <span class="kw">mean</span>(treated),
@@ -440,6 +441,7 @@ predicted_treated &lt;-<span class="st"> </span>model_greeks <span class="op">%&
 </div>
 <div id="program-13.3" class="section level2">
 <h2><span class="header-section-number">3.3</span> Program 13.3</h2>
+<p>We’ll follow the same premise to use the parametric G-formula for the NHEFS data. First, we’ll clone <code>nhefs_complete</code> twice: one for where everyone quit smoking and one where everyone kept smoking. Then, we’ll predict the change in weight for both groups using the model we fit with the observed data in Program 13.1, <code>standardized_model</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">kept_smoking &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">qsmk =</span> <span class="dv">0</span>)
 
@@ -452,9 +454,9 @@ predicted_kept_smoking &lt;-<span class="st"> </span>standardized_model <span cl
 
 predicted_quit_smoking &lt;-<span class="st"> </span>standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> quit_smoking) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="dt">quit_smoking =</span> .fitted)
-
-<span class="kw">bind_cols</span>(predicted_kept_smoking, predicted_quit_smoking) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">quit_smoking =</span> .fitted)</code></pre>
+<p>Again, average treatment effect is the difference in the mean of the predicted values.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_cols</span>(predicted_kept_smoking, predicted_quit_smoking) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(
     <span class="dt">mean_quit_smoking =</span> <span class="kw">mean</span>(quit_smoking),
     <span class="dt">mean_kept_smoking =</span> <span class="kw">mean</span>(kept_smoking),
@@ -467,6 +469,7 @@ predicted_quit_smoking &lt;-<span class="st"> </span>standardized_model <span cl
 </div>
 <div id="program-13.4" class="section level2">
 <h2><span class="header-section-number">3.4</span> Program 13.4</h2>
+<p>To get valid confidence intervals for the estimated average treatment effect, we need to use the bootstrap. Like in Chapter 12, we’ll write a function and pass it to the <code>boot()</code> function. We need to refit <code>standardized_model</code> using the bootstrapped data for each replication.</p>
 <pre class="sourceCode r"><code class="sourceCode r">fit_gformula &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {
   .df &lt;-<span class="st"> </span>data[indices, ]
   
@@ -498,9 +501,9 @@ predicted_quit_smoking &lt;-<span class="st"> </span>standardized_model <span cl
       <span class="dt">difference =</span> mean_quit_smoking <span class="op">-</span><span class="st"> </span>mean_kept_smoking
     ) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">pull</span>(difference)
-}
-
-bootstrapped_gformula &lt;-<span class="st"> </span><span class="kw">boot</span>(nhefs_complete, fit_gformula, <span class="dt">R =</span> <span class="dv">2000</span>)
+}</code></pre>
+<p>As with Chapter 12, we’ll use 2000 replications and bias-corrected confidence intervals, then pass the results to <code>tidy()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">bootstrapped_gformula &lt;-<span class="st"> </span><span class="kw">boot</span>(nhefs_complete, fit_gformula, <span class="dt">R =</span> <span class="dv">2000</span>)
 
 bootstrapped_gformula <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.meth =</span> <span class="st">&quot;bca&quot;</span>)</code></pre>
