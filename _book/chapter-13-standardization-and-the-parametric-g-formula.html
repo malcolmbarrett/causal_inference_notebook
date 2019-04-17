@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>3 Chapter 13: Standardization and the Parametric G-Formula | Coding Causal Inference in R</title>
+  <meta name="description" content="3 Chapter 13: Standardization and the Parametric G-Formula | Coding Causal Inference in R">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="3 Chapter 13: Standardization and the Parametric G-Formula | Coding Causal Inference in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Chapter 13: Standardization and the Parametric G-Formula | Coding Causal Inference in R" />
+  
+  
+  
+
+
+
+<meta name="date" content="2019-03-30">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="chapter-12-ip-weighting-and-marginal-structural-models.html">
+<link rel="next" href="chapter-14.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Causal Inference Notebook</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html"><i class="fa fa-check"></i><b>1</b> Chapter 11: Why model?</a><ul>
+<li class="chapter" data-level="1.1" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.1"><i class="fa fa-check"></i><b>1.1</b> Program 11.1</a></li>
+<li class="chapter" data-level="1.2" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.2"><i class="fa fa-check"></i><b>1.2</b> Program 11.2</a></li>
+<li class="chapter" data-level="1.3" data-path="chapter-11-why-model.html"><a href="chapter-11-why-model.html#program-11.3"><i class="fa fa-check"></i><b>1.3</b> Program 11.3</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html"><i class="fa fa-check"></i><b>2</b> Chapter 12: IP Weighting and Marginal Structural Models</a><ul>
+<li class="chapter" data-level="2.1" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.1"><i class="fa fa-check"></i><b>2.1</b> Program 12.1</a></li>
+<li class="chapter" data-level="2.2" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.2"><i class="fa fa-check"></i><b>2.2</b> Program 12.2</a></li>
+<li class="chapter" data-level="2.3" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.3"><i class="fa fa-check"></i><b>2.3</b> Program 12.3</a></li>
+<li class="chapter" data-level="2.4" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.4"><i class="fa fa-check"></i><b>2.4</b> Program 12.4</a></li>
+<li class="chapter" data-level="2.5" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.5"><i class="fa fa-check"></i><b>2.5</b> Program 12.5</a></li>
+<li class="chapter" data-level="2.6" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.6"><i class="fa fa-check"></i><b>2.6</b> Program 12.6</a></li>
+<li class="chapter" data-level="2.7" data-path="chapter-12-ip-weighting-and-marginal-structural-models.html"><a href="chapter-12-ip-weighting-and-marginal-structural-models.html#program-12.7"><i class="fa fa-check"></i><b>2.7</b> Program 12.7</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="chapter-13-standardization-and-the-parametric-g-formula.html"><a href="chapter-13-standardization-and-the-parametric-g-formula.html"><i class="fa fa-check"></i><b>3</b> Chapter 13: Standardization and the Parametric G-Formula</a><ul>
+<li class="chapter" data-level="3.1" data-path="chapter-13-standardization-and-the-parametric-g-formula.html"><a href="chapter-13-standardization-and-the-parametric-g-formula.html#program-13.1"><i class="fa fa-check"></i><b>3.1</b> Program 13.1</a></li>
+<li class="chapter" data-level="3.2" data-path="chapter-13-standardization-and-the-parametric-g-formula.html"><a href="chapter-13-standardization-and-the-parametric-g-formula.html#program-13.2"><i class="fa fa-check"></i><b>3.2</b> Program 13.2</a></li>
+<li class="chapter" data-level="3.3" data-path="chapter-13-standardization-and-the-parametric-g-formula.html"><a href="chapter-13-standardization-and-the-parametric-g-formula.html#program-13.3"><i class="fa fa-check"></i><b>3.3</b> Program 13.3</a></li>
+<li class="chapter" data-level="3.4" data-path="chapter-13-standardization-and-the-parametric-g-formula.html"><a href="chapter-13-standardization-and-the-parametric-g-formula.html#program-13.4"><i class="fa fa-check"></i><b>3.4</b> Program 13.4</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="chapter-14.html"><a href="chapter-14.html"><i class="fa fa-check"></i><b>4</b> Chapter 14</a><ul>
+<li class="chapter" data-level="4.1" data-path="chapter-14.html"><a href="chapter-14.html#program-14.1"><i class="fa fa-check"></i><b>4.1</b> Program 14.1</a></li>
+<li class="chapter" data-level="4.2" data-path="chapter-14.html"><a href="chapter-14.html#program-14.2"><i class="fa fa-check"></i><b>4.2</b> Program 14.2</a></li>
+<li class="chapter" data-level="4.3" data-path="chapter-14.html"><a href="chapter-14.html#program-14.3"><i class="fa fa-check"></i><b>4.3</b> Program 14.3</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="chapter-15.html"><a href="chapter-15.html"><i class="fa fa-check"></i><b>5</b> Chapter 15</a></li>
+<li class="chapter" data-level="6" data-path="chapter-16.html"><a href="chapter-16.html"><i class="fa fa-check"></i><b>6</b> Chapter 16</a></li>
+<li class="chapter" data-level="7" data-path="chapter-17.html"><a href="chapter-17.html"><i class="fa fa-check"></i><b>7</b> Chapter 17</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Coding Causal Inference in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="chapter-13-standardization-and-the-parametric-g-formula" class="section level1">
+<h1><span class="header-section-number">3</span> Chapter 13: Standardization and the Parametric G-Formula</h1>
+<p>This is the code for Chapter 13</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(haven)
+<span class="kw">library</span>(broom)
+<span class="kw">library</span>(boot)</code></pre>
+<p>Instead of re-cleaning the NHEFS data we used in Chapter 12, we will load it with the <code>cidata</code> package, which contains all the data we need for this chapter.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># contains `nhefs`, `nhefs_codebook`, and `greek_data`, as well</span>
+<span class="kw">library</span>(cidata)
+
+nhefs_complete</code></pre>
+<pre><code>## # A tibble: 1,566 x 78
+##       id numerator_sex numerator  seqn  qsmk death yrdth modth dadth   sbp
+##    &lt;int&gt;         &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1     1         0.711     0.743   233     0     0    NA    NA    NA   175
+##  2     2         0.711     0.743   235     0     0    NA    NA    NA   123
+##  3     3         0.772     0.743   244     0     0    NA    NA    NA   115
+##  4     4         0.711     0.743   245     0     1    85     2    14   148
+##  5     5         0.711     0.743   252     0     0    NA    NA    NA   118
+##  6     6         0.772     0.743   257     0     0    NA    NA    NA   141
+##  7     7         0.772     0.743   262     0     0    NA    NA    NA   132
+##  8     8         0.772     0.743   266     0     0    NA    NA    NA   100
+##  9     9         0.711     0.743   419     0     1    84    10    13   163
+## 10    10         0.711     0.743   420     0     1    86    10    17   184
+## # … with 1,556 more rows, and 68 more variables: dbp &lt;dbl&gt;, sex &lt;fct&gt;,
+## #   age &lt;dbl&gt;, race &lt;fct&gt;, income &lt;dbl&gt;, marital &lt;dbl&gt;, school &lt;dbl&gt;,
+## #   education &lt;fct&gt;, ht &lt;dbl&gt;, wt71 &lt;dbl&gt;, wt82 &lt;dbl&gt;, wt82_71 &lt;dbl&gt;,
+## #   birthplace &lt;dbl&gt;, smokeintensity &lt;dbl&gt;, smkintensity82_71 &lt;dbl&gt;,
+## #   smokeyrs &lt;dbl&gt;, asthma &lt;dbl&gt;, bronch &lt;dbl&gt;, tb &lt;dbl&gt;, hf &lt;dbl&gt;,
+## #   hbp &lt;dbl&gt;, pepticulcer &lt;dbl&gt;, colitis &lt;dbl&gt;, hepatitis &lt;dbl&gt;,
+## #   chroniccough &lt;dbl&gt;, hayfever &lt;dbl&gt;, diabetes &lt;dbl&gt;, polio &lt;dbl&gt;,
+## #   tumor &lt;dbl&gt;, nervousbreak &lt;dbl&gt;, alcoholpy &lt;dbl&gt;, alcoholfreq &lt;dbl&gt;,
+## #   alcoholtype &lt;dbl&gt;, alcoholhowmuch &lt;dbl&gt;, pica &lt;dbl&gt;, headache &lt;dbl&gt;,
+## #   otherpain &lt;dbl&gt;, weakheart &lt;dbl&gt;, allergies &lt;dbl&gt;, nerves &lt;dbl&gt;,
+## #   lackpep &lt;dbl&gt;, hbpmed &lt;dbl&gt;, boweltrouble &lt;dbl&gt;, wtloss &lt;dbl&gt;,
+## #   infection &lt;dbl&gt;, active &lt;fct&gt;, exercise &lt;fct&gt;, birthcontrol &lt;dbl&gt;,
+## #   pregnancies &lt;dbl&gt;, cholesterol &lt;dbl&gt;, hightax82 &lt;dbl&gt;, price71 &lt;dbl&gt;,
+## #   price82 &lt;dbl&gt;, tax71 &lt;dbl&gt;, tax82 &lt;dbl&gt;, price71_82 &lt;dbl&gt;,
+## #   tax71_82 &lt;dbl&gt;, censored &lt;dbl&gt;, older &lt;dbl&gt;, .fitted &lt;dbl&gt;,
+## #   .resid &lt;dbl&gt;, .std.resid &lt;dbl&gt;, .hat &lt;dbl&gt;, .sigma &lt;dbl&gt;,
+## #   .cooksd &lt;dbl&gt;, wts &lt;dbl&gt;, swts &lt;dbl&gt;, swts_sex &lt;dbl&gt;</code></pre>
+<div id="program-13.1" class="section level2">
+<h2><span class="header-section-number">3.1</span> Program 13.1</h2>
+<p>The parametric G-Formula uses parametric models, like linear regression, to predict mean risk under different counterfactual outcomes. To do so, we need to fit a model with the observed data. Like in Chapter 12, we’ll fit a linear regression model with <code>wt82_71</code> as the outcome and <code>qmk</code> as the exposure, but we’ll also control for the covariates directly instead of via weights from a propensity score model. In this model, we’ll also include an interaction term between smoking cessation and smoking intensity, <code>I(qsmk * smokeintensity)</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">standardized_model &lt;-<span class="st"> </span><span class="kw">lm</span>(
+  wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(qsmk <span class="op">*</span><span class="st"> </span>smokeintensity) <span class="op">+</span><span class="st"> </span>smokeintensity <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>smokeyrs <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+  <span class="dt">data =</span> nhefs_complete
+)</code></pre>
+<p>A model can be used to predict any combination of covariates. For example, to compute the predicted effects of having the covariates set to the same values as the participant with <code>seqn == 24770</code>, we can pass that row to <code>augment()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fit using the values of the covariates that this participant has</span>
+standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> <span class="kw">filter</span>(nhefs_complete, seqn <span class="op">==</span><span class="st"> </span><span class="dv">24770</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(.fitted) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">.fitted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.34</td>
+</tr>
+</tbody>
+</table>
+<p>To do so on all the data, we just need to use <code>augment()</code> directly.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># predict on all combonations of covariates present in the data</span>
+standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise_each</span>(<span class="kw">funs</span>(mean, min, max), .fitted) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">mean</th>
+<th align="right">min</th>
+<th align="right">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2.64</td>
+<td align="right">-10.88</td>
+<td align="right">9.88</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="program-13.2" class="section level2">
+<h2><span class="header-section-number">3.2</span> Program 13.2</h2>
+<p>The data from Table 2.2 is available as <code>greek_data</code> in the <code>cidata</code> package.</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(greek_data)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">l</th>
+<th align="right">a</th>
+<th align="right">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Rheia</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Kronos</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Demeter</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Hades</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Hestia</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Poseidon</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Hera</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Zeus</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Artemis</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Apollo</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Leto</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Ares</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Athena</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Hephaestus</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Aphrodite</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Cyclope</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Persephone</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Hermes</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Hebe</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Dionysus</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>The first step in the parametric G-Formula is to fit a model using the observed data. We’ll use linear regression with an interaction term between <code>a</code> and <code>l</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">model_greeks &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>a <span class="op">*</span><span class="st"> </span>l, <span class="dt">data =</span> greek_data)</code></pre>
+<p>Instead of predicting on the observed data, we’ll clone our data twice. In the first clone, we’ll set everyone to be untreated (<code>a</code> = 0), and in the second, we’ll set everyone to be treated (<code>a</code> = 1).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  set all participants to have a = 0</span>
+untreated_data &lt;-<span class="st"> </span>greek_data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="dv">0</span>)
+
+<span class="co">#  set all participants to have a = 1</span>
+treated_data &lt;-<span class="st"> </span>greek_data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">a =</span> <span class="dv">1</span>)</code></pre>
+<p>Then, we’ll use these data sets to get predicted values of <code>y</code> for each participant under both counterfactual exposures.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  predict under the data where everyone is untreated</span>
+predicted_untreated &lt;-<span class="st"> </span>model_greeks <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> untreated_data) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">untreated =</span> .fitted)
+
+<span class="co">#  predict under the data where everyone is treated</span>
+predicted_treated &lt;-<span class="st"> </span>model_greeks <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> treated_data) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">treated =</span> .fitted)</code></pre>
+<p>The average treatment effect is simply the difference in the mean of the predicted values. Here, there is no difference between the two groups.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  join the two sets of predictions together</span>
+<span class="kw">bind_cols</span>(predicted_untreated, predicted_treated) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(
+    <span class="dt">mean_treated =</span> <span class="kw">mean</span>(treated),
+    <span class="dt">mean_untreated =</span> <span class="kw">mean</span>(untreated),
+    <span class="dt">difference =</span> mean_treated <span class="op">-</span><span class="st"> </span>mean_untreated
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   mean_treated mean_untreated difference
+##          &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
+## 1        0.500            0.5  -1.67e-16</code></pre>
+</div>
+<div id="program-13.3" class="section level2">
+<h2><span class="header-section-number">3.3</span> Program 13.3</h2>
+<p>We’ll follow the same premise to use the parametric G-formula for the NHEFS data. First, we’ll clone <code>nhefs_complete</code> twice: one for where everyone quit smoking and one where everyone kept smoking. Then, we’ll predict the change in weight for both groups using the model we fit with the observed data in Program 13.1, <code>standardized_model</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">kept_smoking &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">qsmk =</span> <span class="dv">0</span>)
+
+quit_smoking &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">qsmk =</span> <span class="dv">1</span>)
+
+predicted_kept_smoking &lt;-<span class="st"> </span>standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> kept_smoking) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">kept_smoking =</span> .fitted)
+
+predicted_quit_smoking &lt;-<span class="st"> </span>standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">augment</span>(<span class="dt">newdata =</span> quit_smoking) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">quit_smoking =</span> .fitted)</code></pre>
+<p>Again, average treatment effect is the difference in the mean of the predicted values.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_cols</span>(predicted_kept_smoking, predicted_quit_smoking) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(
+    <span class="dt">mean_quit_smoking =</span> <span class="kw">mean</span>(quit_smoking),
+    <span class="dt">mean_kept_smoking =</span> <span class="kw">mean</span>(kept_smoking),
+    <span class="dt">difference =</span> mean_quit_smoking <span class="op">-</span><span class="st"> </span>mean_kept_smoking
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   mean_quit_smoking mean_kept_smoking difference
+##               &lt;dbl&gt;             &lt;dbl&gt;      &lt;dbl&gt;
+## 1              5.27              1.76       3.52</code></pre>
+</div>
+<div id="program-13.4" class="section level2">
+<h2><span class="header-section-number">3.4</span> Program 13.4</h2>
+<p>To get valid confidence intervals for the estimated average treatment effect, we need to use the bootstrap. Like in Chapter 12, we’ll write a function and pass it to the <code>boot()</code> function. We need to refit <code>standardized_model</code> using the bootstrapped data for each replication.</p>
+<pre class="sourceCode r"><code class="sourceCode r">fit_gformula &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices) {
+  <span class="co">#  resample data set</span>
+  .df &lt;-<span class="st"> </span>data[indices, ]
+  
+  <span class="co">#  fit the standardized regression model using the resampled observed data</span>
+  standardized_model &lt;-<span class="st"> </span><span class="kw">lm</span>(
+    wt82_<span class="dv">71</span> <span class="op">~</span><span class="st"> </span>qsmk <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(qsmk <span class="op">*</span><span class="st"> </span>smokeintensity) <span class="op">+</span><span class="st"> </span>smokeintensity <span class="op">+</span><span class="st"> </span>
+<span class="st">      </span><span class="kw">I</span>(smokeintensity<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>education <span class="op">+</span><span class="st"> </span>smokeyrs <span class="op">+</span><span class="st"> </span>
+<span class="st">      </span><span class="kw">I</span>(smokeyrs<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>exercise <span class="op">+</span><span class="st"> </span>active <span class="op">+</span><span class="st"> </span>wt71 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(wt71<span class="op">^</span><span class="dv">2</span>), 
+    <span class="dt">data =</span> .df
+  )
+  
+  <span class="co">#  clone the data and set each to given exposure level</span>
+  kept_smoking &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">qsmk =</span> <span class="dv">0</span>)
+  
+  quit_smoking &lt;-<span class="st"> </span>nhefs_complete <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">qsmk =</span> <span class="dv">1</span>)
+  
+  <span class="co">#  predict on the cloned data</span>
+  predicted_kept_smoking &lt;-<span class="st"> </span>standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">augment</span>(<span class="dt">newdata =</span> kept_smoking) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="dt">kept_smoking =</span> .fitted)
+  
+  predicted_quit_smoking &lt;-<span class="st"> </span>standardized_model <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">augment</span>(<span class="dt">newdata =</span> quit_smoking) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="dt">quit_smoking =</span> .fitted)
+  
+  <span class="co">#  summarize the mean difference and pull from data frame</span>
+  <span class="kw">bind_cols</span>(predicted_kept_smoking, predicted_quit_smoking) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarise</span>(
+      <span class="dt">mean_quit_smoking =</span> <span class="kw">mean</span>(quit_smoking),
+      <span class="dt">mean_kept_smoking =</span> <span class="kw">mean</span>(kept_smoking),
+      <span class="dt">difference =</span> mean_quit_smoking <span class="op">-</span><span class="st"> </span>mean_kept_smoking
+    ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">pull</span>(difference)
+}</code></pre>
+<p>As with Chapter 12, we’ll use 2000 replications and bias-corrected confidence intervals, then pass the results to <code>tidy()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">bootstrapped_gformula &lt;-<span class="st"> </span><span class="kw">boot</span>(nhefs_complete, fit_gformula, <span class="dt">R =</span> <span class="dv">2000</span>)
+
+bootstrapped_gformula <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">tidy</span>(<span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.meth =</span> <span class="st">&quot;bca&quot;</span>)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   statistic      bias std.error conf.low conf.high
+##       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1      3.52 -0.000109     0.490     2.61      4.49</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="chapter-12-ip-weighting-and-marginal-structural-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chapter-14.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/malcolmbarrett/causal_inference_book/blob/master/chapter13.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
