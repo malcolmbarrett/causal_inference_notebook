@@ -3,11 +3,21 @@ title: 'Causal Inference: Chapter 14'
 output: html_document
 ---
 
-# Chapter 14
+# Chapter 14: G-Estimation of Structural Nested Models
 
-This is the code for Chapter 14
+This is the code for Chapter 14.
+
+```{r}
+library(tidyverse)
+library(broom)
+library(geepack)
+library(boot)
+library(cidata)
+```
 
 ## Program 14.1
+
+In this section, Hernán and Robins discuss rank preservation: that participants would be ranked in the same order for all counterfactual outcomes. We can't do that, but we can look at the observed ranks. There are many ways to make ranks, but we'll use `dplyr::min_rank()` and rank the participants in descending order of weights.
 
 ```{r, warning=FALSE}
 ranks <- nhefs %>% 
@@ -23,12 +33,18 @@ ranks <- nhefs %>%
 
 ranks %>% 
   select(-lbl) %>% 
-  top_n(5, wt82_71)
+  top_n(5, wt82_71) %>% 
+  knitr::kable()
 
 ranks %>% 
   select(-lbl) %>% 
-  top_n(-5, wt82_71)
+  top_n(-5, wt82_71) %>% 
+  knitr::kable()
+```
 
+It's easier to understand how the ranks are distributed in a plot. The heart of this plot is simply plotting the ranks (on the `y` axis) versus the observed change in weights. We'll also label the top and bottom 3 ranks with `geom_text_repel()` from the `ggrepel` package. The people with the most weight loss are on the left while people with the most weight gain are on the right.
+
+```{r, warning=FALSE}
 ranks %>% 
   ggplot(aes(y = rank, x = wt82_71)) +
     geom_vline(xintercept = 0, col = "grey90", size = 1.3) +
@@ -49,28 +65,31 @@ ranks %>%
 
 ## Program 14.2
 
-```{r}
-# using complete data set
-nhefs_censored <- nhefs %>% 
-  drop_na(qsmk, sex, race, age, school, smokeintensity, smokeyrs, exercise, 
-         active, wt71)
+We'll start by quickly making censoring weights for the complete data set, `nhefs_complete`, as in Chapter 12.
 
+```{r}
 #  compute unstabilized inverse probability of censoring weights
 cwts_model <- glm(
   censored ~ qsmk + sex + race + age + I(age^2) + education + 
   smokeintensity + I(smokeintensity^2) + 
   smokeyrs + I(smokeyrs^2) + exercise + active + 
   wt71 + I(wt71^2), 
-  data = nhefs_censored, family = binomial()
+  data = nhefs_complete, family = binomial()
 )
 
-nhefs_censored <- cwts_model %>% 
-  augment(type.predict = "response", data = nhefs_censored) %>% 
+nhefs_complete <- cwts_model %>% 
+  augment(type.predict = "response", data = nhefs_complete) %>% 
   mutate(cwts = 1 / ifelse(censored == 0, 1 - .fitted, .fitted))
+```
 
+G-Estimation looks quite different than other types of causal regression models. Our main effect is not for `wt82_71` but `h_psi`. Our goal is to find the regression model that minimizes `h_psi` so that it is independent of the outcome; we want it as close to the null as possible. `h_psi` is defined as the outcome minus the product of `psi` and the exposure. Then, we include `h_psi` in a model with the *exposure* as the outcome (`qsmk`) weighted by our censoring weights and adjusted for the confounders we've used in previous models. We'll write a function, `compute_h_psi()`, to compute `h_psi` for a given value of `psi`.
+
+In the book, Hernán and Robins tell us the best fit is 3.446, so we'll test that the G-estimation model gives us a number very close to 0. The interpretation for this estimate is similar to the other causal modeling approaches: if everyone had quit smoking, they would have gained 3.446 more than if everyone had kept smoking.
+
+```{r}
 # compute all values of h(psi)
 compute_h_psi <- function(psi) {
-  df <- nhefs_censored %>% 
+  df <- nhefs_complete %>% 
     mutate(h_psi = wt82_71 - psi * qsmk) %>% 
     # gee doesn't like missing values
     drop_na(h_psi)
@@ -94,9 +113,20 @@ compute_h_psi <- function(psi) {
 }
 
 compute_h_psi(3.446)
+```
 
+The way that we have to find the best value for `psi` is by brute force: we will search values of psi within a plausible range. Here, we'll check from 2 to 5 by values of .1, meaning we will actually fit 31 models. Then, we'll figure out which value of `psi` produces the `h_psi` closest to null. To fit the models, we'll map the `compute_h_psi()` function to each value with `purrr::map_dfr()`. (The `map_dfr()` returns a data frame, so we can manipulate it with dplyr.)
+
+```{r}
+# search for h_psi for values of psi from 2 to 5 by .1
 psi_search <- map_dfr(seq(2, 5, by = .1), compute_h_psi)
+```
 
+Because we didn't search quite as finely as the authors, we get an answer that is close but not quite what they have. Had we searched more finely (e.g. `by = .001`), we would have done so but would need to fit thousands of models. 
+
+Since we want the estimate closest to 0, we'll sort by the absolute value of `estimate`.
+
+```{r}
 psi_search %>% 
   arrange(abs(estimate))
 
@@ -104,7 +134,11 @@ psi_est <- psi_search %>%
   arrange(abs(estimate)) %>% 
   slice(1) %>% 
   select(-estimate, -p.value)
+```
 
+We can get the confidence intervals by filtering out p-values with that are lower than .05 (since we're looking for statistical independence) and take the minimum and maximum values of the estimate.
+
+```{r}
 # get minimum and maximum values that have p >= .05 for confidence intervals
 psi_conf_int <- psi_search %>% 
   filter(p.value >= .05) %>% 
@@ -116,6 +150,8 @@ psi_conf_int <- psi_search %>%
 bind_cols(psi_est, psi_conf_int)
 ```
 
+The search ends up being linear (and, in fact, we can take a guess where the best `h_psi` will be based on the intercept of the regression line). Again, the closer we are to 0, the better.
+
 ```{r}
 psi_search %>% 
   ggplot(aes(x = psi, y = estimate)) +       
@@ -125,8 +161,9 @@ psi_search %>%
     theme_minimal(14)
 ```
 
+For some types of G-estimation models, we can use a closed-form estimator to predict `psi` using the censoring weights, outcome, treatment, and predicted treatment. First, we'll calculate a model for `qsmk` (without `h_psi`) and then use these values to calculate `psi` using `psi_formula()`.
 
-```{r psi_formula, cache = TRUE}
+```{r psi_formula}
 psi_formula <- function(weights, outcome, treatment, treatment_pred) {
   numerator <- weights * outcome * (treatment - treatment_pred)
   denominator <- sum(weights * treatment * (treatment - treatment_pred), na.rm = TRUE)
@@ -154,16 +191,21 @@ estimate_psi <- function(.data) {
     )
 }
 
-nhefs_censored %>% 
+nhefs_complete %>% 
   select(-.fitted:-.cooksd) %>% 
   filter(censored == 0) %>% 
   estimate_psi()
+```
 
+As with other estimates, getting proper bootstraps involves writing a function to calculate the estimate using a re-sampled data set and then bootstrapping with the `boot` function.
+
+```{r psi_formula_boot, cache = TRUE}
 bootstrap_psi <- function(data, indices) {
+  # calculate psi for the re-sampled data set
   estimate_psi(data[indices, ]) %>% pull(psi)
 }
 
-bootstrapped_psis <- nhefs_censored %>% 
+bootstrapped_psis <- nhefs_complete %>% 
   select(-.fitted:-.cooksd) %>% 
   filter(censored == 0) %>% 
   boot(bootstrap_psi, R = 2000)
@@ -173,6 +215,8 @@ bootstrapped_psis %>%
 ```
 
 ## Program 14.3
+
+Searching for more than one estimate, as in a model where we're interested in the effect of both quitting smoking and baseline smoking intensity, is more difficult because it requires searching in two dimensions. For this example, we'll use the closed-form estimator. Essentially, it requires two matrices with different combinations of products of `qsmk`, `smokeintensity`, `wt82_71`, and the model residuals. We'll write a function to create and solve these matrices for us and give us two parameter estimates.
 
 ```{r, warning = FALSE}
 estimate_psi2 <- function(.data) {
@@ -193,7 +237,7 @@ solve_matrix <- function(.data, .names = c("psi1", "psi2")) {
   cells <- .data %>% 
     summarise(
       a1 = sum(qsmk * diff), 
-      a2 = sum(qsmk * smokeintensity  * diff), 
+      a2 = sum(qsmk * smokeintensity * diff), 
       a3 = sum(qsmk * smokeintensity * diff), 
       a4 = sum(qsmk * smokeintensity * smokeintensity * diff),
       b1 = sum(wt82_71 * diff),
@@ -223,7 +267,7 @@ psi_formula2 <- function(.data) {
     solve_matrix()
 }
 
-nhefs_censored %>% 
+nhefs_complete %>% 
   select(-.fitted:-.cooksd) %>% 
   filter(censored == 0) %>% 
   estimate_psi2()
