@@ -2,6 +2,193 @@
 title: 'Causal Inference: Chapter 13'
 output: html_document
 ---
-# Chapter 13
+
+# Chapter 13: Standardization and the Parametric G-Formula
 
 This is the code for Chapter 13
+
+```{r}
+library(tidyverse)
+library(haven)
+library(broom)
+library(boot)
+```
+
+Instead of re-cleaning the NHEFS data we used in Chapter 12, we will load it with the `cidata` package, which contains all the data we need for this chapter.
+
+```{r}
+# contains `nhefs`, `nhefs_codebook`, and `greek_data`, as well
+library(cidata)
+
+nhefs_complete
+```
+
+## Program 13.1
+
+The parametric G-Formula uses parametric models, like linear regression, to predict mean risk under different counterfactual outcomes. To do so, we need to fit a model with the observed data. Like in Chapter 12, we'll fit a linear regression model with `wt82_71` as the outcome and `qmk` as the exposure, but we'll also control for the covariates directly instead of via weights from a propensity score model. In this model, we'll also include an interaction term between smoking cessation and smoking intensity, `I(qsmk * smokeintensity)`. 
+
+```{r}
+standardized_model <- lm(
+  wt82_71 ~ qsmk + I(qsmk * smokeintensity) + smokeintensity + 
+    I(smokeintensity^2) + sex + race + age + I(age^2) + education + smokeyrs + 
+    I(smokeyrs^2) + exercise + active + wt71 + I(wt71^2), 
+  data = nhefs_complete
+)
+```
+
+A model can be used to predict any combination of covariates. For example, to compute the predicted effects of having the covariates set to the same values as the participant with `seqn == 24770`, we can pass that row to `augment()`.
+
+```{r}
+# fit using the values of the covariates that this participant has
+standardized_model %>% 
+  augment(newdata = filter(nhefs_complete, seqn == 24770)) %>% 
+  select(.fitted) %>% 
+  knitr::kable(digits = 2)
+```
+
+To do so on all the data, we just need to use `augment()` directly. 
+
+```{r}
+# predict on all combonations of covariates present in the data
+standardized_model %>% 
+  augment() %>% 
+  summarise_each(funs(mean, min, max), .fitted) %>% 
+  knitr::kable(digits = 2)
+```
+
+## Program 13.2
+
+The data from Table 2.2 is available as `greek_data` in the `cidata` package. 
+
+```{r}
+knitr::kable(greek_data)
+```
+
+The first step in the parametric G-Formula is to fit a model using the observed data. We'll use linear regression with an interaction term between `a` and `l`.
+
+```{r}
+model_greeks <- lm(y ~ a * l, data = greek_data)
+```
+
+Instead of predicting on the observed data, we'll clone our data twice. In the first clone, we'll set everyone to be untreated (`a` = 0), and in the second, we'll set everyone to be treated (`a` = 1).
+
+```{r}
+#  set all participants to have a = 0
+untreated_data <- greek_data %>% 
+  mutate(a = 0)
+
+#  set all participants to have a = 1
+treated_data <- greek_data %>% 
+  mutate(a = 1)
+```
+
+Then, we'll use these data sets to get predicted values of `y` for each participant under both counterfactual exposures.
+
+```{r}
+#  predict under the data where everyone is untreated
+predicted_untreated <- model_greeks %>% 
+  augment(newdata = untreated_data) %>%
+  select(untreated = .fitted)
+
+#  predict under the data where everyone is treated
+predicted_treated <- model_greeks %>% 
+  augment(newdata = treated_data) %>%
+  select(treated = .fitted)
+```
+
+The average treatment effect is simply the difference in the mean of the predicted values. Here, there is no difference between the two groups.
+
+```{r}
+#  join the two sets of predictions together
+bind_cols(predicted_untreated, predicted_treated) %>% 
+  summarise(
+    mean_treated = mean(treated),
+    mean_untreated = mean(untreated),
+    difference = mean_treated - mean_untreated
+  )
+```
+
+
+## Program 13.3
+
+We'll follow the same premise to use the parametric G-formula for the NHEFS data. First, we'll clone `nhefs_complete` twice: one for where everyone quit smoking and one where everyone kept smoking. Then, we'll predict the change in weight for both groups using the model we fit with the observed data in Program 13.1, `standardized_model`.
+
+```{r}
+kept_smoking <- nhefs_complete %>% 
+  mutate(qsmk = 0)
+
+quit_smoking <- nhefs_complete %>% 
+  mutate(qsmk = 1)
+
+predicted_kept_smoking <- standardized_model %>% 
+  augment(newdata = kept_smoking) %>%
+  select(kept_smoking = .fitted)
+
+predicted_quit_smoking <- standardized_model %>% 
+  augment(newdata = quit_smoking) %>%
+  select(quit_smoking = .fitted)
+```
+
+Again, average treatment effect is the difference in the mean of the predicted values.
+
+```{r}
+bind_cols(predicted_kept_smoking, predicted_quit_smoking) %>% 
+  summarise(
+    mean_quit_smoking = mean(quit_smoking),
+    mean_kept_smoking = mean(kept_smoking),
+    difference = mean_quit_smoking - mean_kept_smoking
+  )
+```
+
+## Program 13.4
+
+To get valid confidence intervals for the estimated average treatment effect, we need to use the bootstrap. Like in Chapter 12, we'll write a function and pass it to the `boot()` function. We need to refit `standardized_model` using the bootstrapped data for each replication. 
+
+```{r}
+fit_gformula <- function(data, indices) {
+  #  resample data set
+  .df <- data[indices, ]
+  
+  #  fit the standardized regression model using the resampled observed data
+  standardized_model <- lm(
+    wt82_71 ~ qsmk + I(qsmk * smokeintensity) + smokeintensity + 
+      I(smokeintensity^2) + sex + race + age + I(age^2) + education + smokeyrs + 
+      I(smokeyrs^2) + exercise + active + wt71 + I(wt71^2), 
+    data = .df
+  )
+  
+  #  clone the data and set each to given exposure level
+  kept_smoking <- nhefs_complete %>% 
+    mutate(qsmk = 0)
+  
+  quit_smoking <- nhefs_complete %>% 
+    mutate(qsmk = 1)
+  
+  #  predict on the cloned data
+  predicted_kept_smoking <- standardized_model %>% 
+    augment(newdata = kept_smoking) %>%
+    select(kept_smoking = .fitted)
+  
+  predicted_quit_smoking <- standardized_model %>% 
+    augment(newdata = quit_smoking) %>%
+    select(quit_smoking = .fitted)
+  
+  #  summarize the mean difference and pull from data frame
+  bind_cols(predicted_kept_smoking, predicted_quit_smoking) %>% 
+    summarise(
+      mean_quit_smoking = mean(quit_smoking),
+      mean_kept_smoking = mean(kept_smoking),
+      difference = mean_quit_smoking - mean_kept_smoking
+    ) %>% 
+    pull(difference)
+}
+```
+
+As with Chapter 12, we'll use 2000 replications and bias-corrected confidence intervals, then pass the results to `tidy()`.
+
+```{r boot_gformula, cache=TRUE}
+bootstrapped_gformula <- boot(nhefs_complete, fit_gformula, R = 2000)
+
+bootstrapped_gformula %>% 
+  tidy(conf.int = TRUE, conf.meth = "bca")
+```
